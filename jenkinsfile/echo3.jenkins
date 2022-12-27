@@ -16,7 +16,7 @@ pipeline {
             steps {
                 echo " ============== echo2 =================="
                 dir ('/') {
-                	sh 'cp -a . /var/appdata'
+                	sh 'cp main.py /var/appdata/main.py'
                 }
             }
         }
