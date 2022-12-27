@@ -15,7 +15,6 @@ pipeline {
         stage("echo") {
             steps {
                 echo " ============== echo2 =================="
-                }
             }
         }
     }
