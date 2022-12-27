@@ -15,8 +15,8 @@ pipeline {
         stage("echo") {
             steps {
                 echo " ============== echo2 =================="
-                dir ('/') {
-                	sh 'cp main.py /var/appdata/main.py'
+                dir ('plc_cv') {
+                	sh 'cp . /var/appdata'
                 }
             }
         }
