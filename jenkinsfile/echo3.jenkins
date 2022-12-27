@@ -11,16 +11,39 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
     }
+    
+    environment {
+        source_repo = 'https://github.com/trendy-automation/plc_cv.git'
+        source_path = '-R *'
+        target_path = '/var/appdata'
+    }
+    
     stages {
-        stage("echo") {
+        stage("cleanWs") {
             steps {
-                echo " ============== echo2 =================="
+                echo " ============== cleanWs =================="
                 cleanWs()
-                //dir ('') {
-                    //sh 'ls'
-                	sh 'cp -R * /var/appdata'
-                //}
             }
         }
+        stage("checkuot") {
+            steps {
+                echo " ============== checkuot =================="
+                git url: source_repo
+            }
+        }
+        stage ("copy") {
+            steps {
+                echo " ============== copy =================="
+                sh 'cp $source_path $target_path'
+            }
+        }
+
+            //steps {
+                //dir ('') {
+                    //sh 'ls'
+                	//sh 'cp -R * /var/appdata'
+                //}
+            //}
+        //}
     }
 }
