@@ -16,7 +16,7 @@ pipeline {
             steps {
                 echo " ============== echo2 =================="
                 dir ('plc_cv') {
-                	sh 'cp "plc_cv/"* /var/appdata'
+                	sh 'ls && cp "/"* /var/appdata'
                 }
             }
         }
