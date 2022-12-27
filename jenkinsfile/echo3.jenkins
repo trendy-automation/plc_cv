@@ -15,8 +15,9 @@ pipeline {
         stage("echo") {
             steps {
                 echo " ============== echo2 =================="
-                dir ('plc_cv') {
-                	sh 'ls && cp "/"* /var/appdata'
+                dir ('plc_cv/') {
+                    sh 'ls'
+                	#sh 'ls && cp "/"* /var/appdata'
                 }
             }
         }
