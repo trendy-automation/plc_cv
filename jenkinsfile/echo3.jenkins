@@ -15,7 +15,7 @@ pipeline {
     
     environment {
         source_repo = 'https://github.com/trendy-automation/plc_cv.git'
-        source_path = '-R *'
+        source_path = '/python'
         target_path = '/var/appdata'
     }
     
@@ -38,13 +38,5 @@ pipeline {
                 sh 'cp $source_path $target_path'
             }
         }
-
-            //steps {
-                //dir ('') {
-                    //sh 'ls'
-                	//sh 'cp -R * /var/appdata'
-                //}
-            //}
-        //}
     }
 }
