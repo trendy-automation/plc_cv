@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage("echo") {
             steps {
-                echo " ============== echo =================="
+                echo " ============== echo2 =================="
                 }
             }
         }
