@@ -16,7 +16,7 @@ pipeline {
             steps {
                 echo " ============== echo2 =================="
                 dir ('/') {
-                	sh 'cp -a . /var/jenkins_home/plc_cv'
+                	sh 'cp -a . /var/appdata'
                 }
             }
         }
