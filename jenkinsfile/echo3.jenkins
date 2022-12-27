@@ -1,7 +1,7 @@
 #!groovy
 // Run docker build
 properties([disableConcurrentBuilds()])
-cleanWs()
+
 pipeline {
     agent { 
         label 'jenkins_agent'
@@ -15,6 +15,7 @@ pipeline {
         stage("echo") {
             steps {
                 echo " ============== echo2 =================="
+                cleanWs()
                 //dir ('') {
                     //sh 'ls'
                 	sh 'cp -R * /var/appdata'
