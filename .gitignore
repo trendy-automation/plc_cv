@@ -5,16 +5,16 @@ venv/*
 #Docker jenkins
 docker-compose/jenkins_home/*
 !docker-compose/jenkins_home/credentials.xml
-#docker-compose/jenkins_home/.ssh*
+docker-compose/jenkins_home/.ssh*
 !docker-compose/jenkins_home/.ssh/jenkins_id_rsa
 !docker-compose/jenkins_home/.ssh/jenkins_id_rsa.pub
-#docker-compose/jenkins_home/jobs/*
-!docker-compose/jenkins_home/jobs/git_schedule
+docker-compose/jenkins_home/jobs/*
+docker-compose/jenkins_home/jobs/git_schedule/*
 !docker-compose/jenkins_home/jobs/git_schedule/config.xml
-#docker-compose/jenkins_home/nodes/*
-!docker-compose/jenkins_home/nodes/jenkins_agent
+docker-compose/jenkins_home/nodes/*
+docker-compose/jenkins_home/nodes/jenkins_agent/*
 !docker-compose/jenkins_home/nodes/jenkins_agent/config.xml
-#docker-compose/jenkins_home/users/*
-!docker-compose/jenkins_home/users/basic_2549913433733378232
+docker-compose/jenkins_home/users/*
+docker-compose/jenkins_home/users/basic_2549913433733378232/*
 !docker-compose/jenkins_home/users/users.xml
 !docker-compose/jenkins_home/users/basic_2549913433733378232/config.xml
