@@ -6,7 +6,8 @@ import time
 import threading
 from snap7.util import *
 
-#TODO
+#TODO pip install -r /path/to/requirements.txt
+#TODO found_part_num
 found_part_num = 0
 
 class PLC(threading.Thread):

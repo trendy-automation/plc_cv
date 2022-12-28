@@ -60,7 +60,7 @@
       <submoduleCfg class="empty-list"/>
       <extensions/>
     </scm>
-    <scriptPath>jenkinsfile</scriptPath>
+    <scriptPath>git_schedule.jenkins</scriptPath>
     <lightweight>true</lightweight>
   </definition>
   <triggers/>
