@@ -1,5 +1,5 @@
 # plc_cv
-Computer vision based on Intel Realsense Depth camera D455 and Siemens PLC
+Computer vision based on Intel Realsense Depth camera D455 and Siemens PLC S7-1200
 
 Using Jenkins pipeline and docker-compose
 With jupyter example

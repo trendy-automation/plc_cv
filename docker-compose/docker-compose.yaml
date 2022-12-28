@@ -3,7 +3,7 @@ version: '3.8'
 x-services-volume:
   &services-volume
   type: bind
-  source: ../appdata
+  source: ./appdata
   target: /var/appdata
   
 services:
