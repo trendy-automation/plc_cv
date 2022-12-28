@@ -20,10 +20,16 @@ pipeline {
     }
     
     stages {
-        stage("cleanWs") {
+        stage("clean workspace") {
             steps {
-                echo " ============== cleanWs =================="
+                echo " ============== clean workspace =================="
                 cleanWs()
+            }
+        }
+        stage("clean appdata") {
+            steps {
+                echo " ============== clean appdata =================="
+                sh 'rm -r $target_path'
             }
         }
         stage("checkuot") {
