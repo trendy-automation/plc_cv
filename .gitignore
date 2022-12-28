@@ -5,6 +5,7 @@ venv/*
 
 #Docker jenkins
 docker-compose/jenkins_home/*
+!docker-compose/jenkins_home/jenkinsfile/git_schedule.jenkins
 !docker-compose/jenkins_home/credentials.xml
 docker-compose/jenkins_home/.ssh*
 !docker-compose/jenkins_home/.ssh/jenkins_id_rsa
