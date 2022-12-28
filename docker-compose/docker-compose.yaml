@@ -21,7 +21,9 @@ services:
     environment:
       - GIT_SSL_NO_VERIFY=true
   agent:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     privileged: true
     user: root
     container_name: agent
