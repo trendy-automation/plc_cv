@@ -29,7 +29,7 @@ pipeline {
         stage("clean appdata") {
             steps {
                 echo " ============== clean appdata =================="
-                sh 'rm -r $target_path/*'
+                sh 'rm -irf $target_path/*'
             }
         }
         stage("checkuot") {
