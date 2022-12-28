@@ -1,5 +1,8 @@
 # Environment
 venv/*
+.idea/*
+
+#Docker jenkins
 docker-compose/jenkins_home/*
 !docker-compose/jenkins_home/credentials.xml
 #docker-compose/jenkins_home/.ssh*
