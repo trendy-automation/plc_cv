@@ -1,14 +1,11 @@
-# This is a sample Python script.
+import plc
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
+def run_plc(ip):
+    my_plc = plc.PLC(ip)
+    my_plc.start()
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PLC_CV')
+    # common variables
+    found_part_num = 0
+    run_plc('192.168.1.101')
