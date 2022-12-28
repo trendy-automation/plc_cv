@@ -41,7 +41,7 @@ pipeline {
         stage ("copy") {
             steps {
                 echo " ============== copy =================="
-                sh 'cp -R $source_path $target_path'
+                sh 'cp -ir $source_path $target_path'
             }
         }
     }

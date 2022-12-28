@@ -21,7 +21,7 @@ services:
     environment:
       - GIT_SSL_NO_VERIFY=true
   agent:
-    image: jenkins/ssh-agent:jdk11
+    build: .
     privileged: true
     user: root
     container_name: agent
