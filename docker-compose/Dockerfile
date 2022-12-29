@@ -1,0 +1,7 @@
+FROM jenkins/ssh-agent:jdk11
+RUN apt update && \
+	apt install -y --no-install-recommends git && \
+    apt install -y curl
+ARG DOCKER_GID=993
+RUN groupadd -g ${DOCKER_GID} docker
+RUN usermod -aG docker jenkins

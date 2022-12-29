@@ -22,10 +22,9 @@ services:
       - GIT_SSL_NO_VERIFY=true
     restart: always
   agent:
-    #build:
-    #  context: .
-    #  dockerfile: Dockerfile
-    image: jenkins/ssh-agent:jdk11
+    build:
+      context: .
+      dockerfile: Dockerfile
     privileged: true
     user: root
     container_name: agent
@@ -38,11 +37,6 @@ services:
       - *services-volume
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
-    command:
-      - apt update && \
-        apt install -y --no-install-recommends git && \
-        apt install -y curl
-      - chmod 777 /var/run/docker.sock
   opencv:
     image: sixsq/opencv-python:latest
     user: root
