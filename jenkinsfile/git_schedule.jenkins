@@ -41,7 +41,7 @@ pipeline {
         stage ("stop opencv") {
             steps {
                 echo " ============== stop opencv =================="
-                sh 'docker compose stop opencv'
+                sh 'curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop'
             }
         }
         stage ("copy") {
@@ -53,7 +53,7 @@ pipeline {
         stage ("start opencv") {
             steps {
                 echo " ============== start opencv =================="
-                sh 'docker compose up -d opencv'
+                sh 'curl -XPOST --unix-socket /var/run/docker.sock localhost/containers/opencv/start'
             }
         }
     }
