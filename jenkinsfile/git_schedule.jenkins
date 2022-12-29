@@ -43,7 +43,8 @@ pipeline {
                 echo " ============== stop opencv =================="
                 sh 'docker-compose stop opencv'
             }
-        }        stage ("copy") {
+        }
+        stage ("copy") {
             steps {
                 echo " ============== copy =================="
                 sh 'cp -ir $source_path $target_path'
