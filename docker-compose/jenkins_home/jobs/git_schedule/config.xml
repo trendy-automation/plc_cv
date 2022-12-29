@@ -23,9 +23,6 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
-      <abortPrevious>false</abortPrevious>
-    </org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
         <daysToKeep>-1</daysToKeep>
@@ -42,6 +39,9 @@
         </hudson.triggers.SCMTrigger>
       </triggers>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
+      <abortPrevious>false</abortPrevious>
+    </org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@3583.v4f58de0d78d5">
     <scm class="hudson.plugins.git.GitSCM" plugin="git@4.14.3">
@@ -60,7 +60,7 @@
       <submoduleCfg class="empty-list"/>
       <extensions/>
     </scm>
-    <scriptPath>git_schedule.jenkins</scriptPath>
+    <scriptPath>jenkinsfile/git_schedule.jenkins</scriptPath>
     <lightweight>true</lightweight>
   </definition>
   <triggers/>
