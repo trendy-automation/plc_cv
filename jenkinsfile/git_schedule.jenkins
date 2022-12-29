@@ -24,10 +24,10 @@ pipeline {
             steps {
                 echo " ============== clean workspace =================="
                 cleanWs()
-            }
-        }
-        stage("clean appdata") {
-            steps {
+        //    }
+        //}
+        //stage("clean appdata") {
+        //    steps {
                 echo " ============== clean appdata =================="
                 sh 'rm -irf $target_path/*'
             }
