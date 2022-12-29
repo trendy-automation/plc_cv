@@ -53,7 +53,7 @@ pipeline {
         stage ("start opencv") {
             steps {
                 echo " ============== start opencv =================="
-                sh 'curl -XPOST --unix-socket /var/run/docker.sock localhost/containers/opencv/start'
+                sh 'curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/start'
             }
         }
     }
