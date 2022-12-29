@@ -38,10 +38,20 @@ pipeline {
                 git url: source_repo
             }
         }
-        stage ("copy") {
+        stage ("stop opencv") {
+            steps {
+                echo " ============== stop opencv =================="
+                sh 'docker-compose stop opencv'
+            }
+        }        stage ("copy") {
             steps {
                 echo " ============== copy =================="
                 sh 'cp -ir $source_path $target_path'
+            }
+        }        stage ("start opencv") {
+            steps {
+                echo " ============== start opencv =================="
+                sh 'docker-compose up -d opencv'
             }
         }
     }
