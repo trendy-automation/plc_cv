@@ -43,5 +43,8 @@ services:
     container_name: opencv
     volumes: 
       - *services-volume
-    tty: true
+    command:
+      - pip install -r /var/appdata/python/requirements.txt
+      - python /var/appdata/python/main.py
+    #tty: true
     restart: always
