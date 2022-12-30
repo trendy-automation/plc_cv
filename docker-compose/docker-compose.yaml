@@ -41,7 +41,7 @@ services:
     image: sixsq/opencv-python:latest
     user: root
     container_name: opencv
-    volumes: 
+    volumes:
       - *services-volume
     command:
       - pip install -r /var/appdata/python/requirements.txt
