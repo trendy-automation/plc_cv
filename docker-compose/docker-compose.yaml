@@ -44,7 +44,6 @@ services:
     volumes:
       - *services-volume
     command:
-      - pip install -r /var/appdata/python/requirements.txt
-      - python3 /var/appdata/python/main.py
+      - /var/appdata/python/appstart.sh
     tty: true
     restart: always
