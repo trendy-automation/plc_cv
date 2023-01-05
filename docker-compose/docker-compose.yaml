@@ -24,7 +24,7 @@ services:
   agent:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: agentDockerfile
     privileged: true
     user: root
     container_name: agent
@@ -57,5 +57,5 @@ services:
     #  - python3 /var/appdata/python/main.py
     #entrypoint: ["/var/appdata/python/appstart.sh"]
     #entrypoint: ["pip install -r /var/appdata/python/requirements.txt", "python3 /var/appdata/python/main.py"]
-    tty: true
+    #tty: true
     restart: always
