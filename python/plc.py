@@ -6,9 +6,10 @@ import time
 import threading
 from snap7.util import *
 
-#TODO pip install -r /path/to/requirements.txt
 #TODO found_part_num
 found_part_num = 0
+camera_DB_num = 8
+reconnect_timeout = 60
 
 class PLC(threading.Thread):
     def __init__(self, plc_ip):
@@ -39,11 +40,11 @@ class PLC(threading.Thread):
 
     def run(self):
         self.logger.info(f"Connection with PLC {self.plc_ip} started")
-        cur_thread = threading.currentThread()
+        cur_thread = threading.current_thread()
         # Основной цикл
         while getattr(cur_thread, "do_run", True):
             time.sleep(1.2)
-            if self.unreachable_time == 0 or (time.time() - self.unreachable_time) > 600:
+            if self.unreachable_time == 0 or (time.time() - self.unreachable_time) > reconnect_timeout:
                 # print(f"self.snap7client.get_connected() {self.snap7client.get_connected()}")
                 if not self.snap7client.get_connected():
                     # Подключение к контроллеру ...
@@ -69,10 +70,10 @@ class PLC(threading.Thread):
                     if self.connection_ok or True:
                         # Подключение активно
                         # print(f"Подключение активно {self.plc_ip}")
-                        snapshotReq = self.get_bool(db_number=8, offsetbyte=0, offsetbit=0)
+                        snapshotReq = self.get_bool(db_number=camera_DB_num, offsetbyte=0, offsetbit=0)
                         if snapshotReq:
                             # snapshot
                             # res
                             if found_part_num > 0:
                                 # print(f"Запись результата распознования - номер найденной детали - {found_part_num}")
-                                self.set_usint(db_number=8, offsetbyte=1, tag_value=found_part_num)
+                                self.set_usint(db_number=camera_DB_num, offsetbyte=1, tag_value=found_part_num)
