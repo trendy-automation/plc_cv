@@ -16,7 +16,7 @@ class PLC(threading.Thread):
         # init
         threading.Thread.__init__(self, args=(), name=plc_ip, kwargs=None)
         self.plc_ip = plc_ip
-        self.logger = logging.getLogger("opc_py")
+        self.logger = logging.getLogger("opencv")
         snap7.client.logger.setLevel(logging.INFO)
         self.snap7client = snap7.client.Client()
         self.connection_ok = False
@@ -50,14 +50,7 @@ class PLC(threading.Thread):
                     # Подключение к контроллеру ...
                     try:
                         print(f"Подключение к контроллеру {self.plc_ip}...")
-                        if self.snap7client.connect(self.plc_ip, 0, 1):
-                            self.connection_ok = True
-                            self.unreachable_time = 0
-                            self.logger.info(f"Соединение открыто {self.plc_ip}")
-                            print(f"Соединение открыто {self.plc_ip}")
-                            snap7.client.logger.disabled = False
-                        # else:
-                        #    print(f"Соединение НЕ открыто {self.plc_ip}")
+                        self.snap7client.connect(self.plc_ip, 0, 1)
                     except Exception as error:
                         if self.connection_ok:
                             self.snap7client.disconnect()
@@ -67,22 +60,22 @@ class PLC(threading.Thread):
                         snap7.client.logger.disabled = True
                         self.unreachable_time = time.time()
                 else:
-                    if self.connection_ok or True:
-                        # Подключение активно
-                        # print(f"Подключение активно {self.plc_ip}")
-                        try:
-                            snapshotReq = self.get_bool(db_number=camera_DB_num, offsetbyte=0, offsetbit=0)
-                        except Exception as error:
-                            self.logger.error(f"Не удалось считать строб съёмки: DB{camera_DB_num}.DBX0.0\n"
-                                              f"Ошибка {str(error)} {traceback.format_exc()}")
-                        if snapshotReq:
-                            # snapshot
-                            # res
-                            if found_part_num > 0:
-                                # print(f"Запись результата распознования - номер найденной детали - {found_part_num}")
-                                try:
-                                    self.set_usint(db_number=camera_DB_num, offsetbyte=1, tag_value=found_part_num)
-                                except Exception as error:
-                                    self.logger.error(f"Не удалось записать результат съёмки: DB{camera_DB_num}.DBB1\n"
-                                                      f"Ошибка {str(error)} {traceback.format_exc()}")
-
+                    if not self.connection_ok:
+                        self.connection_ok = True
+                        self.unreachable_time = 0
+                        self.logger.info(f"Соединение открыто {self.plc_ip}")
+                        snap7.client.logger.disabled = False
+                    try:
+                        snapshotReq = self.get_bool(db_number=camera_DB_num, offsetbyte=0, offsetbit=0)
+                    except Exception as error:
+                        self.logger.error(f"Не удалось считать строб съёмки: DB{camera_DB_num}.DBX0.0\n"
+                                          f"Ошибка {str(error)} {traceback.format_exc()}")
+                    if snapshotReq:
+                        if found_part_num > 0:
+                           self.logger.info(f"Запись результата распознования - номер найденной детали - {found_part_num}")
+                           try:
+                               self.set_usint(db_number=camera_DB_num, offsetbyte=1, tag_value=found_part_num)
+                               found_part_num = 0
+                           except Exception as error:
+                               self.logger.error(f"Не удалось записать результат съёмки: DB{camera_DB_num}.DBB1\n"
+                                                 f"Ошибка {str(error)} {traceback.format_exc()}")
