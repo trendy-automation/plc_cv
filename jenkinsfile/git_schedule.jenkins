@@ -38,12 +38,14 @@ pipeline {
                 sh 'curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop'
             }
         }
-        stage ("copy") {
+        stage ("clean & copy appdata") {
             steps {
                 echo " ============== clean appdata =================="
                 sh 'rm -irf $target_path/*'
-            }
-            steps {
+        //    }
+        //}
+        //stage ("copy") {
+        //    steps {
                 echo " ============== copy app =================="
                 sh 'cp -ir $source_path $target_path'
             }
