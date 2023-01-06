@@ -2,6 +2,8 @@
 import snap7
 import sys
 import logging
+from logging import handlers
+from logging.handlers import RotatingFileHandler
 import traceback
 import time
 import threading
@@ -20,10 +22,10 @@ class PLC(threading.Thread):
         self.logger = logging.getLogger("_plc_.client")
         #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
         logging.basicConfig(level=logging.INFO,
-                            handlers=[logging.StreamHandler(sys.stdout)],
+                            handlers=[logging.StreamHandler(sys.stdout),
+                                      logging.handlers.RotatingFileHandler
+                                          ("debug.log", maxBytes=(1048576 * 5), backupCount=7)],
                             format='%(asctime)-15s %(name)s %(message)s')
-        #self.logger.setLevel(logging.INFO)
-        #snap7.client.logger.setLevel(logging.INFO)
         self.snap7client = snap7.client.Client()
         self.connection_ok = False
         self.unreachable_time = 0
