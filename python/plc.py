@@ -1,5 +1,6 @@
 # %%
 import snap7
+import sys
 import logging
 import traceback
 import time
@@ -16,8 +17,13 @@ class PLC(threading.Thread):
         # init
         threading.Thread.__init__(self, args=(), name=plc_ip, kwargs=None)
         self.plc_ip = plc_ip
-        self.logger = logging.getLogger("opencv")
-        snap7.client.logger.setLevel(logging.INFO)
+        self.logger = logging.getLogger("_plc_.client")
+        #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+        logging.basicConfig(level=logging.INFO,
+                            handlers=[logging.StreamHandler(sys.stdout)],
+                            format='%(asctime)-15s %(name)s %(message)s')
+        #self.logger.setLevel(logging.INFO)
+        #snap7.client.logger.setLevel(logging.INFO)
         self.snap7client = snap7.client.Client()
         self.connection_ok = False
         self.unreachable_time = 0
@@ -45,11 +51,10 @@ class PLC(threading.Thread):
         while getattr(cur_thread, "do_run", True):
             time.sleep(1.2)
             if self.unreachable_time == 0 or (time.time() - self.unreachable_time) > reconnect_timeout:
-                # print(f"self.snap7client.get_connected() {self.snap7client.get_connected()}")
                 if not self.snap7client.get_connected():
                     # Подключение к контроллеру ...
                     try:
-                        print(f"Подключение к контроллеру {self.plc_ip}...")
+                        self.logger.info(f"Подключение к контроллеру {self.plc_ip}...")
                         self.snap7client.connect(self.plc_ip, 0, 1)
                     except Exception as error:
                         if self.connection_ok:
