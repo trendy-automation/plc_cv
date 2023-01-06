@@ -74,7 +74,10 @@ class PLC(threading.Thread):
                             self.logger.info(f"Соединение открыто {self.plc_ip}")
                             snap7.client.logger.disabled = False
                         try:
-                            snapshotReq = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
+                            if not snapshotReq:
+                                snapshotReq = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
+                                if snapshotReq:
+                                    self.logger.info(f"Строб съёмки пришёл {snapshotReq}")
                         except Exception as error:
                             self.logger.error(f"Не удалось считать строб съёмки: DB{camera_db_num}.DBX0.0\n"
                                               f"Ошибка {str(error)} {traceback.format_exc()}")
