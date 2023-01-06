@@ -37,8 +37,8 @@ services:
     volumes: 
       - *services-volume
       - /var/run/docker.sock:/var/run/docker.sock
-    command:
-      - chown jenkins:docker /var/run/docker.sock
+    #command:
+    #  - chown jenkins:docker /var/run/docker.sock
     #entrypoint: ["chown jenkins:docker /var/run/docker.sock"]
     restart: always
   opencv:
