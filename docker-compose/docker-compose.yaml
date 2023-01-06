@@ -17,7 +17,6 @@ services:
     container_name: jenkins
     volumes:
       - ./jenkins_home/:/var/jenkins_home
-    #  - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - GIT_SSL_NO_VERIFY=true
     restart: always
@@ -37,9 +36,6 @@ services:
     volumes: 
       - *services-volume
       - /var/run/docker.sock:/var/run/docker.sock
-    #command:
-    #  - chown jenkins:docker /var/run/docker.sock
-    #entrypoint: ["chown jenkins:docker /var/run/docker.sock"]
     restart: always
   opencv:
     #image: sixsq/opencv-python:latest
@@ -50,17 +46,9 @@ services:
     container_name: opencv
     volumes:
       - *services-volume
-    #  - /var/run/docker.sock:/var/run/docker.sock
-    #platform: linux/amd64
     command:
       - /var/appdata/python/appstart.sh
-    #  - /bin/sh -c 'sleep 1'
-    #  - /bin/sh -c 'pip install -r /var/appdata/python/requirements.txt'
-    #  - /bin/sh -c 'python3 /var/appdata/python/main.py'
-    #  - /var/appdata/python/appstart.sh
     #  - pip install -r /var/appdata/python/requirements.txt
     #  - python3 /var/appdata/python/main.py
-    #entrypoint: ["/var/appdata/python/appstart.sh"]
-    #entrypoint: ["pip install -r /var/appdata/python/requirements.txt", "python3 /var/appdata/python/main.py"]
     tty: true
     restart: always
