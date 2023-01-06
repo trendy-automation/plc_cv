@@ -14,5 +14,6 @@ ENV LC_ALL ru_RU.UTF-8
 # +Timezone (если надо на этапе сборки)
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+#RUN timedatectl set-timezone Europe/Moscow
 RUN pip install --upgrade pip
 RUN pip install python-snap7

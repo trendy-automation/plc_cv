@@ -24,6 +24,7 @@ pipeline {
             steps {
                 echo " ============== clean workspace =================="
                 cleanWs()
+            }
         }
         stage("checkuot") {
             steps {
