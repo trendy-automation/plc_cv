@@ -20,6 +20,7 @@ class PLC(threading.Thread):
         threading.Thread.__init__(self, args=(), name=plc_ip, kwargs=None)
         self.plc_ip = plc_ip
         self.found_part_num = 0
+        self.snapshotReq = False
         self.plc_ip = plc_ip
         self.logger = logging.getLogger("_plc_.client")
         #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
@@ -74,17 +75,17 @@ class PLC(threading.Thread):
                             self.logger.info(f"Соединение открыто {self.plc_ip}")
                             snap7.client.logger.disabled = False
                         try:
-                            if not snapshotReq:
-                                snapshotReq = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
-                                if snapshotReq:
-                                    self.logger.info(f"Строб съёмки пришёл {snapshotReq}")
+                            if not self.snapshotReq:
+                                self.snapshotReq = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
+                                if self.snapshotReq:
+                                    self.logger.info(f"Строб съёмки пришёл {self.snapshotReq}")
                         except Exception as error:
                             self.logger.error(f"Не удалось считать строб съёмки: DB{camera_db_num}.DBX0.0\n"
                                               f"Ошибка {str(error)} {traceback.format_exc()}")
                             self.snap7client.disconnect()
 
 
-                        if snapshotReq:
+                        if self.snapshotReq:
                             if self.found_part_num > 0:
                                self.logger.info(f"Запись результата распознования - номер найденной детали - {self.found_part_num}")
                                try:
