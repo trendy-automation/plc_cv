@@ -62,7 +62,7 @@ class PLC(threading.Thread):
                         if self.connection_ok:
                             self.snap7client.disconnect()
                             self.connection_ok = False
-                        self.logger.error(f"Не удалось подключиться к контроллеру: {self.plc_ip}"
+                        self.logger.error(f"Не удалось подключиться к контроллеру: {self.plc_ip}\n"
                                           f"Ошибка {str(error)} {traceback.format_exc()}")
                         snap7.client.logger.disabled = True
                         self.unreachable_time = time.time()
@@ -73,7 +73,7 @@ class PLC(threading.Thread):
                         try:
                             snapshotReq = self.get_bool(db_number=camera_DB_num, offsetbyte=0, offsetbit=0)
                         except Exception as error:
-                            self.logger.error(f"Не удалось считать строб съёмки: DB{camera_DB_num}.DBX0.0"
+                            self.logger.error(f"Не удалось считать строб съёмки: DB{camera_DB_num}.DBX0.0\n"
                                               f"Ошибка {str(error)} {traceback.format_exc()}")
                         if snapshotReq:
                             # snapshot
@@ -83,6 +83,6 @@ class PLC(threading.Thread):
                                 try:
                                     self.set_usint(db_number=camera_DB_num, offsetbyte=1, tag_value=found_part_num)
                                 except Exception as error:
-                                    self.logger.error(f"Не удалось записать результат съёмки: DB{camera_DB_num}.DBB1"
+                                    self.logger.error(f"Не удалось записать результат съёмки: DB{camera_DB_num}.DBB1\n"
                                                       f"Ошибка {str(error)} {traceback.format_exc()}")
 
