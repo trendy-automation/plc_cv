@@ -1,4 +1,5 @@
 
+#!/bin/bash
 sudo apt install openssh-server
 
 #insted https://docs.docker.com/engine/install/ubuntu/
