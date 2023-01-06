@@ -9,14 +9,14 @@ import time
 import threading
 from snap7.util import *
 
+# TODO found_part_num
+found_part_num = 0
+camera_db_num = 8
+reconnect_timeout = 60
 
 class PLC(threading.Thread):
     def __init__(self, plc_ip):
-        # TODO found_part_num
-        found_part_num = 0
-        camera_DB_num = 8
-        reconnect_timeout = 60
-        # init
+        #init
         threading.Thread.__init__(self, args=(), name=plc_ip, kwargs=None)
         self.plc_ip = plc_ip
         self.logger = logging.getLogger("_plc_.client")
@@ -72,9 +72,9 @@ class PLC(threading.Thread):
                             self.logger.info(f"Соединение открыто {self.plc_ip}")
                             snap7.client.logger.disabled = False
                         try:
-                            snapshotReq = self.get_bool(db_number=camera_DB_num, offsetbyte=0, offsetbit=0)
+                            snapshotReq = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
                         except Exception as error:
-                            self.logger.error(f"Не удалось считать строб съёмки: DB{camera_DB_num}.DBX0.0\n"
+                            self.logger.error(f"Не удалось считать строб съёмки: DB{camera_db_num}.DBX0.0\n"
                                               f"Ошибка {str(error)} {traceback.format_exc()}")
                             self.snap7client.disconnect()
 
@@ -83,10 +83,10 @@ class PLC(threading.Thread):
                             if found_part_num > 0:
                                self.logger.info(f"Запись результата распознования - номер найденной детали - {found_part_num}")
                                try:
-                                   self.set_usint(db_number=camera_DB_num, offsetbyte=1, tag_value=found_part_num)
+                                   self.set_usint(db_number=camera_db_num, offsetbyte=1, tag_value=found_part_num)
                                    found_part_num = 0
                                except Exception as error:
-                                   self.logger.error(f"Не удалось записать результат съёмки: DB{camera_DB_num}.DBB1\n"
+                                   self.logger.error(f"Не удалось записать результат съёмки: DB{camera_db_num}.DBB1\n"
                                                      f"Ошибка {str(error)} {traceback.format_exc()}")
                                    self.snap7client.disconnect()
             except Exception as error:
