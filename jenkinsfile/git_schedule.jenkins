@@ -24,13 +24,6 @@ pipeline {
             steps {
                 echo " ============== clean workspace =================="
                 cleanWs()
-        //    }
-        //}
-        //stage("clean appdata") {
-        //    steps {
-                echo " ============== clean appdata =================="
-                sh 'rm -irf $target_path/*'
-            }
         }
         stage("checkuot") {
             steps {
@@ -46,7 +39,11 @@ pipeline {
         }
         stage ("copy") {
             steps {
-                echo " ============== copy =================="
+                echo " ============== clean appdata =================="
+                sh 'rm -irf $target_path/*'
+            }
+            steps {
+                echo " ============== copy app =================="
                 sh 'cp -ir $source_path $target_path'
             }
         }

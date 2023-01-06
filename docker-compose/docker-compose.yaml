@@ -22,6 +22,7 @@ services:
       - GIT_SSL_NO_VERIFY=true
     restart: always
   agent:
+    #image: jenkins/ssh-agent:jdk11
     build:
       context: .
       dockerfile: agentDockerfile
@@ -36,6 +37,9 @@ services:
     volumes: 
       - *services-volume
       - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - chown jenkins:docker /var/run/docker.sock
+    #entrypoint: ["chown jenkins:docker /var/run/docker.sock"]
     restart: always
   opencv:
     #image: sixsq/opencv-python:latest

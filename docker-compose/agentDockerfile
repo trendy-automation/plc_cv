@@ -5,3 +5,4 @@ RUN apt update && \
 ARG DOCKER_GID=993
 RUN groupadd -g ${DOCKER_GID} docker
 RUN usermod -aG docker jenkins
+ENTRYPOINT []
