@@ -43,7 +43,7 @@ pipeline {
                 echo " ============== clean appdata =================="
                 //bash 'shopt -s extglob'
                 //bash 'rm -irf !(debug.log|__pycache__) $target_path/*'
-                bash 'find $target_path/ -type f -not -name debug.log -type d -not -name __pycache__ -delete'
+                sh 'find $target_path/ -type f -not -name debug.log -type d -not -name __pycache__ -delete'
         //    }
         //}
         //stage ("copy") {
