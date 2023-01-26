@@ -27,7 +27,7 @@ class PLC(threading.Thread):
         logging.basicConfig(level=logging.INFO,
                             handlers=[logging.StreamHandler(sys.stdout),
                                       logging.handlers.RotatingFileHandler
-                                          ("debug.log", maxBytes=(1048576 * 5), backupCount=7)],
+                                          ("./debug.log", maxBytes=(1048576 * 5), backupCount=7)],
                             format='%(asctime)-15s %(name)s %(message)s')
         self.snap7client = snap7.client.Client()
         self.connection_ok = False
