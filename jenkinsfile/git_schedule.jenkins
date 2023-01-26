@@ -44,7 +44,7 @@ pipeline {
                 //bash 'shopt -s extglob'
                 //bash 'rm -irf !(debug.log|__pycache__) $target_path/*'
                 //exec rm -R {} \\
-                sh 'find $target_path/ -type f -not -name debug.log -delete -type d -not -name __pycache__ -delete'
+                sh 'find $target_path/ -type f -not -name debug.log -delete -type d -not -name __pycache__ -exec rm -R {} \\;'
         //    }
         //}
         //stage ("copy") {
