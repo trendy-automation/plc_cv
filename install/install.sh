@@ -12,7 +12,7 @@ git clone https://github.com/trendy-automation/plc_cv plc_cv
 cd plc_cv
 cp -ir python docker-compose/appdata/python
 cd docker-compose
-sudo docker volume create portainer_data
+#sudo docker volume create portainer_data
 
 sudo chmod +x appdata/python/appstart.sh
 

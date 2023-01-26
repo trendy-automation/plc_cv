@@ -8,17 +8,12 @@ x-services-volume:
 
 
 services:
-  #docker run -d -p 8000:8000 -p 9443:9443 --name portainer
-    #--restart=always
-    #-v /var/run/docker.sock:/var/run/docker.sock
-    #-v portainer_data:/data portainer/portainer-ce:latest
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
     ports:
       - 9443:9443
       - 8000:8000
-    #  - 9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer_data:/data
@@ -37,7 +32,6 @@ services:
       - GIT_SSL_NO_VERIFY=true
     restart: always
   agent:
-    #image: jenkins/ssh-agent:jdk11
     build:
       context: .
       dockerfile: agentDockerfile
@@ -54,7 +48,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
   opencv:
-    #image: sixsq/opencv-python:latest
     build:
       context: .
       dockerfile: opencvDockerfile

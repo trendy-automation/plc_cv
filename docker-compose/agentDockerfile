@@ -5,9 +5,11 @@ RUN apt update && \
 #ARG DOCKER_GID=993
 #RUN groupadd -g ${DOCKER_GID} docker
 #RUN usermod -aG docker jenkins
+#RUN newgrp - docker
 #RUN mkdir /var/run/docker.sock
 #RUN chown jenkins:jenkins /var/run/docker.sock
 #RUN timedatectl set-timezone Europe/Moscow
+RUN echo "if [ -e /var/run/docker.sock ]; then sudo chown jenkins /var/run/docker.sock; fi" >> /home/jenkins/.bashrc
 # +Timezone (если надо на этапе сборки)
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

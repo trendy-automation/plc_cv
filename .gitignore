@@ -7,9 +7,11 @@ venv/*
 docker-compose/jenkins_home/*
 docker-compose/appdata/*
 !docker-compose/jenkins_home/credentials.xml
-docker-compose/jenkins_home/.ssh*
-!docker-compose/jenkins_home/.ssh/jenkins_id_rsa
-!docker-compose/jenkins_home/.ssh/jenkins_id_rsa.pub
+!docker-compose/jenkins_home/config.xml
+!docker-compose/jenkins_home/secrets
+#docker-compose/jenkins_home/.ssh*
+#!docker-compose/jenkins_home/.ssh/jenkins_id_rsa
+#!docker-compose/jenkins_home/.ssh/jenkins_id_rsa.pub
 docker-compose/jenkins_home/jobs/*
 docker-compose/jenkins_home/jobs/git_schedule/*
 !docker-compose/jenkins_home/jobs/git_schedule/config.xml
