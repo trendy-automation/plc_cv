@@ -42,7 +42,7 @@ pipeline {
             steps {
                 echo " ============== clean appdata =================="
                 //sh 'rm -irf $target_path/*'
-                sh 'find $target_path/ -type f -not -name 'debug.log' -type d -not -name __pycache__ -exec rm -R {} \\;'
+                sh 'find $target_path/ -type f -not -name debug.log -type d -not -name __pycache__ -exec rm -R {} \\;'
         //    }
         //}
         //stage ("copy") {
