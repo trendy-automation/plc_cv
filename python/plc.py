@@ -27,7 +27,10 @@ class PLC(threading.Thread):
         self.logger = logging.getLogger("_plc_.client")
         #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
         logging.basicConfig(level=config['logger']['level'],
-                            handlers=config['logger']['handlers'],
+                            handlers=[logging.StreamHandler(sys.stdout),
+                                      logging.handlers.RotatingFileHandler(config['logger']['debug_file'],
+                                                                           maxBytes=(1048576 * 5),
+                                                                           backupCount=7)],
                             format=config['logger']['format'])
         self.snap7client = snap7.client.Client()
         self.connection_ok = False

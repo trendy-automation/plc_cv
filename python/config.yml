@@ -1,8 +1,7 @@
 version: 1.0
 logger:
   level: logging.INFO
-  handlers: [logging.StreamHandler(sys.stdout),
-             logging.handlers.RotatingFileHandler("./debug.log", maxBytes=(1048576 * 5), backupCount=7)]
+  debug_file: 'debug.log'
   format: '%(asctime)-15s %(name)s %(message)s'
 plc:
   ip: 192.168.0.10

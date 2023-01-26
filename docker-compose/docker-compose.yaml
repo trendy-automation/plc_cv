@@ -56,9 +56,10 @@ services:
     volumes:
       - *services-volume
     #command: /var/appdata/python/appstart.sh
-    command: pip install -r /var/appdata/python/requirements.txt
-    command: cd /var/appdata/python
-    command: python3 /var/appdata/python/main.py
+    command: bash -c "
+      cd /var/appdata/python
+      && pip install -r requirements.txt
+      && python3 /var/appdata/python/main.py"
     tty: true
     restart: always
 
