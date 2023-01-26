@@ -41,7 +41,8 @@ pipeline {
         stage ("clean & copy appdata") {
             steps {
                 echo " ============== clean appdata =================="
-                sh 'rm -irf !(__pycache__) $target_path/*'
+                //sh 'rm -irf $target_path/*'
+                sh 'find $target_path/ -type d -not -name __pycache__ -exec rm -R {} \;'
         //    }
         //}
         //stage ("copy") {
