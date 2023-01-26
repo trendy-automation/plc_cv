@@ -1,5 +1,6 @@
 import plc
-plc_ip = '192.168.0.10'
+import yaml
+config = yaml.safe_load(open("config.yml"))
 
 def run_plc(ip):
     my_plc = plc.PLC(ip)
@@ -7,4 +8,4 @@ def run_plc(ip):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    run_plc(plc_ip)
+    run_plc(config['plc_ip'])

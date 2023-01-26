@@ -8,6 +8,8 @@ import traceback
 import time
 import threading
 from snap7.util import *
+import yaml
+config = yaml.safe_load(open("config.yml"))
 
 # TODO found_part_num
 #found_part_num = 0
@@ -24,11 +26,9 @@ class PLC(threading.Thread):
         self.plc_ip = plc_ip
         self.logger = logging.getLogger("_plc_.client")
         #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-        logging.basicConfig(level=logging.INFO,
-                            handlers=[logging.StreamHandler(sys.stdout),
-                                      logging.handlers.RotatingFileHandler
-                                          ("./debug.log", maxBytes=(1048576 * 5), backupCount=7)],
-                            format='%(asctime)-15s %(name)s %(message)s')
+        logging.basicConfig(level=config['logger']['level'],
+                            handlers=config['logger']['handlers'],
+                            format=config['logger']['format'])
         self.snap7client = snap7.client.Client()
         self.connection_ok = False
         self.unreachable_time = 0
