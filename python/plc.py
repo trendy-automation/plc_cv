@@ -13,8 +13,8 @@ config = yaml.safe_load(open("config.yml"))
 
 # TODO found_part_num
 #found_part_num = 0
-camera_db_num = 8
-reconnect_timeout = 60
+camera_db_num = config['plc']['camera_db_num']
+reconnect_timeout = config['plc']['reconnect_timeout']
 
 class PLC(threading.Thread):
     def __init__(self, plc_ip):

@@ -8,4 +8,4 @@ def run_plc(ip):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    run_plc(config['plc_ip'])
+    run_plc(config['plc']['ip'])
