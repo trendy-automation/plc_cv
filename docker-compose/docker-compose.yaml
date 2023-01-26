@@ -55,10 +55,9 @@ services:
     container_name: opencv
     volumes:
       - *services-volume
-    command:
-      - /var/appdata/python/appstart.sh
-    #  - pip install -r /var/appdata/python/requirements.txt
-    #  - python3 /var/appdata/python/main.py
+    #command: /var/appdata/python/appstart.sh
+    command: pip install -r /var/appdata/python/requirements.txt
+    command: python3 /var/appdata/python/main.py
     tty: true
     restart: always
 
