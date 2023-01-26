@@ -1,6 +1,6 @@
 version: 1.0
 logger:
-  level: logging.INFO
+  level: INFO
   debug_file: 'debug.log'
   format: '%(asctime)-15s %(name)s %(message)s'
 plc:
