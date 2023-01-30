@@ -1,6 +1,8 @@
 import plc
 import yaml
-config = yaml.safe_load(open("config.yml"))
+import os
+csd = os.path.dirname(os.path.abspath(__file__))
+config = yaml.safe_load(open(csd+"/config.yml"))
 
 def run_plc(ip):
     my_plc = plc.PLC(ip)

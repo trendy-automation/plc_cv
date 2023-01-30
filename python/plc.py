@@ -9,7 +9,9 @@ import time
 import threading
 from snap7.util import *
 import yaml
-config = yaml.safe_load(open("config.yml"))
+import os
+csd = os.path.dirname(os.path.abspath(__file__))
+config = yaml.safe_load(open(csd+"/config.yml"))
 
 # TODO found_part_num
 #found_part_num = 0
