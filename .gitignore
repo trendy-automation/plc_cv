@@ -21,7 +21,4 @@ docker-compose/jenkins_home/jobs/git_schedule/*
 docker-compose/jenkins_home/nodes/*
 docker-compose/jenkins_home/nodes/jenkins_agent/*
 !docker-compose/jenkins_home/nodes/jenkins_agent/config.xml
-docker-compose/jenkins_home/users/*
-!docker-compose/jenkins_home/users/users.xml
-docker-compose/jenkins_home/users/basic_2549913433733378232/*
-!docker-compose/jenkins_home/users/basic_2549913433733378232/config.xml
+#docker-compose/jenkins_home/users/*
