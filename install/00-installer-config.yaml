@@ -1,0 +1,16 @@
+# This is the network config written by 'subiquity'
+network:
+  renderer: NetworkManager
+  ethernets:
+    eno1:
+      dhcp4: no
+      addresses:
+        - 192.168.1.12/24
+      routes:
+        - to: default
+          via: 192.168.10.1
+      nameservers:
+          addresses: [8.8.8.8, 1.1.1.1]
+    enp2s0:
+      dhcp4: true
+  version: 2
