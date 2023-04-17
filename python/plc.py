@@ -11,7 +11,7 @@ from snap7.util import *
 import yaml
 import os
 csd = os.path.dirname(os.path.abspath(__file__))
-config = yaml.safe_load(open(csd+"/config.yml"))
+config = yaml.safe_load(open(csd+"/config.yaml"))
 
 # TODO found_part_num
 #found_part_num = 0

@@ -25,9 +25,6 @@ parts = [dict(code='8АТ-1250-11', part_name='Корпус маятника', s
 import pyrealsense2 as rs
 import numpy as np
 import matplotlib.pyplot as plt
-import cv2
-# import opencv_jupyter_ui as jcv2
-
 
 import cv2
 
