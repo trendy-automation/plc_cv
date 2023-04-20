@@ -33,7 +33,7 @@ pipeline {
             }
         }
         stage ("stop opencv") {
-            steps {
+            //steps {
                try {
                     echo " ============== stop opencv =================="
                     sh 'curl --connect-timeout 20 -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop'
@@ -44,7 +44,7 @@ pipeline {
                     sh 'curl --connect-timeout 20 -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop'
                  }
                }
-            }
+            //}
         }
         stage ("clean & copy appdata") {
             steps {
@@ -55,7 +55,7 @@ pipeline {
             }
         }
         stage ("start opencv") {
-            steps {
+            //steps {
                try {
                     echo " ============== start opencv =================="
                     sh 'curl --connect-timeout 20 -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/start'
@@ -66,7 +66,7 @@ pipeline {
                     sh 'curl --connect-timeout 20 -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/start'
                  }
                }
-            }
+            //}
         }
     }
 }
