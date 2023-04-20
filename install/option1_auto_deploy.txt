@@ -7,6 +7,8 @@ to deploy:
     cd plc_cv
     docker build ($pwd)/docker-compose -t plc-cv-deploy
     docker run --rm -it -v ($pwd)/install/ansible/playbooks:/ansible/playbooks plc-cv-deploy install/plc-cv-playbook.yaml --extra-vars "ansible_sudo_pass=3470"
+    # to check user user
+    http://192.168.1.12:8080/
 
 to test:
   on master:
