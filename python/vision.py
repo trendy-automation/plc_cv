@@ -1,3 +1,10 @@
+import pyrealsense2 as rs
+import numpy as np
+# import matplotlib.pyplot as plt
+
+import cv2
+
+
 # var huck
 found_part_num = 0
 teach_part_num = 0
@@ -15,18 +22,6 @@ parts = [dict(code='8АТ-1250-11', part_name='Корпус маятника', s
          dict(code='17115.2900.77', part_name='Переходник', step_name='Установ А', h=273, w=206, Zavg=400),
          dict(code='17115.2900.77', part_name='Переходник', step_name='Установ B', h=209.03, w=206, Zavg=400)]
 
-## License: Apache 2.0. See LICENSE file in root directory.
-## Copyright(c) 2015-2017 Intel Corporation. All Rights Reserved.
-
-###############################################
-##      Open CV and Numpy integration        ##
-###############################################
-
-import pyrealsense2 as rs
-import numpy as np
-import matplotlib.pyplot as plt
-
-import cv2
 
 # from transform import hough_windowed_rectangle, hough_cricles
 # from utils import plot_hough_space, graph_output, graph_rectangles_and_circles, countMoney

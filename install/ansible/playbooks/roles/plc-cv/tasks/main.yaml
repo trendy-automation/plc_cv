@@ -1,0 +1,36 @@
+---
+# Clone git repo
+#git clone https://github.com/trendy-automation/plc_cv plc_cv
+#cd plc_cv
+- name: Clone a repo with separate git directory
+  ansible.builtin.git:
+    repo: https://github.com/trendy-automation/plc_cv
+    dest: /plc_cv
+
+# Copy python files to appdata into docker-compose folder
+#cp -ir python docker-compose/appdata/python
+- name: Copy python files
+  copy:
+    src: /plc_cv/python/
+    dest: /plc_cv/docker-compose/appdata/python/
+    #owner: "{{ system_user }}"
+    #group: root
+    mode: 0644
+    remote_src: yes
+    directory_mode: yes
+    
+#  - copy:
+#    src: /docker-compose/appdata/python/
+#    dest: /python/
+#    owner: "{{ system_user }}"
+#  with_fileglob:
+#    - "/*"
+
+# Docker up
+#cd docker-compose
+#sudo docker-compose up --build -d
+- name: deploy Docker Compose stack
+  community.docker.docker_compose:
+    project_src: /plc_cv/docker-compose/
+    files:
+    - docker-compose.yaml

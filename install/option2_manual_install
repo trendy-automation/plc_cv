@@ -1,18 +1,24 @@
 #!/bin/bash
-sudo apt install -y openssh-server
+#sudo apt install -y openssh-server
+# on computer vision PC
 
+#install docer compose
 #insted https://docs.docker.com/engine/install/ubuntu/
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 sudo usermod -aG docker $USER
 sudo apt  install -y docker-compose 
 
+#download repo application + platform
 git clone https://github.com/trendy-automation/plc_cv plc_cv
 
+# copy application to docker volume
 cd plc_cv
 cp -ir python docker-compose/appdata/python
 cd docker-compose
 
 
+# docker compose up
 sudo docker-compose up --build -d
+
 #sudo docker-compose exec jenkins cat var/jenkins_home/secrets/initialAdminPassword
