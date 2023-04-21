@@ -15,7 +15,7 @@
     dest: /plc_cv/docker-compose/appdata/python/
     owner: "{{ system_user }}"
     group: root
-    mode: 644
+    mode: 777
     remote_src: yes
     directory_mode: yes
     

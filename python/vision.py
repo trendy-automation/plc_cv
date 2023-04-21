@@ -4,7 +4,6 @@ import numpy as np
 
 import cv2
 
-
 # var huck
 found_part_num = 0
 teach_part_num = 0
