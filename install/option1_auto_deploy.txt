@@ -1,7 +1,8 @@
 to deploy:
   on pc-cv:
-    sudo echo 'PermitRootLogin prohibit-password' >> /etc/ssh/sshd_config
-    sudo echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+    echo 'PermitRootLogin prohibit-password' >> /etc/ssh/sshd_config
+    echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+    systemctl restart ssh.service
 
   on master:
     cd plc_cv

@@ -34,7 +34,7 @@ RUN CARGO_NET_GIT_FETCH_WITH_CLI=1 && \
 RUN mkdir /ansible && \
     mkdir -p /etc/ansible && \
     echo "[ubuntu-cv]" > /etc/ansible/hosts && \
-    echo "192.168.1.12 ansible_user=op ansible_ssh_pass=3470 ansible_ssh_extra_args='-o StrictHostKeyChecking=no'" >> /etc/ansible/hosts
+    echo "192.168.1.12 ansible_user=root ansible_ssh_pass=3470 ansible_ssh_extra_args='-o StrictHostKeyChecking=no'" >> /etc/ansible/hosts
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /ansible/playbooks

@@ -22,3 +22,9 @@ cd docker-compose
 sudo docker-compose up --build -d
 
 #sudo docker-compose exec jenkins cat var/jenkins_home/secrets/initialAdminPassword
+
+
+#info
+https://medium.com/@jijupax/connect-the-webcam-to-docker-on-mac-or-windows-51d894c44468
+https://hub.docker.com/r/lmwafer/realsense-ready
+https://stackoverflow.com/questions/33985648/access-camera-inside-docker-container

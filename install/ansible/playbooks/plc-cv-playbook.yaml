@@ -1,14 +1,10 @@
 - hosts: ubuntu-cv
-  remote_user: op
+  remote_user: root
   gather_facts: yes
   become: yes
   vars:
-    system_user: op
+    system_user: root
 
   roles:
-  #- docker-compose
-  #- plc-cv
-    - role: docker-compose
-      system_user: op
-    - role: plc-cv
-      system_user: op
+  - docker-compose
+  - plc-cv

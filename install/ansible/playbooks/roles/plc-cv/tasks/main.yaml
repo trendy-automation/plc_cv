@@ -13,9 +13,9 @@
   copy:
     src: /plc_cv/python/
     dest: /plc_cv/docker-compose/appdata/python/
-    #owner: "{{ system_user }}"
-    #group: root
-    mode: 0644
+    owner: "{{ system_user }}"
+    group: root
+    mode: 644
     remote_src: yes
     directory_mode: yes
     
