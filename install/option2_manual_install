@@ -24,7 +24,10 @@ sudo docker-compose up --build -d
 #sudo docker-compose exec jenkins cat var/jenkins_home/secrets/initialAdminPassword
 
 
-#info
-https://medium.com/@jijupax/connect-the-webcam-to-docker-on-mac-or-windows-51d894c44468
-https://hub.docker.com/r/lmwafer/realsense-ready
-https://stackoverflow.com/questions/33985648/access-camera-inside-docker-container
+#info camers docker
+# https://stackoverflow.com/questions/24225647/docker-a-way-to-give-access-to-a-host-usb-or-serial-device
+# https://medium.com/@jijupax/connect-the-webcam-to-docker-on-mac-or-windows-51d894c44468
+# https://hub.docker.com/r/lmwafer/realsense-ready
+# https://stackoverflow.com/questions/33985648/access-camera-inside-docker-container
+# jenkins install by ansible
+# https://habr.com/ru/articles/680170/
