@@ -1,18 +1,23 @@
 to deploy:
   on pc-cv:
-    echo 'PermitRootLogin prohibit-password' >> /etc/ssh/sshd_config
-    echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
-    systemctl restart ssh.service
+    sudo echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+    sudo echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+    sudo systemctl restart ssh.service
+    sudo ip link set enp0s8 up
+    sudo netplan apply
+    sudo passwd root
+
 
   on master:
-    cd plc_cv
-    docker build ($pwd)/docker-compose -t plc-cv-deploy
-    docker run --rm -it -v ($pwd)/install/ansible/playbooks:/ansible/playbooks plc-cv-deploy install/plc-cv-playbook.yaml --extra-vars "ansible_sudo_pass=3470"
+    cd /plc_cv
+    docker build install -t plc-cv-deploy
+    docker run --rm -it -v $(pwd)/install/ansible/playbooks:/ansible/playbooks plc-cv-deploy install/plc-cv-playbook.yaml --extra-vars "ansible_sudo_pass=3470"
     # to check user user
+    # install jenkins plugins
     http://192.168.1.12:8080/
 
 to test:
   on master:
-    cd plc_cv
-    docker build ($pwd)/jupyter -t jupyter-notebook
-    docker run -it --rm -p 10000:8888 -v ($pwd)/jupyter:/home/jovyan/work jupyter-notebook
+    cd /plc_cv
+    docker build jupyter -t jupyter-notebook
+    docker run -it --rm -p 8888:8888 -v $(pwd)/jupyter:/home/jovyan/work --device /dev/video0 jupyter-notebook

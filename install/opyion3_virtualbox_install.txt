@@ -1,0 +1,6 @@
+sudo pvresize /dev/sda3
+sudo lvresize -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+sudo resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+
+#in host OS
+#VBoxManage modifyhd YOUR_HARD_DISK.vdi --resize SIZE_IN_MB
