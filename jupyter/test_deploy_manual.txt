@@ -7,3 +7,4 @@
     cd /plc_cv
     docker build ./jupyter  -t jupyter-notebook
     docker run -it --rm -p 8888:8888 -v /plc_cv/jupyter:/home/jovyan/work --device-cgroup-rule "c 81:* rmw" -v /dev:/dev --device-cgroup-rule "c 189:* rmw" jupyter-notebook
+    rs-enumerate-devices

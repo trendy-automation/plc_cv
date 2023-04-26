@@ -1,15 +1,22 @@
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
-
 # Pick your favorite docker-stacks image
 FROM jupyter/minimal-notebook:2023-02-28
 
 USER root
 
-# Add permanent apt-get installs and other root commands here
-# e.g., RUN apt-get install --yes --no-install-recommends npm nodejs
-# RUN apt update && apt -y install libusb-1.0-0-dev && apt -y install ffmpeg libsm6 libxext6
+SHELL ["/bin/bash", "-c"]
 
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+ && apt-get install -y \
+    build-essential \
+    cmake \
+    git-all \
+    software-properties-common \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install dependencies: See https://github.com/IntelRealSense/realsense-ros/tree/ros2-development
+# Librealsense: See https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md#installing-the-packages
 RUN apt-get update \
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE \
  && add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u \
@@ -19,17 +26,39 @@ RUN apt-get update \
     librealsense2-dkms \
     librealsense2-utils \
  && rm -rf /var/lib/apt/lists/*
+ 
+# Install dep packages
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \	
+    libusb-1.0-0 \
+    udev \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    && rm -rf /var/lib/apt/lists/*
 
-USER ${NB_UID}
+ARG DEBIAN_FRONTEND=dialog
 
-# Switch back to jovyan to avoid accidental container runs as root
-# Add permanent mamba/pip/conda installs, data files, other user libs here
-# e.g., RUN pip install --no-cache-dir flake8
+#RUN echo "export PATH=$PATH:~/.local/bin" >> /home/jovyan/.bashrc \
+# && echo "export PYTHONPATH=$PYTHONPATH:/opt/conda/lib" >> /home/jovyan/.bashrc \ 
+# && echo "export PYTHONPATH=$PYTHONPATH:/opt/conda/lib/python3.10/site-packages/pyrealsense2" >> /home/jovyan/.bashrc
 
+RUN echo "chown -R jovyan /dev/video0" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/video1" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/video2" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/video3" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/video4" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/video5" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/iio:device0" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/iio:device1" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /dev/HID-SENSOR-2000e1.4.auto" >> /home/jovyan/.bashrc \
+ && echo "chown -R jovyan /work" >> /home/jovyan/.bashrc 
 
-
+ 
+#USER ${NB_UID}
 
 # Install python packages for data science
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
-
+RUN pip install pyshine
