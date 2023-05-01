@@ -2,6 +2,7 @@ to deploy:
   on pc-cv:
     sudo echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
     sudo echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+    sudo ip a
     sudo systemctl restart ssh.service
     sudo ip link set enp0s8 up
     sudo netplan apply
