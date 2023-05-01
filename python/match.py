@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import logging
 import yaml
 import os
 
@@ -14,8 +15,15 @@ templateDir = config['vision']['match_template']['templateDir']
 resolution_x = config['vision']['pipline']['resolution_x']
 resolution_y = config['vision']['pipline']['resolution_y']
 
+#logger
+logger_level = config['logger']['level']
+logger_debug_file = config['logger']['debug_file']
+logger_format = config['logger']['format']
+
+
 class MatchCapture:
     def __init__(self, depth_colormap, templates):
+        self.logger = logging.getLogger("vision.matching")
         self.depth_colormap = depth_colormap
         self.templates = templates
 
@@ -70,9 +78,18 @@ class MatchCapture:
                     rotated_template = scaled_template
                 else:
                     rotated_template = self.rotate_image(scaled_template, next_angle)
+                template_gray = cv2.cvtColor(rotated_template, cv2.COLOR_BGR2GRAY)
+                contours, _ = cv2.findContours(template_gray, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+                areas = [cv2.contourArea(c) for c in contours]
+                max_index = np.argmax(areas)
+                cnt = contours[max_index]
+                x, y, w, h = cv2.boundingRect(cnt)
+                # print(x, y, w, h)
+                rotated_template = rotated_template[y:y + h, x:x + w]
                 matched_points = cv2.matchTemplate(rgbimage, rotated_template, method, None, rotated_template.copy())
                 min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(matched_points)
                 if max_val >= matched_thresh:
+                    max_loc = (max_loc[0] - x, max_loc[1] - y)
                     all_points.append([max_loc, next_angle, actual_scale, max_val])
         all_points = sorted(all_points, key=lambda x: -x[3])
         if rm_redundant == True:

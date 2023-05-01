@@ -1,14 +1,21 @@
 import cv2
 import numpy as np
+import logging
 import yaml
 import os
 
 csd = os.path.dirname(os.path.abspath(__file__))
 config = yaml.safe_load(open(csd + "/config.yaml"))
 scaleAbs_alpha = config['vision']['capture']['scaleAbs_alpha']
+#logger
+logger_level = config['logger']['level']
+logger_debug_file = config['logger']['debug_file']
+logger_format = config['logger']['format']
+
 
 class ImgCapture:
     def __init__(self, pipeline, hole_filling):
+        self.logger = logging.getLogger("vision.capture")
         self.frames = None
         self.pipeline = pipeline
         self.hole_filling = hole_filling

@@ -1,5 +1,6 @@
 import pyshine as ps
 import socket
+import logging
 import threading
 import yaml
 import os
@@ -9,9 +10,16 @@ config = yaml.safe_load(open(csd + "/config.yaml"))
 resolution_x = config['vision']['pipline']['resolution_x']
 resolution_y = config['vision']['pipline']['resolution_y']
 
+#logger
+logger_level = config['logger']['level']
+logger_debug_file = config['logger']['debug_file']
+logger_format = config['logger']['format']
+
 
 class WebServer(threading.Thread):
-    def __init__(self,cap_images):
+    def __init__(self, cap_images):
+        self.logger = logging.getLogger("vision.webserver")
+        threading.Thread.__init__(self, args=(), name='webserver', kwargs=None)
         self.cap_images = cap_images
         self.server = None
 

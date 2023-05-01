@@ -6,6 +6,9 @@ logger:
 plc:
   ip: 192.168.0.10
   camera_db_num: 8
+  part_type_byte: 1
+  part_posnum_byte: 2
+  vision_mode_byte: 4
   reconnect_timeout: 60
 vision:
   capture:
