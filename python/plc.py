@@ -10,30 +10,39 @@ import threading
 from snap7.util import *
 import yaml
 import os
+
 csd = os.path.dirname(os.path.abspath(__file__))
-config = yaml.safe_load(open(csd+"/config.yaml"))
+config = yaml.safe_load(open(csd + "/config.yaml"))
+
+logger_level = config['logger']['level']
+logger_debug_file = config['logger']['debug_file']
+logger_format = config['logger']['format']
+
+
+
 
 # TODO found_part_num
-#found_part_num = 0
+# found_part_num = 0
 camera_db_num = config['plc']['camera_db_num']
 reconnect_timeout = config['plc']['reconnect_timeout']
 
+
 class PLC(threading.Thread):
     def __init__(self, plc_ip):
-        #init
+        # init
         threading.Thread.__init__(self, args=(), name=plc_ip, kwargs=None)
         self.plc_ip = plc_ip
         self.found_part_num = 0
         self.snapshotReq = False
         self.plc_ip = plc_ip
         self.logger = logging.getLogger("_plc_.client")
-        #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-        logging.basicConfig(level=config['logger']['level'],
+        # logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+        logging.basicConfig(level=logger_level,
                             handlers=[logging.StreamHandler(sys.stdout),
-                                      logging.handlers.RotatingFileHandler(config['logger']['debug_file'],
+                                      logging.handlers.RotatingFileHandler(logger_debug_file,
                                                                            maxBytes=(1048576 * 5),
                                                                            backupCount=7)],
-                            format=config['logger']['format'])
+                            format=logger_format)
         self.snap7client = snap7.client.Client()
         self.connection_ok = False
         self.unreachable_time = 0
@@ -89,17 +98,17 @@ class PLC(threading.Thread):
                                               f"Ошибка {str(error)} {traceback.format_exc()}")
                             self.snap7client.disconnect()
 
-
                         if self.snapshotReq:
                             if self.found_part_num > 0:
-                               self.logger.info(f"Запись результата распознования - номер найденной детали - {self.found_part_num}")
-                               try:
-                                   self.set_usint(db_number=camera_db_num, offsetbyte=1, tag_value=self.found_part_num)
-                                   self.found_part_num = 0
-                               except Exception as error:
-                                   self.logger.error(f"Не удалось записать результат съёмки: DB{camera_db_num}.DBB1\n"
-                                                     f"Ошибка {str(error)} {traceback.format_exc()}")
-                                   self.snap7client.disconnect()
+                                self.logger.info(
+                                    f"Запись результата распознования - номер найденной детали - {self.found_part_num}")
+                                try:
+                                    self.set_usint(db_number=camera_db_num, offsetbyte=1, tag_value=self.found_part_num)
+                                    self.found_part_num = 0
+                                except Exception as error:
+                                    self.logger.error(f"Не удалось записать результат съёмки: DB{camera_db_num}.DBB1\n"
+                                                      f"Ошибка {str(error)} {traceback.format_exc()}")
+                                    self.snap7client.disconnect()
             except Exception as error:
                 self.logger.error(f"Не удалось обработать цикл класса plc\n"
                                   f"Ошибка {str(error)} {traceback.format_exc()}")

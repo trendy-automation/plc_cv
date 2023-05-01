@@ -8,11 +8,21 @@ plc:
   camera_db_num: 8
   reconnect_timeout: 60
 vision:
-  scaleAbs_alpha: 0.3
-  templateThreshold: 0.85
-  maxShiftPix: 30
-  templateDir: 'templates'
-  configStream:
+  capture:
+    scaleAbs_alpha: 0.3
+  pipline:
+      # resolution_x, resolution_y = 640, 480 | 848, 480 | 1280,720
       resolution_x: 848
       resolution_y: 480
+      # fps = 5 | 15 | 30 | 60
       fps: 5
+  match_template:
+    templateDir: 'templates'
+    limits:
+      match_threshold: 0.95
+      delta_angle: 5
+      delta_scale: 0
+      offset_pix: 30
+    save_history: on
+  stream:
+    quality: 100

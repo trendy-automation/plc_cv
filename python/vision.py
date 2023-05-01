@@ -12,123 +12,44 @@ parts = [dict(code='8АТ-1250-11', part_name='Корпус маятника', s
          dict(code='17115.2900.77', part_name='Переходник', step_name='Установ B', h=209.03, w=206, Zavg=400)]
 """
 import pyrealsense2 as rs
-import numpy as np
-import pyshine as ps
-import socket
-import cv2
 import yaml
 import os
+from capture import ImgCapture
+from match import MatchCapture
+from webserver import WebServer
 
 csd = os.path.dirname(os.path.abspath(__file__))
 config = yaml.safe_load(open(csd + "/config.yaml"))
 
-scaleAbs_alpha = config['vision']['scaleAbs_alpha']
-templateThreshold = config['vision']['templateThreshold']
-maxShiftPix = config['vision']['maxShiftPix']
-templateDir = config['vision']['templateDir']
-resolution_x = config['vision']['configStream']['resolution_x']
-resolution_y = config['vision']['configStream']['resolution_y']
-fps = config['vision']['configStream']['fps']
+resolution_x = config['vision']['pipline']['resolution_x']
+resolution_y = config['vision']['pipline']['resolution_y']
+fps = config['vision']['pipline']['fps']
+# Папка для образцов
+templateDir = config['vision']['match_template']['templateDir']
+save_history = config['vision']['match_template']['save_history']
 
 
-class ImgCapture:
-    def __init__(self, pipeline, templates):
-        self.frames = None
-        self.pipeline = pipeline
-        self.templates = templates
-
-    def read(self):
-
-        # Wait for a coherent pair of frames: depth and color
-        self.frames = self.pipeline.wait_for_frames()
-        depth_frame = self.frames.get_depth_frame()
-        color_frame = self.frames.get_color_frame()
-        """
-        # Convert images to numpy arrays
-        #depth_image = np.asanyarray(depth_frame.get_data())
-        frames = []
-        for x in range(15):
-            frameset = pipeline.wait_for_frames()
-            frames.append(frameset.get_depth_frame())
-
-        hole_filling = rs.hole_filling_filter()
-        for x in range(15):
-            frame = hole_filling.process(frames[x])
-            frames[x] = np.asanyarray(frame.get_data())
-        depth_image = np.min(frames, axis=0)        
-        """
-        hole_filling = rs.hole_filling_filter()
-        depth_frame = hole_filling.process(depth_frame)
-        depth_image = np.asanyarray(depth_frame.get_data())
-        color_image = np.asanyarray(color_frame.get_data())
-
-        # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=scaleAbs_alpha), cv2.COLORMAP_JET)
-        depth_colormap_dim = depth_colormap.shape
-        color_colormap_dim = color_image.shape
-
-        # print (f"templates loop for {templates}")
-        for part, pics in self.templates.items():
-            # print (f"look for part {part}")
-            for file in pics:
-                # print (f"look for template {template}")
-                template = cv2.imread(f"{templateDir}/{part}/{file}")
-                h, w = template.shape[:2]
-                if h == resolution_x and w == resolution_y:
-                    methods = [cv2.TM_SQDIFF_NORMED, cv2.TM_CCORR_NORMED, cv2.TM_CCOEFF_NORMED]
-                    res = cv2.matchTemplate(depth_colormap, template, methods[1])
-                    loc = np.where(
-                        res >= templateThreshold)  # Coordinates y, x where the matching degree is greater than threshold
-                    # print("loc", loc)
-                    # for pt in zip(*loc[::-1]):  # * Indicates optional parameters
-                    if len(loc[0]) > 0:
-                        print(f"Part {part} found")
-                        pt = list(zip(*loc[::-1]))[0]
-                        right_bottom = (pt[0] + w, pt[1] + h)
-                        cv2.rectangle(depth_colormap, pt, right_bottom, (0, 0, 255), 1)
-                        continue
-
-        # If depth and color resolutions are different, resize color image to match depth image for display
-        if depth_colormap_dim != color_colormap_dim:
-            color_image = cv2.resize(color_image, dsize=(depth_colormap_dim[1], depth_colormap_dim[0]),
-                                     interpolation=cv2.INTER_AREA)
-        images = np.hstack((depth_colormap, color_image))
-
-        if images is not None:
-            ret = True
-        return (ret, images)
-
-    def isOpened(self):
-        ret, _, _ = self.rs.get_frame_stream()
-        return (ret)
-
-
-def vision_start():
-    # resolution_x, resolution_y = 640, 480
-    # resolution_x, resolution_y = 848, 480
-    # resolution_x,
-    # resolution_y = 1280,720
-    # fps = 5
-
-    # Папка для образцов
-    # templateDir = 'templates'
-    lstdr = os.listdir(templateDir)
-    parts = [f for f in lstdr if os.path.isdir(templateDir + '/' + f)]
+def vision_start(mode):
+    if mode == 'test':
+        pass
+    elif mode == 'train_part':
+        pass
+    elif mode == 'train_nest':
+        pass
+    elif mode == 'debug':
+        pass
+    elif mode == 'train':
+        pass
+    elif mode == 'train':
+        pass
+    else:
+        pass
+    list_dir = os.listdir(templateDir)
+    parts = [f for f in list_dir if os.path.isdir(templateDir + '/' + f)]
     templates = {str(p): [f for f in os.listdir(templateDir + '/' + p)
                           if os.path.isfile(templateDir + '/' + p + '/' + f) and f.endswith('.png')]
                  for p in parts}
 
-    HTML = f"""
-    <html>
-    <body>
-    <center><img src="stream.mjpg" width='{resolution_x * 2}' height='{resolution_y}' autoplay playsinline></center>
-    </body>
-    </html>
-    """
-
-    stream_props = ps.StreamProps
-    stream_props.set_Page(stream_props, HTML)
-    address = (socket.gethostbyname(socket.gethostname()), 9001)  # Enter your IP address
 
     # Configure depth and color streams
     pipeline = rs.pipeline()
@@ -154,19 +75,24 @@ def vision_start():
     rs_config.enable_stream(rs.stream.depth, resolution_x, resolution_y, rs.format.z16, fps)
     rs_config.enable_stream(rs.stream.color, resolution_x, resolution_y, rs.format.bgr8, fps)
 
-    # Start streaming
-    pipeline.start(rs_config)
     try:
-        stream_props.set_Mode(stream_props, 'cv2')
-        cap_images = ImgCapture(pipeline, templates)
-        stream_props.set_Capture(stream_props, cap_images)
-        stream_props.set_Quality(stream_props, 90)
-        server = ps.Streamer(address, stream_props)
-        print('Server started at', 'http://' + address[0] + ':' + str(address[1]))
-        server.serve_forever()
-        while True:
-            cv2.waitKey(1)
+        # Start streaming
+        pipeline.start(rs_config)
+
+        cap_images = ImgCapture(pipeline, rs.hole_filling_filter())
+        mc = MatchCapture(cap_images['depth'], templates)
+        res = mc.eval_match()
+
+        ws = WebServer(cap_images['cap'])
+        ws.start()
+        print('Server continue')
+        ws.shutdown()
+        print('Server shutdown')
+
+        #while True:
+        #    cv2.waitKey(1)
 
     finally:
         # Stop streaming
+        ws.shutdown()
         pipeline.stop()
