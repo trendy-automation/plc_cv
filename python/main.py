@@ -27,7 +27,7 @@ def run_plc(ip):
     techvision = TechVision()
     techvision.vision_tasks = my_plc.vision_tasks
     my_plc.vision_status = techvision.vision_status
-    my_plc.vision_tasks.put({"mode": "to_train_nest", "type": 1, "pos_num": 1})
+    #my_plc.vision_tasks.put({"mode": "to_train_nest", "type": 1, "pos_num": 1})
     techvision.start()
     my_plc.start()
 

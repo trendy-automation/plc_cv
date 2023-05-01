@@ -128,18 +128,14 @@ class MatchCapture:
                 points_list = self.invariantMatchTemplate(self.depth_colormap, template, cv2.TM_CCORR_NORMED,
                                                           match_threshold, [-delta_angle, delta_angle + 1], 1,
                                                           [100 - delta_scale, 100 + delta_scale + 1], 1, True)
-                res_list.append(
-                    {"points": filter(lambda x: (x[0][0] < offset_pix and x[0][1] < offset_pix), points_list),
-                     "part": part})
                 if len(points_list) > 0:
                     print(f"Part type {part} found")
-                    #pt = points_list[0][0]
-                    #h, w = template.shape[:2]
-                    #right_bottom = (pt[0] + w, pt[1] + h)
-                    #cv2.rectangle(depth_colormap, pt, right_bottom, (0, 0, 255), 1)
+                    res_list.append(
+                        {"points": list(
+                            filter(lambda x: (abs(x[0][0]) < offset_pix and abs(x[0][1]) < offset_pix), points_list)),
+                         "part": part})
                     continue
-                #for pos in poses:
-
+                #for pos in poses: проверять шаблоны для каждой позиции
 
         if len(res_list) == 0:
             result = 'no matches'
