@@ -24,6 +24,7 @@ vision_mode_byte = config['plc']['vision_mode_byte']
 
 class PLC(threading.Thread):
     def __init__(self, plc_ip):
+        print("plc.py")
         # init
         threading.Thread.__init__(self, args=(), name=plc_ip, kwargs=None)
         self.vision_tasks = Queue()
@@ -95,7 +96,7 @@ class PLC(threading.Thread):
         #    self.logger.error(f"Не удалось обработать чтение/запись IO plc\n"
         #                          f"Ошибка {str(error)} {traceback.format_exc()}")
 
-        if self.vision_tasks.isEmpty():
+        if self.vision_tasks.empty():
             try:
                 snapshot_req = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
             except Exception as error:
@@ -111,7 +112,7 @@ class PLC(threading.Thread):
                     # Отправляем задание
                     self.vision_tasks.put({"mode": vision_mode, "type": part_type, "pos_num": part_pos_num})
 
-        if not self.vision_status.isEmpty():
+        if not self.vision_status.empty():
             self.vision_tasks.get()
             if self.vision_status.queue[0].part_num > 0:
                 self.logger.info(
