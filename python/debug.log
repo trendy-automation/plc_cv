@@ -1542,3 +1542,13 @@ RuntimeError: b' TCP : Unreachable peer'
 
 2023-05-04 20:06:39,438 _plc_.client Подключение к контроллеру 192.168.0.10...
 2023-05-04 20:06:39,757 snap7.common b' TCP : Unreachable peer'
+2023-05-04 20:06:39,758 _plc_.client Не удалось подключиться к контроллеру: 192.168.0.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 76, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
