@@ -55,6 +55,9 @@ class TechVision(threading.Thread):
         self.logger = logging.getLogger("vision.main")
         threading.Thread.__init__(self, args=(), name='techvision', kwargs=None)
         self.vision_tasks = None
+        self.http_server = None
+        self.rtsp_server = None
+        self.cap_images = None
         self.vision_status = Queue()
 
     def subtract_background(self, nest_part, nest):
@@ -67,13 +70,39 @@ class TechVision(threading.Thread):
         nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
         return nest_mask
 
+    def http_stream_on(self):
+        if self.http_server is None:
+            self.http_server = HttpServer(opt=stream_opt, cap=self.cap_images['cap'])
+            self.http_server.start()
+
+    def http_stream_off(self):
+        if not self.http_server is None:
+            self.http_server.shutdown()
+            self.http_server = None
+            print('Http server shutdown')
+    def rtsp_stream_on(self):
+        if self.rtsp_server is None:
+            # RTSP: initializing the threads and running the stream on loop.
+            GObject.threads_init()
+            Gst.init(None)
+            self.rtsp_server = GstServer(opt=stream_opt, cap=self.cap_images['cap'])
+            gst_loop = GObject.MainLoop()
+            gst_loop.run()
+
+    def rtsp_stream_off(self):
+        if not self.http_server is None:
+            self.rtsp_server = None
+            print('Rtsp server shutdown')
+
+
     def run(self):
         self.logger.info(f"Techvision started")
         cur_thread = threading.current_thread()
-        list_dir = os.listdir(templateDir)
-        parts = [f for f in list_dir if os.path.isdir(templateDir + '/' + f)]
-        templates = {str(p): [f for f in os.listdir(templateDir + '/' + p)
-                              if os.path.isfile(templateDir + '/' + p + '/' + f)
+        os.chdir(match_opt.templateDir + '/')
+        list_dir = os.listdir()
+        parts = [f for f in list_dir if os.path.isdir('/' + f)]
+        templates = {str(p): [f for f in os.listdir('/' + p)
+                              if os.path.isfile('/' + p + '/' + f)
                               and f.endswith('.png')
                               and not f.startswith('nest_')]
                      for p in parts}
@@ -102,40 +131,32 @@ class TechVision(threading.Thread):
                     # Start streaming
                     pipeline.start(rs_config)
                     # Get capture
-                    cap_images = ImgCapture(pipeline, rs.hole_filling_filter())
-
+                    self.cap_images = ImgCapture(pipeline, rs.hole_filling_filter())
                     task = self.vision_tasks.queue[0]
                     mode = task['mode']
                     match  mode:
                         case 'test':
-                            mc = MatchCapture(opt=match_opt, cap=cap_images['depth'], templates=templates)
+                            mc = MatchCapture(opt=match_opt, cap=self.cap_images['depth'], templates=templates)
                             res = mc.eval_match()
                         case 'to_train_part':
-                            nest = cv2.imread(os.path.join(templateDir, task['type'], "nest_" + task['pos_num'] + ".png"))
-                            nest_part = cap_images['depth']
+                            nest = cv2.imread(os.path.join(match_opt.templateDir, task['type'], "nest_" + task['pos_num'] + ".png"))
+                            nest_part = self.cap_images['depth']
                             nest_mask = self.subtract_background(nest_part, nest)
-                            cv2.imwrite(os.path.join(templateDir, task['type'], task['pos_num'] + ".png"), nest_mask)
-                            os.remove(os.path.join(templateDir, task['type'], "nest_" + task['pos_num'] + ".png"))
+                            cv2.imwrite(os.path.join(match_opt.templateDir, task['type'], task['pos_num'] + ".png"), nest_mask)
+                            os.remove(os.path.join(match_opt.templateDir, task['type'], "nest_" + task['pos_num'] + ".png"))
                         case 'to_train_nest':
-                            cv2.imwrite(os.path.join(templateDir, task['type'], "nest_" + task['pos_num'] + ".png"),
-                                        cap_images['depth'])
+                            cv2.imwrite(os.path.join(match_opt.templateDir, task['type'], "nest_" + task['pos_num'] + ".png"),
+                                        self.cap_images['depth'])
                         case 'debug':
                             pass
                         case 'http_stream_on':
-                            httpserver = HttpServer(opt=stream_opt, cap=cap_images['cap'])
-                            httpserver.start()
+                            self.http_stream_on()
                         case 'http_stream_off':
-                            print('Server shutdown')
-                            httpserver.shutdown()
+                            self.http_stream_off()
                         case 'rtsp_stream_on':
-                            # RTSP: initializing the threads and running the stream on loop.
-                            GObject.threads_init()
-                            Gst.init(None)
-                            gst_server = GstServer(opt=stream_opt, cap=cap_images['cap'])
-                            gst_loop = GObject.MainLoop()
-                            gst_loop.run()
+                            self.rtsp_stream_on()
                         case 'rtsp_stream_off':
-                            pass
+                            self.rtsp_stream_off()
                         case _:
                             pass
                 finally:
