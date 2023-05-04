@@ -1,31 +1,14 @@
 import cv2
 import numpy as np
 import logging
-import yaml
-import os
-
-csd = os.path.dirname(os.path.abspath(__file__))
-config = yaml.safe_load(open(csd + "/config.yaml"))
-offset_pix = config['vision']['match_template']['limits']['offset_pix']
-match_threshold = config['vision']['match_template']['limits']['match_threshold']
-delta_angle = config['vision']['match_template']['limits']['delta_angle']
-delta_scale = config['vision']['match_template']['limits']['delta_scale']
-
-templateDir = config['vision']['match_template']['templateDir']
-resolution_x = config['vision']['pipline']['resolution_x']
-resolution_y = config['vision']['pipline']['resolution_y']
-
-#logger
-logger_level = config['logger']['level']
-logger_debug_file = config['logger']['debug_file']
-logger_format = config['logger']['format']
 
 
 class MatchCapture:
-    def __init__(self, depth_colormap, templates):
+    def __init__(self, **kwargs):
+        self.opt = kwargs['opt']
         self.logger = logging.getLogger("vision.matching")
-        self.depth_colormap = depth_colormap
-        self.templates = templates
+        self.depth_colormap = kwargs['depth_colormap']
+        self.templates = kwargs['templates']
 
     def rotate_image(self, image, angle):
         image_center = tuple(np.array(image.shape[1::-1]) / 2)
@@ -52,7 +35,8 @@ class MatchCapture:
         result = cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
         return result, percent
 
-    def invariantMatchTemplate(self, rgbimage, rgbtemplate, method, matched_thresh, rot_range, rot_interval, scale_range,
+    def invariantMatchTemplate(self, rgbimage, rgbtemplate, method, matched_thresh, rot_range, rot_interval,
+                               scale_range,
                                scale_interval, rm_redundant):
         """
         rgbimage: RGB image where the search is running.
@@ -91,8 +75,8 @@ class MatchCapture:
                 if max_val >= matched_thresh:
                     max_loc = (max_loc[0] - x, max_loc[1] - y)
                     all_points.append([max_loc, next_angle, actual_scale, max_val])
-        all_points = sorted(all_points, key=lambda x: -x[3])
-        if rm_redundant == True:
+        all_points = sorted(all_points, key=lambda k: -k[3])
+        if rm_redundant:
             lone_points_list = []
             visited_points_list = []
             for point_info in all_points:
@@ -104,7 +88,7 @@ class MatchCapture:
                         if ((abs(visited_point[0] - point[0]) < (width * scale / 100)) and (
                                 abs(visited_point[1] - point[1]) < (height * scale / 100))):
                             all_visited_points_not_close = False
-                    if all_visited_points_not_close == True:
+                    if all_visited_points_not_close:
                         lone_points_list.append(point_info)
                         visited_points_list.append(point)
                 else:
@@ -124,18 +108,22 @@ class MatchCapture:
             # print (f"look for part type {part}")
             for file in pics:
                 # print (f"look for template {template}")
-                template = cv2.imread(f"{templateDir}/{part}/{file}")
+                template = cv2.imread(f"{self.opt.templateDir}/{part}/{file}")
                 points_list = self.invariantMatchTemplate(self.depth_colormap, template, cv2.TM_CCORR_NORMED,
-                                                          match_threshold, [-delta_angle, delta_angle + 1], 1,
-                                                          [100 - delta_scale, 100 + delta_scale + 1], 1, True)
+                                                          self.opt.match_threshold,
+                                                          [-self.opt.delta_angle, self.opt.delta_angle + 1], 1,
+                                                          [100 - self.opt.delta_scale,
+                                                           100 + self.opt.delta_scale + 1], 1, True)
                 if len(points_list) > 0:
                     print(f"Part type {part} found")
                     res_list.append(
                         {"points": list(
-                            filter(lambda x: (abs(x[0][0]) < offset_pix and abs(x[0][1]) < offset_pix), points_list)),
-                         "part": part})
+                            filter(
+                                lambda x: (abs(x[0][0]) < self.opt.offset_pix and abs(x[0][1]) < self.opt.offset_pix),
+                                points_list)),
+                            "part": part})
                     continue
-                #for pos in poses: проверять шаблоны для каждой позиции
+                # for pos in poses: проверять шаблоны для каждой позиции
 
         if len(res_list) == 0:
             result = 'no matches'
@@ -144,6 +132,6 @@ class MatchCapture:
         else:
             result = 'many matches'
         return result, res_list
-    def eval_match_forever(self):
 
+    def eval_match_forever(self):
         return 0
