@@ -52,6 +52,9 @@ services:
       context: .
       dockerfile: opencvDockerfile
     user: root
+    ports:
+      - 9001:9001
+      - 8554:8554
     container_name: opencv
     volumes:
       - *services-volume

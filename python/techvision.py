@@ -69,8 +69,9 @@ class TechVision(threading.Thread):
         # Папка для образцов
         # save_history = config['vision']['match_template']['save_history']
 
-        self.stream_opt = Obj({"rstpport": 8554,
-                          "httpport": 9001,
+        self.stream_opt = Obj({"rstpport": config['vision']['stream']['rstpport'],
+                          "httpport": config['vision']['stream']['httpport'],
+                          "quality": config['vision']['stream']['quality'],
                           "local_ip": socket.gethostbyname(socket.gethostname()),
                           "stream_uri": "",
                           "image_width": 2 * config['vision']['pipline']['resolution_x'],

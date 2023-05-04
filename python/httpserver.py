@@ -24,7 +24,7 @@ class HttpServer(threading.Thread):
         address = (opt.local_ip, opt.httpport)
         stream_props.set_Mode(stream_props, 'cv2')
         stream_props.set_Capture(stream_props, self.cap)
-        stream_props.set_Quality(stream_props, 100)
+        stream_props.set_Quality(stream_props, opt.quality)
         self.server = ps.Streamer(address, stream_props)
         print('Server started at', 'http://' + address[0] + ':' + str(address[1]))
         self.server.serve_forever()
