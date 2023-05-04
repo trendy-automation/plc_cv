@@ -88,7 +88,7 @@ class TechVision(threading.Thread):
 
     def pipeline_start(self):
         # stopped
-        if rs.playback_status == 3:
+        #if rs.playback_status == 3:
             # Start streaming
             self.pipeline.start(self.rs_config)
 
@@ -116,7 +116,9 @@ class TechVision(threading.Thread):
         return res, nest_mask
 
     def http_stream_on(self):
+        print('http_stream_on')
         if self.http_server is None and not (self.cap_images is None):
+
             self.http_server = HttpServer(opt=self.stream_opt, cap=self.cap_images['cap'])
             self.http_server.start()
             return True
