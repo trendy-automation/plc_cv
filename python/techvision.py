@@ -1,16 +1,3 @@
-"""
-# separate file - configurations of parts and settings
-tolerance = 0.05
-
-
-parts = [dict(code='8АТ-1250-11', part_name='Корпус маятника', step_name='Установ А', h=212, w=89, Zavg=400),
-         dict(code='8АТ-1250-11', part_name='Корпус маятника', step_name='Установ B', h=208, w=87, Zavg=400),
-         dict(code='8АТ-1250-11', part_name='Корпус маятника', step_name='Установ C', h=208, w=80.6, Zavg=400),
-         dict(code='8АТ-1250-11', part_name='Корпус маятника', step_name='Установ D', h=208, w=80, Zavg=400),
-         dict(code='8АТ-1250-11', part_name='Корпус маятника', step_name='Установ E', h=528, w=268, Zavg=400),
-         dict(code='17115.2900.77', part_name='Переходник', step_name='Установ А', h=273, w=206, Zavg=400),
-         dict(code='17115.2900.77', part_name='Переходник', step_name='Установ B', h=209.03, w=206, Zavg=400)]
-"""
 from capture import ImgCapture
 from match import MatchCapture
 from httpserver import HttpServer
@@ -47,7 +34,7 @@ match_opt = Obj({"offset_pix": config['vision']['match_template']['limits']['off
                  "match_threshold": config['vision']['match_template']['limits']['match_threshold'],
                  "delta_angle": config['vision']['match_template']['limits']['delta_angle'],
                  "delta_scale": config['vision']['match_template']['limits']['delta_scale'],
-                 "templateDir": config['vision']['match_template']['templateDir']})
+                 "template_dir": config['vision']['match_template']['template_dir']})
 
 
 class TechVision(threading.Thread):
@@ -57,21 +44,71 @@ class TechVision(threading.Thread):
         self.vision_tasks = None
         self.http_server = None
         self.rtsp_server = None
+        self.gst_loop = None
         self.cap_images = None
         self.vision_status = Queue()
 
+        os.chdir(match_opt.templateDir + '/')
+        list_dir = os.listdir()
+        parts = [f for f in list_dir if os.path.isdir(f)]
+        self.templates = {str(p): [f for f in os.listdir(p)
+                                   if os.path.isfile(os.path.join(p, f))
+                                   and f.endswith('.png')
+                                   and not f.startswith('nest_')]
+                          for p in parts}
+
+        # Configure depth and color streams
+        self.pipeline = rs.pipeline()
+        self.rs_config = rs.config()
+
+        ## Get device product line for setting a supporting resolution
+        # pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
+        # pipeline_profile = rs_config.resolve(pipeline_wrapper)
+        # device = pipeline_profile.get_device()
+        ## depth_sensor = device.first_depth_sensor()
+        # device_product_line = str(device.get_info(rs.camera_info.product_line))
+        # print('device_product_line', device_product_line)
+
+        res = rs.align(rs.stream.depth)
+        self.rs_config.enable_stream(rs.stream.depth, stream_opt.resolution_x, stream_opt.resolution_y, rs.format.z16,
+                                     stream_opt.fps)
+        self.rs_config.enable_stream(rs.stream.color, stream_opt.resolution_x, stream_opt.resolution_y, rs.format.bgr8,
+                                     stream_opt.fps)
+        self.pipeline_start()
+        self.http_stream_on()
+        self.rtsp_stream_on()
+        #self.pipeline_stop()
+
+
+
+    def pipeline_start(self):
+        # stopped
+        if rs.playback_status == 3:
+            # Start streaming
+            self.pipeline.start(self.rs_config)
+            # Get capture
+            self.cap_images = ImgCapture(self.pipeline, rs.hole_filling_filter())
+
+    def pipeline_stop(self):
+        # playing
+        if rs.playback_status == 1:
+            self.pipeline.stop()
+
     def subtract_background(self, nest_part, nest):
-        nest_diff = cv2.compare(nest_part, nest, cv2.CMP_NE)
-        alpha_channel = cv2.cvtColor(nest_diff, cv2.COLOR_BGR2GRAY)
-        b_channel, g_channel, r_channel = cv2.split(nest_part)
-        b_channel = cv2.bitwise_and(b_channel, b_channel, mask=alpha_channel)
-        g_channel = cv2.bitwise_and(g_channel, g_channel, mask=alpha_channel)
-        r_channel = cv2.bitwise_and(r_channel, r_channel, mask=alpha_channel)
-        nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
-        return nest_mask
+        nest_mask = None
+        if not (nest_part is None) and not (nest is None):
+            nest_diff = cv2.compare(nest_part, nest, cv2.CMP_NE)
+            alpha_channel = cv2.cvtColor(nest_diff, cv2.COLOR_BGR2GRAY)
+            b_channel, g_channel, r_channel = cv2.split(nest_part)
+            b_channel = cv2.bitwise_and(b_channel, b_channel, mask=alpha_channel)
+            g_channel = cv2.bitwise_and(g_channel, g_channel, mask=alpha_channel)
+            r_channel = cv2.bitwise_and(r_channel, r_channel, mask=alpha_channel)
+            nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
+        res = not (nest_mask is None)
+        return res, nest_mask
 
     def http_stream_on(self):
-        if self.http_server is None:
+        if self.http_server is None and not (self.cap_images is None):
             self.http_server = HttpServer(opt=stream_opt, cap=self.cap_images['cap'])
             self.http_server.start()
 
@@ -80,72 +117,50 @@ class TechVision(threading.Thread):
             self.http_server.shutdown()
             self.http_server = None
             print('Http server shutdown')
+
     def rtsp_stream_on(self):
-        if self.rtsp_server is None:
+        if self.rtsp_server is None and not (self.cap_images is None):
             # RTSP: initializing the threads and running the stream on loop.
             GObject.threads_init()
             Gst.init(None)
             self.rtsp_server = GstServer(opt=stream_opt, cap=self.cap_images['cap'])
-            gst_loop = GObject.MainLoop()
-            gst_loop.run()
+            self.gst_loop = GObject.MainLoop()
+            self.gst_loop.run()
 
     def rtsp_stream_off(self):
-        if not self.http_server is None:
+        if not (self.http_server is None):
             self.rtsp_server = None
+        if not (self.gst_loop is None):
+            self.gst_loop.stop()
             print('Rtsp server shutdown')
-
 
     def run(self):
         self.logger.info(f"Techvision started")
         cur_thread = threading.current_thread()
-        os.chdir(match_opt.templateDir + '/')
-        list_dir = os.listdir()
-        parts = [f for f in list_dir if os.path.isdir('/' + f)]
-        templates = {str(p): [f for f in os.listdir('/' + p)
-                              if os.path.isfile('/' + p + '/' + f)
-                              and f.endswith('.png')
-                              and not f.startswith('nest_')]
-                     for p in parts}
-
-        # Configure depth and color streams
-        pipeline = rs.pipeline()
-        rs_config = rs.config()
-
-        # Get device product line for setting a supporting resolution
-        pipeline_wrapper = rs.pipeline_wrapper(pipeline)
-        pipeline_profile = rs_config.resolve(pipeline_wrapper)
-        device = pipeline_profile.get_device()
-        # depth_sensor = device.first_depth_sensor()
-        device_product_line = str(device.get_info(rs.camera_info.product_line))
-        print('device_product_line', device_product_line)
-
-        align = rs.align(rs.stream.depth)
-        rs_config.enable_stream(rs.stream.depth, stream_opt.resolution_x, stream_opt.resolution_y, rs.format.z16,
-                                stream_opt.fps)
-        rs_config.enable_stream(rs.stream.color, stream_opt.resolution_x, stream_opt.resolution_y, rs.format.bgr8,
-                                stream_opt.fps)
         while getattr(cur_thread, "do_run", True):
             time.sleep(0.2)
             if not self.vision_tasks.isEmpty():
                 try:
                     # Start streaming
-                    pipeline.start(rs_config)
-                    # Get capture
-                    self.cap_images = ImgCapture(pipeline, rs.hole_filling_filter())
+                    self.pipeline_start()
                     task = self.vision_tasks.queue[0]
                     mode = task['mode']
-                    match  mode:
+                    match mode:
                         case 'test':
-                            mc = MatchCapture(opt=match_opt, cap=self.cap_images['depth'], templates=templates)
+                            mc = MatchCapture(opt=match_opt, cap=self.cap_images['depth'], templates=self.templates)
                             res = mc.eval_match()
                         case 'to_train_part':
-                            nest = cv2.imread(os.path.join(match_opt.templateDir, task['type'], "nest_" + task['pos_num'] + ".png"))
+                            part_template_dir = os.path.join(part_template_dir)
+                            nest = cv2.imread(os.path.join(part_template_dir, "nest_" + task['pos_num'] + ".png"))
                             nest_part = self.cap_images['depth']
-                            nest_mask = self.subtract_background(nest_part, nest)
-                            cv2.imwrite(os.path.join(match_opt.templateDir, task['type'], task['pos_num'] + ".png"), nest_mask)
-                            os.remove(os.path.join(match_opt.templateDir, task['type'], "nest_" + task['pos_num'] + ".png"))
+                            res, nest_mask = self.subtract_background(nest_part, nest)
+                            if res:
+                                cv2.imwrite(os.path.join(part_template_dir, task['pos_num'] + ".png"), nest_mask)
+                                os.remove(os.path.join(part_template_dir, "nest_" + task['pos_num'] + ".png"))
+                            else:
+                                print('Ошибка. Невозможно обучить деталь')
                         case 'to_train_nest':
-                            cv2.imwrite(os.path.join(match_opt.templateDir, task['type'], "nest_" + task['pos_num'] + ".png"),
+                            cv2.imwrite(os.path.join(part_template_dir, "nest_" + task['pos_num'] + ".png"),
                                         self.cap_images['depth'])
                         case 'debug':
                             pass
@@ -160,9 +175,8 @@ class TechVision(threading.Thread):
                         case _:
                             pass
                 finally:
-                    # Stop streaming?
-                    # ws.shutdown()
-                    # pipeline.stop()
+                    # Stop streaming
+                    self.pipeline_stop()
                     pass
             else:
                 pass
