@@ -36170,3 +36170,419 @@ RuntimeError: b' TCP : Unreachable peer'
 2023-05-06 23:57:49,018 snap7.client creating snap7 client
 2023-05-06 23:58:04,271 snap7.client creating snap7 client
 2023-05-07 00:02:36,503 snap7.client destroying snap7 client
+2023-05-07 00:10:26,400 snap7.client creating snap7 client
+2023-05-07 00:10:41,452 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:10:41,455 vision.main Techvision started
+2023-05-07 00:10:41,456 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-07 00:10:41,657 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:10:41,657 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-07 00:10:42,113 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:10:42,128 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:11:02,906 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:11:02,907 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 210, in run
+    mc = MatchCapture(opt=self.match_opt, cap=self.cap_images['depth'], templates=self.templates)
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 105, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-07 00:11:42,233 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:11:42,233 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-07 00:11:42,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:11:42,609 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:12:42,801 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:12:43,109 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:12:43,109 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:13:43,137 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:13:43,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:13:43,610 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:14:43,805 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:14:44,109 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:14:44,110 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:15:44,297 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:15:44,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:15:44,610 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:16:44,628 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:16:45,110 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:16:45,111 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:16:59,266 snap7.client creating snap7 client
+2023-05-07 00:17:06,298 snap7.client creating snap7 client
+2023-05-07 00:17:21,351 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:17:21,354 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-07 00:17:21,369 vision.main Techvision started
+2023-05-07 00:17:21,555 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:17:21,555 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-07 00:17:36,599 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:17:36,599 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:17:36,600 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 107, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-07 00:17:36,605 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:18:36,796 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:18:37,111 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:18:37,112 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:19:37,291 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:19:37,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:19:37,611 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:20:37,611 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:20:38,109 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:20:38,109 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:21:38,310 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:21:38,612 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:21:38,612 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:22:38,621 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:22:39,109 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:22:39,110 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:23:39,302 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:23:39,611 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:23:39,611 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:24:39,808 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:24:40,110 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:24:40,111 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:25:40,308 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:25:40,608 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:25:40,609 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:25:50,964 snap7.client creating snap7 client
+2023-05-07 00:26:06,014 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:26:06,016 vision.main Techvision started
+2023-05-07 00:26:06,016 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-07 00:26:21,242 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:26:21,243 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-07 00:26:21,242 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:26:21,243 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 107, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-07 00:26:21,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:26:21,611 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:27:21,809 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:27:22,108 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:27:22,109 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:28:22,112 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:28:22,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:28:22,610 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:29:17,315 snap7.client creating snap7 client
+2023-05-07 00:29:32,372 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:29:32,374 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-07 00:29:32,375 vision.main Techvision started
+2023-05-07 00:29:47,599 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:29:47,599 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 94, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:29:47,599 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-07 00:29:47,600 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 107, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-07 00:29:47,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:29:47,611 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:30:47,796 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:30:48,111 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:30:48,111 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:31:48,129 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:31:48,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:31:48,610 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 120, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:32:30,564 snap7.client creating snap7 client
+2023-05-07 00:32:45,615 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 96, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:32:45,617 vision.main Techvision started
+2023-05-07 00:32:45,617 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-07 00:32:45,820 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:32:45,821 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-07 00:33:00,846 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 96, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:33:00,847 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 109, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-07 00:33:01,109 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:33:01,110 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 122, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:34:01,306 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-07 00:34:01,609 snap7.common b' TCP : Unreachable peer'
+2023-05-07 00:34:01,609 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 122, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-07 00:34:41,706 snap7.client creating snap7 client
+2023-05-07 00:34:56,757 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 96, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-07 00:34:56,759 vision.main Techvision started
+2023-05-07 00:34:56,760 _plc_.client Connection with PLC 192.168.1.10 started

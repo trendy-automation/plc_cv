@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from plc import PLC
 from techvision import TechVision
 import yaml
@@ -54,7 +56,7 @@ if __name__ == '__main__':
             "outTrainModeOn": False,
             "outPartPresentInNest": False,
             "outHistoryOn": False,
-            "outStreamOn": False,
+            "outStreamOn": True,
             "inPartTypeDetect": 0,
             "inPartPosNumDetect": 0,
             "outPartTypeExpect": 2,

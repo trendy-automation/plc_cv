@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from capture import ImgCapture
 from match import MatchCapture
 from httpserver import HttpServer
@@ -94,13 +96,15 @@ class TechVision(threading.Thread):
             self.pipeline.start(self.rs_config)
             # Get capture
             self.cap_images = ImgCapture(self.pipeline, rs.hole_filling_filter())
+            return not (self.cap_images is None)
         except Exception as error:
             self.logger.error(f"Не удалось включить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
+            return False
 
     def pipeline_stop(self):
         # playing
-        #if rs.playback_status == 1:
+        # if rs.playback_status == 1:
         try:
             self.pipeline.stop()
         except Exception as error:
@@ -142,7 +146,6 @@ class TechVision(threading.Thread):
             self.logger.error(f"Не удалось выключить http стрим сервер\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
 
-
     def rtsp_stream_on(self):
         try:
             if self.rtsp_server is None and not (self.cap_images is None):
@@ -157,7 +160,6 @@ class TechVision(threading.Thread):
         except Exception as error:
             self.logger.error(f"Не удалось включить rtsp стрим сервер\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
-
 
     def rtsp_stream_off(self):
         try:
@@ -178,55 +180,55 @@ class TechVision(threading.Thread):
         while getattr(cur_thread, "do_run", True):
             time.sleep(0.2)
             if not self.vision_tasks.empty():
-                res = False
+                camera_db = self.vision_tasks.queue[0]
                 try:
                     # Start streaming
-                    self.pipeline_start()
-                    camera_db = self.vision_tasks.queue[0]
-                    # print(f"camera_db {camera_db}")
-                    part_type = str(camera_db.outPartTypeExpect)
-                    part_pos_num = str(camera_db.outPartPosNumExpect)
-                    part_template_dir = os.path.join(self.match_opt.template_dir, part_type)
-                    if camera_db.outTrainModeOn:
-                        res = False
-                        if camera_db.outPartPresentInNest:
-                            if not (self.cap_images is None):
-                                nest = cv2.imread(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"))
-                                nest_part = self.cap_images['depth']
-                                res, nest_mask = self.subtract_background(nest_part, nest)
-                                if res:
-                                    res = cv2.imwrite(os.path.join(part_template_dir, part_pos_num + ".png"), nest_mask)
-                                    os.remove(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"))
-                                else:
-                                    print('Ошибка. Невозможно обучить деталь')
-                        else:
-                            if not (self.cap_images is None):
-                                res = cv2.imwrite(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"),
-                                                  self.cap_images['depth'])
+                    if self.pipeline_start():
+                        # print(f"camera_db {camera_db}")
+                        part_type = str(camera_db.outPartTypeExpect)
+                        part_pos_num = str(camera_db.outPartPosNumExpect)
+                        part_template_dir = os.path.join(self.match_opt.template_dir, part_type)
+                        if camera_db.outTrainModeOn:
+                            res = False
+                            if camera_db.outPartPresentInNest:
+                                if not (self.cap_images is None):
+                                    nest = cv2.imread(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"))
+                                    nest_part = self.cap_images['depth']
+                                    res, nest_mask = self.subtract_background(nest_part, nest)
+                                    if res:
+                                        res = cv2.imwrite(os.path.join(part_template_dir, part_pos_num + ".png"),
+                                                          nest_mask)
+                                        os.remove(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"))
+                                    else:
+                                        print('Ошибка. Невозможно обучить деталь')
                             else:
-                                print('Ошибка. Невозможно обучить фон')
-                        camera_db.inoutTrainOk = res
-                    else:
-                        mc = MatchCapture(opt=self.match_opt, cap=self.cap_images['depth'], templates=self.templates)
-                        match_res = mc.eval_match()
-                        camera_db.inoutPartOk = len(match_res) > 0
-                        camera_db.inoutResultNok = len(match_res) == 0
-                    if camera_db.outStreamOn:
-                        res1 = self.http_stream_on()
-                        res2 = self.rtsp_stream_on()
-                    else:
-                        res1 = self.http_stream_off()
-                        res2 = self.rtsp_stream_off()
-                    if camera_db.outHistoryOn:
-                        pass
-                    else:
-                        pass
+                                if not (self.cap_images is None):
+                                    res = cv2.imwrite(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"),
+                                                      self.cap_images['depth'])
+                                else:
+                                    print('Ошибка. Невозможно обучить фон')
+                            camera_db.inoutTrainOk = res
+                            camera_db.inoutResultNok = not res
+                        else:
+                            mc = MatchCapture(opt=self.match_opt, cap=self.cap_images['depth'],
+                                              templates=self.templates)
+                            match_res = mc.eval_match()
+                            camera_db.inoutPartOk = len(match_res) > 0
+                            camera_db.inoutResultNok = len(match_res) == 0
+                        if camera_db.outStreamOn:
+                            res1 = self.http_stream_on()
+                            res2 = self.rtsp_stream_on()
+                        else:
+                            res1 = self.http_stream_off()
+                            res2 = self.rtsp_stream_off()
+                        if camera_db.outHistoryOn:
+                            pass
+                        else:
+                            pass
                 finally:
                     # Stop streaming
                     self.pipeline_stop()
-                    camera_db.inoutPartOk = False
                     camera_db.inPartTypeDetect = camera_db.outPartTypeExpect
                     camera_db.inPartPosNumDetect = camera_db.outPartPosNumExpect
-                    self.vision_status = camera_db
-                    if res:
-                        self.vision_tasks.get()
+                    self.vision_status.put(camera_db)
+                    self.vision_tasks.get()
