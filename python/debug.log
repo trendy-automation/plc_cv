@@ -36164,3 +36164,9 @@ RuntimeError: b' TCP : Unreachable peer'
     raise RuntimeError(error)
 RuntimeError: b' TCP : Unreachable peer'
 
+2023-05-06 23:54:15,539 snap7.client creating snap7 client
+2023-05-06 23:56:01,586 snap7.client creating snap7 client
+2023-05-06 23:57:17,427 snap7.client creating snap7 client
+2023-05-06 23:57:49,018 snap7.client creating snap7 client
+2023-05-06 23:58:04,271 snap7.client creating snap7 client
+2023-05-07 00:02:36,503 snap7.client destroying snap7 client

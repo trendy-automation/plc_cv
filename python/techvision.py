@@ -4,6 +4,7 @@ from httpserver import HttpServer
 # from rtspserver import GObject, Gst, GstServer
 from obj import Obj
 import logging
+import traceback
 import socket
 import threading
 import time
@@ -89,15 +90,22 @@ class TechVision(threading.Thread):
         # stopped
         # if rs.playback_status == 3:
         # Start streaming
-        self.pipeline.start(self.rs_config)
-
-        # Get capture
-        self.cap_images = ImgCapture(self.pipeline, rs.hole_filling_filter())
+        try:
+            self.pipeline.start(self.rs_config)
+            # Get capture
+            self.cap_images = ImgCapture(self.pipeline, rs.hole_filling_filter())
+        except Exception as error:
+            self.logger.error(f"Не удалось включить камеру\n"
+                              f"Ошибка {str(error)} {traceback.format_exc()}")
 
     def pipeline_stop(self):
         # playing
-        if rs.playback_status == 1:
+        #if rs.playback_status == 1:
+        try:
             self.pipeline.stop()
+        except Exception as error:
+            self.logger.error(f"Не удалось выключить камеру\n"
+                              f"Ошибка {str(error)} {traceback.format_exc()}")
 
     def subtract_background(self, nest_part, nest):
         nest_mask = None
@@ -113,38 +121,56 @@ class TechVision(threading.Thread):
         return res, nest_mask
 
     def http_stream_on(self):
-        print('http_stream_on')
-        if self.http_server is None and not (self.cap_images is None):
-            self.http_server = HttpServer(opt=self.stream_opt, cap=self.cap_images['cap'])
-            self.http_server.start()
-            return True
+        try:
+            print('http_stream_on')
+            if self.http_server is None and not (self.cap_images is None):
+                self.http_server = HttpServer(opt=self.stream_opt, cap=self.cap_images['cap'])
+                self.http_server.start()
+                return True
+        except Exception as error:
+            self.logger.error(f"Не удалось включить http стрим сервер\n"
+                              f"Ошибка {str(error)} {traceback.format_exc()}")
 
     def http_stream_off(self):
-        if not self.http_server is None:
-            self.http_server.shutdown()
-            self.http_server = None
-            print('Http server shutdown')
-            return True
+        try:
+            if not self.http_server is None:
+                self.http_server.shutdown()
+                self.http_server = None
+                print('Http server shutdown')
+                return True
+        except Exception as error:
+            self.logger.error(f"Не удалось выключить http стрим сервер\n"
+                              f"Ошибка {str(error)} {traceback.format_exc()}")
+
 
     def rtsp_stream_on(self):
-        if self.rtsp_server is None and not (self.cap_images is None):
-            print('Rtsp server start')
-            # # RTSP: initializing the threads and running the stream on loop.
-            # GObject.threads_init()
-            # Gst.init(None)
-            # self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.cap_images['cap'])
-            # self.gst_loop = GObject.MainLoop()
-            # self.gst_loop.run()
-            return True
+        try:
+            if self.rtsp_server is None and not (self.cap_images is None):
+                print('Rtsp server start')
+                # # RTSP: initializing the threads and running the stream on loop.
+                # GObject.threads_init()
+                # Gst.init(None)
+                # self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.cap_images['cap'])
+                # self.gst_loop = GObject.MainLoop()
+                # self.gst_loop.run()
+                return True
+        except Exception as error:
+            self.logger.error(f"Не удалось включить rtsp стрим сервер\n"
+                              f"Ошибка {str(error)} {traceback.format_exc()}")
+
 
     def rtsp_stream_off(self):
-        if not (self.http_server is None):
-            pass
-        #     self.rtsp_server = None
-        if not (self.gst_loop is None):
-            #     self.gst_loop.stop()
-            print('Rtsp server shutdown')
-        return True
+        try:
+            if not (self.http_server is None):
+                pass
+            #     self.rtsp_server = None
+            if not (self.gst_loop is None):
+                #     self.gst_loop.stop()
+                print('Rtsp server shutdown')
+            return True
+        except Exception as error:
+            self.logger.error(f"Не удалось выключить rtsp стрим сервер\n"
+                              f"Ошибка {str(error)} {traceback.format_exc()}")
 
     def run(self):
         self.logger.info(f"Techvision started")
@@ -186,11 +212,11 @@ class TechVision(threading.Thread):
                         camera_db.inoutPartOk = len(match_res) > 0
                         camera_db.inoutResultNok = len(match_res) == 0
                     if camera_db.outStreamOn:
-                        res = self.http_stream_on()
-                        res = self.rtsp_stream_on()
+                        res1 = self.http_stream_on()
+                        res2 = self.rtsp_stream_on()
                     else:
-                        res = self.http_stream_off()
-                        res = self.rtsp_stream_off()
+                        res1 = self.http_stream_off()
+                        res2 = self.rtsp_stream_off()
                     if camera_db.outHistoryOn:
                         pass
                     else:
@@ -204,5 +230,3 @@ class TechVision(threading.Thread):
                     self.vision_status = camera_db
                     if res:
                         self.vision_tasks.get()
-            else:
-                pass
