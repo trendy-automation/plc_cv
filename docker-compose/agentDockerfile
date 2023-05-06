@@ -10,6 +10,7 @@ RUN apt update && \
 #RUN chown jenkins:jenkins /var/run/docker.sock
 #RUN timedatectl set-timezone Europe/Moscow
 RUN echo "if [ -e /var/run/docker.sock ]; then sudo chown jenkins /var/run/docker.sock; fi" >> /home/jenkins/.bashrc
+RUN echo "if [ -e /var/run/docker.sock ]; then sudo chown jenkins /var/run/docker.sock; fi" >> /home/jenkins/.shrc
 #RUN echo "if [ -e /var/run/docker.sock ]; then chown jenkins /var/run/docker.sock; fi" >> /home/jenkins/.bashrc
 # +Timezone (если надо на этапе сборки)
 ENV TZ Europe/Moscow
