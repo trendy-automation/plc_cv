@@ -38,7 +38,7 @@ pipeline {
                 //    try {
                         echo " ============== stop opencv =================="
                         sh '''#!/bin/bash
-                        chown jenkins /var/run/docker.sock
+                        sudo chown jenkins /var/run/docker.sock
                         curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop
                         '''
                         //sh 'curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop'
