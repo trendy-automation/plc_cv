@@ -6,10 +6,24 @@ logger:
 plc:
   ip: 192.168.1.10
   camera_db_num: 8
-  part_type_byte: 1
-  part_posnum_byte: 2
+  part_type_expect_byte: 1
+  part_posnum_expect_byte: 2
   vision_mode_byte: 4
   reconnect_timeout: 60
+
+#  inoutRequest	Bool	0.0
+#  inoutPartOk	Bool	0.1
+#  inoutResultNok	Bool	0.2
+#  inoutTrainOk	Bool	0.3
+#  outTrainModeOn	Bool	0.4
+#  outPartPresentInNest	Bool	0.5
+#  outHistoryOn	Bool	0.6
+#  outStreamOn	Bool	0.7
+#  inPartTypeDetect	USInt	1.0
+#  inPartPosNumDetect	USInt	2.0
+#  outPartTypeExpect	USInt	3.0
+#  outPartPosNumExpect	USInt	4.0
+
 vision:
   capture:
     scaleAbs_alpha: 0.3
