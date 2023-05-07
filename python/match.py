@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import cv2
 import numpy as np
 import logging
@@ -7,7 +9,7 @@ class MatchCapture:
     def __init__(self, **kwargs):
         self.opt = kwargs['opt']
         self.logger = logging.getLogger("vision.matching")
-        self.depth_colormap = kwargs['depth_colormap']
+        self.depth_colormap = kwargs['cap']
         self.templates = kwargs['templates']
 
     def rotate_image(self, image, angle):
@@ -108,21 +110,23 @@ class MatchCapture:
             # print (f"look for part type {part}")
             for file in pics:
                 # print (f"look for template {template}")
-                template = cv2.imread(f"{self.opt.templateDir}/{part}/{file}")
-                points_list = self.invariantMatchTemplate(self.depth_colormap, template, cv2.TM_CCORR_NORMED,
-                                                          self.opt.match_threshold,
-                                                          [-self.opt.delta_angle, self.opt.delta_angle + 1], 1,
-                                                          [100 - self.opt.delta_scale,
-                                                           100 + self.opt.delta_scale + 1], 1, True)
-                if len(points_list) > 0:
-                    print(f"Part type {part} found")
-                    res_list.append(
-                        {"points": list(
-                            filter(
-                                lambda x: (abs(x[0][0]) < self.opt.offset_pix and abs(x[0][1]) < self.opt.offset_pix),
-                                points_list)),
-                            "part": part})
-                    continue
+                # /{self.opt.template_dir}/
+                template = cv2.imread(f"{part}/{file}")
+                if template is not None:
+                    points_list = self.invariantMatchTemplate(self.depth_colormap, template, cv2.TM_CCORR_NORMED,
+                                                              self.opt.match_threshold,
+                                                              [-self.opt.delta_angle, self.opt.delta_angle + 1], 1,
+                                                              [100 - self.opt.delta_scale,
+                                                               100 + self.opt.delta_scale + 1], 1, True)
+                    if len(points_list) > 0:
+                        print(f"Part type {part} found")
+                        res_list.append(
+                            {"points": list(
+                                filter(
+                                    lambda x: (abs(x[0][0]) < self.opt.offset_pix and abs(x[0][1]) < self.opt.offset_pix),
+                                    points_list)),
+                                "part": part})
+                        continue
                 # for pos in poses: проверять шаблоны для каждой позиции
 
         if len(res_list) == 0:

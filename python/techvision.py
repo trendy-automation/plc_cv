@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from capture import ImgCapture
+from capture import ImgCapture #, ImgDepth, ImgImages, ImgColor
 from match import MatchCapture
 from httpserver import HttpServer
 # from rtspserver import GObject, Gst, GstServer
@@ -30,7 +30,7 @@ class TechVision(threading.Thread):
         self.http_server = None
         self.rtsp_server = None
         self.gst_loop = None
-        self.cap_images = None
+        self.capture = None
         self.vision_status = Queue()
 
         os.chdir(self.match_opt.template_dir + '/')
@@ -59,10 +59,6 @@ class TechVision(threading.Thread):
                                      rs.format.z16, self.stream_opt.fps)
         self.rs_config.enable_stream(rs.stream.color, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
                                      rs.format.bgr8, self.stream_opt.fps)
-        self.pipeline_start()
-        self.http_stream_on()
-        self.rtsp_stream_on()
-        # self.pipeline_stop()
 
     def read_config(self):
         csd = os.path.dirname(os.path.abspath(__file__))
@@ -74,7 +70,8 @@ class TechVision(threading.Thread):
         self.stream_opt = Obj({"rstpport": config['vision']['stream']['rstpport'],
                                "httpport": config['vision']['stream']['httpport'],
                                "quality": config['vision']['stream']['quality'],
-                               "local_ip": socket.gethostbyname(socket.gethostname()),
+                               # "local_ip": socket.gethostbyname(socket.gethostname()),
+                               "local_ip": "192.168.0.67",
                                "stream_uri": "",
                                "image_width": 2 * config['vision']['pipline']['resolution_x'],
                                "image_height": config['vision']['pipline']['resolution_y'],
@@ -93,10 +90,11 @@ class TechVision(threading.Thread):
         # if rs.playback_status == 3:
         # Start streaming
         try:
+            #self.pipeline.stop()
             self.pipeline.start(self.rs_config)
             # Get capture
-            self.cap_images = ImgCapture(self.pipeline, rs.hole_filling_filter())
-            return not (self.cap_images is None)
+            self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
+            return self.capture is not None
         except Exception as error:
             self.logger.error(f"Не удалось включить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
@@ -126,10 +124,12 @@ class TechVision(threading.Thread):
 
     def http_stream_on(self):
         try:
-            print('http_stream_on')
-            if self.http_server is None and not (self.cap_images is None):
-                self.http_server = HttpServer(opt=self.stream_opt, cap=self.cap_images['cap'])
+            #print('http_stream_on')
+            if self.http_server is None and self.capture is not None:
+                print('HTTP server start begin')
+                self.http_server = HttpServer(opt=self.stream_opt, cap=self.capture.images)
                 self.http_server.start()
+                print('HTTP server start end')
                 return True
         except Exception as error:
             self.logger.error(f"Не удалось включить http стрим сервер\n"
@@ -148,12 +148,12 @@ class TechVision(threading.Thread):
 
     def rtsp_stream_on(self):
         try:
-            if self.rtsp_server is None and not (self.cap_images is None):
-                print('Rtsp server start')
+            if self.rtsp_server is None and self.capture is not None:
+                # print('RTSP server start')
                 # # RTSP: initializing the threads and running the stream on loop.
                 # GObject.threads_init()
                 # Gst.init(None)
-                # self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.cap_images['cap'])
+                # self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.capture.images)
                 # self.gst_loop = GObject.MainLoop()
                 # self.gst_loop.run()
                 return True
@@ -187,34 +187,35 @@ class TechVision(threading.Thread):
                         # print(f"camera_db {camera_db}")
                         part_type = str(camera_db.outPartTypeExpect)
                         part_pos_num = str(camera_db.outPartPosNumExpect)
-                        part_template_dir = os.path.join(self.match_opt.template_dir, part_type)
+                        # part_template_dir = os.path.join(self.match_opt.template_dir, part_type)
                         if camera_db.outTrainModeOn:
                             res = False
                             if camera_db.outPartPresentInNest:
-                                if not (self.cap_images is None):
-                                    nest = cv2.imread(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"))
-                                    nest_part = self.cap_images['depth']
+                                if self.capture is not None:
+                                    nest = cv2.imread(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
+                                    nest_part = self.capture.depth.read()
                                     res, nest_mask = self.subtract_background(nest_part, nest)
                                     if res:
-                                        res = cv2.imwrite(os.path.join(part_template_dir, part_pos_num + ".png"),
+                                        res = cv2.imwrite(os.path.join(part_type, part_pos_num + ".png"),
                                                           nest_mask)
-                                        os.remove(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"))
+                                        os.remove(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
                                     else:
                                         print('Ошибка. Невозможно обучить деталь')
                             else:
-                                if not (self.cap_images is None):
-                                    res = cv2.imwrite(os.path.join(part_template_dir, "nest_" + part_pos_num + ".png"),
-                                                      self.cap_images['depth'])
+                                if self.capture is not None:
+                                    res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
+                                                      self.capture.depth.read())
                                 else:
                                     print('Ошибка. Невозможно обучить фон')
                             camera_db.inoutTrainOk = res
                             camera_db.inoutResultNok = not res
                         else:
-                            mc = MatchCapture(opt=self.match_opt, cap=self.cap_images['depth'],
-                                              templates=self.templates)
-                            match_res = mc.eval_match()
-                            camera_db.inoutPartOk = len(match_res) > 0
-                            camera_db.inoutResultNok = len(match_res) == 0
+                            if self.capture is not None:
+                                mc = MatchCapture(opt=self.match_opt, cap=self.capture.depth.read(),
+                                                  templates=self.templates)
+                                match_res = mc.eval_match()
+                                camera_db.inoutPartOk = len(match_res) > 0
+                                camera_db.inoutResultNok = len(match_res) == 0
                         if camera_db.outStreamOn:
                             res1 = self.http_stream_on()
                             res2 = self.rtsp_stream_on()
@@ -227,7 +228,7 @@ class TechVision(threading.Thread):
                             pass
                 finally:
                     # Stop streaming
-                    self.pipeline_stop()
+                    #self.pipeline_stop()
                     camera_db.inPartTypeDetect = camera_db.outPartTypeExpect
                     camera_db.inPartPosNumDetect = camera_db.outPartPosNumExpect
                     self.vision_status.put(camera_db)

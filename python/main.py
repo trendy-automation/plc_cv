@@ -42,7 +42,7 @@ def run_plc(ip):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print("main.py")
+    print("запуск main.py")
     plc_ip, logger_level, logger_debug_file, logger_format = read_config()
     start_logging(logger_level, logger_debug_file, logger_format)
     main_plc, main_techvision = run_plc(plc_ip)
