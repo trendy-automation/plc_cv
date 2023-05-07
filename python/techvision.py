@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from capture import ImgCapture #, ImgDepth, ImgImages, ImgColor
+from capture import ImgCapture
 from match import MatchCapture
 from httpserver import HttpServer
-# from rtspserver import GObject, Gst, GstServer
+from rtspserver import GObject, Gst, GstServer
 from obj import Obj
 import logging
 import traceback
@@ -126,10 +126,10 @@ class TechVision(threading.Thread):
         try:
             #print('http_stream_on')
             if self.http_server is None and self.capture is not None:
-                print('HTTP server start begin')
+                #print('HTTP server start begin')
                 self.http_server = HttpServer(opt=self.stream_opt, cap=self.capture.images)
                 self.http_server.start()
-                print('HTTP server start end')
+                #print('HTTP server start end')
                 return True
         except Exception as error:
             self.logger.error(f"Не удалось включить http стрим сервер\n"
@@ -149,13 +149,13 @@ class TechVision(threading.Thread):
     def rtsp_stream_on(self):
         try:
             if self.rtsp_server is None and self.capture is not None:
-                # print('RTSP server start')
-                # # RTSP: initializing the threads and running the stream on loop.
-                # GObject.threads_init()
-                # Gst.init(None)
-                # self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.capture.images)
-                # self.gst_loop = GObject.MainLoop()
-                # self.gst_loop.run()
+                print('RTSP server start')
+                # RTSP: initializing the threads and running the stream on loop.
+                GObject.threads_init()
+                Gst.init(None)
+                self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.capture.images)
+                self.gst_loop = GObject.MainLoop()
+                self.gst_loop.run()
                 return True
         except Exception as error:
             self.logger.error(f"Не удалось включить rtsp стрим сервер\n"
@@ -164,10 +164,10 @@ class TechVision(threading.Thread):
     def rtsp_stream_off(self):
         try:
             if not (self.http_server is None):
-                pass
-            #     self.rtsp_server = None
+                #pass
+                self.rtsp_server = None
             if not (self.gst_loop is None):
-                #     self.gst_loop.stop()
+                self.gst_loop.stop()
                 print('Rtsp server shutdown')
             return True
         except Exception as error:

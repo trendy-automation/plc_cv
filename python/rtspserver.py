@@ -29,7 +29,7 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
     def __init__(self, **kwargs):
         super(SensorFactory, self).__init__(**kwargs)
         opt = kwargs['opt']
-        self.logger = logging.getLogger("vision.webserver")
+        self.logger = logging.getLogger("vision.rtspserver")
         # threading.Thread.__init__(self, args=(), name='webserver', kwargs=None)
         self.cap = kwargs['cap']
         # self.cap = cv2.VideoCapture(opt.device_id)

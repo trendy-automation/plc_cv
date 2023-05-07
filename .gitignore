@@ -22,3 +22,4 @@ docker-compose/jenkins_home/nodes/*
 docker-compose/jenkins_home/nodes/jenkins_agent/*
 !docker-compose/jenkins_home/nodes/jenkins_agent/config.xml
 #docker-compose/jenkins_home/users/*
+python/debug.log
