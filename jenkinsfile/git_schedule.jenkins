@@ -34,46 +34,23 @@ pipeline {
         }
         stage ("stop opencv") {
             steps {
-                //script {
-                //    try {
+                //script {try {} catch(error) {}}
                         echo " ============== stop opencv =================="
-                        //sh '''#!/bin/bash
-                        //chown jenkins /var/run/docker.sock
-                        //curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop
-                        //'''
                         sh 'curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop'
-                //    } catch(error) {
-                //        echo "First stop failed, let's retry"
-                //        retry(1) {
-                //            echo " ============== stop opencv =================="
-                //            sh 'curl --connect-timeout 20 -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/stop'
-                //        }
-                //    }
-                //}
             }
         }
         stage ("clean & copy appdata") {
             steps {
                 echo " ============== clean appdata =================="
-                sh 'find $target_path/ -type f ! -name debug.log -and -type d ! -name __pycache__ -exec rm -R {} \\;'
+                sh 'find $target_path/$source_path -type f ! -name debug.log -and -type d ! -name __pycache__ -exec rm -R {} \\;'
                 echo " ============== copy app =================="
                 sh 'cp -ir $source_path $target_path'
             }
         }
         stage ("start opencv") {
             steps {
-                //script {
-                //    try {
                         echo " ============== start opencv =================="
                         sh 'curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/start'
-                //    } catch(error) {
-                //        echo "First start failed, let's retry"
-                //        retry(1) {
-                //            echo " ============== start opencv =================="
-                //            sh 'curl --connect-timeout 20 -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/opencv/start'
-                //        }
-                //    }
-                //}
             }
         }
     }

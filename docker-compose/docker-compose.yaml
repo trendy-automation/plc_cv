@@ -65,7 +65,7 @@ services:
     #command: /var/appdata/python/appstart.sh
     command: bash -c "
       cd /var/appdata/python
-      && pip install -r requirements.txt
+      && pip install --root-user-action=ignore -r requirements.txt
       && python3 /var/appdata/python/main.py"
     tty: true
     restart: always
