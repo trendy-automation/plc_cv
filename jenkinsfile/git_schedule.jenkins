@@ -42,7 +42,8 @@ pipeline {
         stage ("clean & copy appdata") {
             steps {
                 echo " ============== clean appdata =================="
-                sh 'find $target_path/$source_path -type f ! -name debug.log -and -type d ! -name __pycache__ -exec rm -R {} \\;'
+                //sh 'find $target_path/$source_path -type f ! -name debug.log -and -type d ! -name __pycache__ -exec rm -R {} \\;'
+                sh 'find $target_path -type f ! -name "debug.log" -and -type d ! -name "__pycache__" -delete \\;'
                 echo " ============== copy app =================="
                 sh 'cp -ir $source_path $target_path'
             }
