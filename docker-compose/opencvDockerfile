@@ -1,22 +1,22 @@
-FROM sixsq/opencv-python:latest
-RUN apt-get update && apt-get install -y locales
+FROM hdgigante/python-opencv:4.7.0-ubuntu
 
-# Locale
-RUN sed -i -e \
-  's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
-   && locale-gen
+USER root
 
-ENV LANG ru_RU.UTF-8
-ENV LANGUAGE ru_RU:ru
-ENV LC_LANG ru_RU.UTF-8
-ENV LC_ALL ru_RU.UTF-8
+SHELL ["/bin/bash", "-c"]
 
-# +Timezone (если надо на этапе сборки)
-ENV TZ Europe/Moscow
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-#RUN timedatectl set-timezone Europe/Moscow
-RUN pip install --upgrade pip
-RUN pip install python-snap7
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+ && apt-get install -y \
+    build-essential \
+    cmake \
+    git-all \
+#    dirmngr \
+#    apt-utils \
+#    gnupg2 \
+#    lsb-release \
+    software-properties-common \
+ && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies: See https://github.com/IntelRealSense/realsense-ros/tree/ros2-development
 # Librealsense: See https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md#installing-the-packages
@@ -31,14 +31,36 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 # Install dep packages
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
     libusb-1.0-0 \
     udev \
     apt-transport-https \
     ca-certificates \
     curl \
-    software-properties-common \
     && rm -rf /var/lib/apt/lists/*
+
+ARG DEBIAN_FRONTEND=dialog
+ENV TZ=Europe/Moscow
+
+RUN apt-get update && apt-get install -y locales
+
+# Locale
+RUN sed -i -e \
+  's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
+   && locale-gen
+
+ENV LANG ru_RU.UTF-8
+ENV LANGUAGE ru_RU:ru
+ENV LC_LANG ru_RU.UTF-8
+ENV LC_ALL ru_RU.UTF-8
+
+# +Timezone (если надо на этапе сборки)
+#ENV TZ Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+#RUN timedatectl set-timezone Europe/Moscow
+RUN pip install --upgrade pip
+RUN pip install python-snap7
 
 RUN apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
                     gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav \

@@ -58,6 +58,10 @@ services:
     container_name: opencv
     volumes:
       - *services-volume
+      - /dev:/dev
+    device_cgroup_rules:
+      - 'c 81:* rmw'
+      - 'c 189:* rmw'
     #command: /var/appdata/python/appstart.sh
     command: bash -c "
       cd /var/appdata/python

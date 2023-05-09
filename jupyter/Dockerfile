@@ -26,16 +26,15 @@ RUN apt-get update \
     librealsense2-dkms \
     librealsense2-utils \
  && rm -rf /var/lib/apt/lists/*
- 
+
 # Install dep packages
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \	
+    && apt-get install -y --no-install-recommends \
     libusb-1.0-0 \
     udev \
     apt-transport-https \
     ca-certificates \
     curl \
-    software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
 ARG DEBIAN_FRONTEND=dialog

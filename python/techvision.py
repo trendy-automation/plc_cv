@@ -229,7 +229,8 @@ class TechVision(threading.Thread):
                 finally:
                     # Stop streaming
                     #self.pipeline_stop()
-                    camera_db.inPartTypeDetect = camera_db.outPartTypeExpect
-                    camera_db.inPartPosNumDetect = camera_db.outPartPosNumExpect
-                    self.vision_status.put(camera_db)
+                    if camera_db.inoutRequest:
+                        camera_db.inPartTypeDetect = camera_db.outPartTypeExpect
+                        camera_db.inPartPosNumDetect = camera_db.outPartPosNumExpect
+                        self.vision_status.put(camera_db)
                     self.vision_tasks.get()

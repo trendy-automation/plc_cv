@@ -145,19 +145,21 @@ class PLC(threading.Thread):
         if self.vision_tasks.empty():
             try:
                 # snapshot_req = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
-                inoutRequest = self.get_cam_value("Bool", 0, 0)
+                stream_current_state = self.camera_db.outStreamOn
+                history_current_state = self.camera_db.outHistoryOn
+                self.camera_db.inoutRequest = self.get_cam_value("Bool", 0, 0)
+                self.camera_db.outHistoryOn = self.get_cam_value("Bool", 0, 6)
+                self.camera_db.outStreamOn = self.get_cam_value("Bool", 0, 7)
             except Exception as error:
-                self.logger.error(f"Не удалось считать строб съёмки: DB{self.camera_db_num}.DBX0.0\n"
+                self.logger.error(f"Не удалось считать данные из DB{self.camera_db_num}\n"
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
                 self.snap7client.disconnect()
             else:
-                if inoutRequest:
-                    self.logger.info(f"Строб съёмки пришёл {inoutRequest} считываем задание")
+                if self.camera_db.inoutRequest:
+                    self.logger.info(f"Строб съёмки пришёл {self.camera_db.inoutRequest} считываем задание")
 
                     self.camera_db.outTrainModeOn = self.get_cam_value("Bool", 0, 4)
                     self.camera_db.outPartPresentInNest = self.get_cam_value("Bool", 0, 5)
-                    self.camera_db.outHistoryOn = self.get_cam_value("Bool", 0, 6)
-                    self.camera_db.outStreamOn = self.get_cam_value("Bool", 0, 7)
                     self.camera_db.outPartTypeExpect = self.get_cam_value("USInt", 3, 0)
                     self.camera_db.outPartPosNumExpect = self.get_cam_value("USInt", 4, 0)
                     # part_type = self.get_usint(db_number=camera_db_num, offsetbyte=part_type_byte)
@@ -165,7 +167,10 @@ class PLC(threading.Thread):
                     # vision_mode = self.get_string(db_number=camera_db_num, offsetbyte=vision_mode_byte)
                     # Отправляем задание
                     self.vision_tasks.put(self.camera_db)
-
+                else:
+                    if stream_current_state != self.camera_db.outStreamOn or \
+                            history_current_state != self.camera_db.outHistoryOn:
+                        self.vision_tasks.put(self.camera_db)
         if not self.vision_status.empty():
             camera_db = self.vision_status.queue[0]
             self.logger.info(
@@ -186,4 +191,3 @@ class PLC(threading.Thread):
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
                 self.snap7client.disconnect()
         self.vision_tasks.get()
-
