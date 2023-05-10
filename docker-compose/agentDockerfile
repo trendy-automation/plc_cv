@@ -1,5 +1,4 @@
 FROM jenkins/ssh-agent:jdk11
-USER root
 RUN apt update && \
 	apt install -y --no-install-recommends git && \
     apt install -y curl
@@ -8,4 +7,3 @@ RUN groupadd -g ${DOCKER_GID} docker
 RUN usermod -a -G docker jenkins
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-USER jenkins
