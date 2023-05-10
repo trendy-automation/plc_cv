@@ -5,7 +5,7 @@ from techvision import TechVision
 import yaml
 import os
 import logging
-# from logging import handlers
+from logging import handlers
 import sys
 
 
