@@ -139,8 +139,13 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 USER ${NB_UID}
-
 RUN apt-get update \
+	&& apt-get install -y python3-dev \
 	&& pip install --upgrade pip \
-	&& pip install --root-user-action=ignore python-snap7 \
+	&& pip install --root-user-action=ignore python-snap7~=1.2 \
+	PyYAML~=6.0 \
+	pyrealsense2~=2.53.1.4623 \
+	numpy~=1.24.2 \
+	pyshine~=0.0.9 \
+	PyGObject~=3.44.1 \
     && rm -rf /var/lib/apt/lists/*

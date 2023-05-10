@@ -37,7 +37,6 @@ services:
       dockerfile: agentDockerfile
     privileged: true
     user: root
-
     #gid: $(stat -c '%g' /var/run/docker.sock)
     container_name: agent
     expose:
