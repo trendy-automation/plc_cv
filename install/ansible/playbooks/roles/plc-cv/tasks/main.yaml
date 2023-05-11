@@ -15,17 +15,17 @@
     src: /plc_cv/python/
     dest: /plc_cv/docker-compose/appdata/python/
     owner: "{{ system_user }}"
-    group: docker
+    #group: root
     mode: 01777
     remote_src: yes
     directory_mode: yes
     
-#- name: update appdata mode
-#  file:
-#    path: /plc_cv/docker-compose/appdata/
-#    owner: "{{ system_user }}"
-#    group: docker
-#    mode: 01777
+- name: update appdata mode
+  file:
+    path: /plc_cv/docker-compose/appdata/
+    owner: "{{ system_user }}"
+    #group: root
+    mode: 01777
     
 #  - copy:
 #    src: /docker-compose/appdata/python/

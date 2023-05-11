@@ -19,6 +19,7 @@ import os
 
 class TechVision(threading.Thread):
     def __init__(self):
+
         self.logger = logging.getLogger("vision.main")
         print("techvision.py")
         threading.Thread.__init__(self, args=(), name='techvision', kwargs=None)
