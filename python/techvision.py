@@ -29,7 +29,7 @@ class TechVision(threading.Thread):
 
         self.vision_tasks = None
         self.http_server = None
-        self.rtsp_server = None
+        self.rtsp_video_writer = None
         self.gst_loop = None
         self.capture = None
         self.vision_status = Queue()
@@ -95,6 +95,11 @@ class TechVision(threading.Thread):
             self.pipeline.start(self.rs_config)
             # Get capture
             self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
+            # ?
+            self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
+            self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
+            self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
+
             return self.capture is not None
         except Exception as error:
             self.logger.error(f"Не удалось включить камеру\n"
@@ -149,7 +154,7 @@ class TechVision(threading.Thread):
 
     def rtsp_stream_on(self):
         try:
-            if self.rtsp_server is None and self.capture is not None:
+            if self.rtsp_video_writer is None and self.capture is not None:
                 # print('RTSP server start')
                 # # RTSP: initializing the threads and running the stream on loop.
                 # GObject.threads_init()
@@ -157,6 +162,13 @@ class TechVision(threading.Thread):
                 # self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.capture.images)
                 # self.gst_loop = GObject.MainLoop()
                 # self.gst_loop.run()
+
+                # Define the gstreamer sink
+                gst_str_rtp = f"appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! " \
+                              f"rtph264pay ! udpsink host={self.stream_opt.local_ip} port={self.stream_opt.rtspport}"
+                # Create videowriter as a SHM sink
+                self.rtsp_video_writer = cv2.VideoWriter(gst_str_rtp, 0, self.stream_opt.fps,
+                                                         (self.stream_opt.image_width, self.stream_opt.image_height), True)
                 return True
         except Exception as error:
             self.logger.error(f"Не удалось включить rtsp стрим сервер\n"
@@ -164,10 +176,9 @@ class TechVision(threading.Thread):
 
     def rtsp_stream_off(self):
         try:
-            if not (self.http_server is None):
-                pass
-                #self.rtsp_server = None
-            if not (self.gst_loop is None):
+            if self.http_server is not None:
+                self.rtsp_video_writer = None
+            if self.gst_loop is not None:
                 #self.gst_loop.stop()
                 print('Rtsp server shutdown')
             return True
@@ -235,3 +246,16 @@ class TechVision(threading.Thread):
                         camera_db.inPartPosNumDetect = camera_db.outPartPosNumExpect
                         self.vision_status.put(camera_db)
                     self.vision_tasks.get()
+            if self.rtsp_video_writer is not None:
+                # Check if cap is open
+                if self.capture.images.isOpened():
+                    # Get the frame
+                    ret, frame = self.capture.images.read()
+                    # Check
+                    if ret is True:
+                        # Flip frame
+                        frame = cv2.flip(frame, 1)
+                        # Write to SHM
+                        self.rtsp_video_writer.write(frame)
+                    else:
+                        print("Camera error.")
