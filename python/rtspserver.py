@@ -5,10 +5,13 @@
 # https://github.com/wingtk/gvsbuild
 
 import gi
+gi.require_version('Gst', '1.0')
+gi.require_version('GstRtspServer', '1.0')
 from gi.repository import Gst, GstRtspServer, GObject
 from obj import Obj
 # import cv2
 import logging
+#import cv2
 #import socket
 #import yaml
 #import os
@@ -19,8 +22,6 @@ import logging
 
 
 # import required library like Gstreamer and GstreamerRtspServer
-gi.require_version('Gst', '1.0')
-gi.require_version('GstRtspServer', '1.0')
 
 
 # Sensor Factory class which inherits the GstRtspServer base class and add
@@ -30,9 +31,8 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
         super(SensorFactory, self).__init__(**kwargs)
         opt = kwargs['opt']
         self.logger = logging.getLogger("vision.rtspserver")
-        # threading.Thread.__init__(self, args=(), name='webserver', kwargs=None)
+        # threading.Thread.__init__(self, args=(), name='rtspserver', kwargs=None)
         self.cap = kwargs['cap']
-        # self.cap = cv2.VideoCapture(opt.device_id)
         self.number_frames = 0
         self.fps = opt.fps
         self.duration = 1 / self.fps * Gst.SECOND  # duration of a frame in nanoseconds
@@ -48,6 +48,7 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
     def on_need_data(self, src, length):
         if self.cap.isOpened():
             ret, frame = self.cap.read()
+            #ret, frame = True, cv2.imread("2/part4.png")
             if ret:
                 ## It is better to change the resolution of the camera
                 ## instead of changing the image shape as it affects the image quality.

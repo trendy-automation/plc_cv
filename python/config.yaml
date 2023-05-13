@@ -43,7 +43,7 @@ vision:
     save_history: on
   stream:
     quality: 100
-    rstpport: 8554,
+    rtspport: 8554
     httpport: 9001
 parts: 
   - code: '8АТ-1250-11'
