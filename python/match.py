@@ -126,7 +126,7 @@ class MatchCapture:
                                     lambda x: (abs(x[0][0]) < self.opt.offset_pix and abs(x[0][1]) < self.opt.offset_pix),
                                     points_list)),
                                 "part": part})
-                        continue
+                        break
                 # for pos in poses: проверять шаблоны для каждой позиции
 
         if len(res_list) == 0:
