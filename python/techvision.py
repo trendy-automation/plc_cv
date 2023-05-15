@@ -216,12 +216,12 @@ class TechVision(threading.Thread):
                     # Start streaming
                     if self.pipeline_start():
                         # print(f"camera_db {camera_db}")
-                        part_type = str(camera_db.outPartTypeExpect)
-                        part_pos_num = str(camera_db.outPartPosNumExpect)
+                        part_type = str(camera_db.outPartTypeExpect[0])
+                        part_pos_num = str(camera_db.outPartPosNumExpect[0])
                         # part_template_dir = os.path.join(self.match_opt.template_dir, part_type)
-                        if camera_db.outTrainModeOn:
+                        if camera_db.outTrainModeOn[0]:
                             res = False
-                            if camera_db.outPartPresentInNest:
+                            if camera_db.outPartPresentInNest[0]:
                                 if self.capture is not None:
                                     nest = cv2.imread(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
                                     nest_part = self.capture.depth.read()
@@ -238,32 +238,32 @@ class TechVision(threading.Thread):
                                                       self.capture.depth.read())
                                 else:
                                     print('Ошибка. Невозможно обучить фон')
-                            camera_db.inoutTrainOk = res
-                            camera_db.inoutResultNok = not res
+                            camera_db.inoutTrainOk[0] = res
+                            camera_db.inoutResultNok[0] = not res
                         else:
                             if self.capture is not None:
                                 mc = MatchCapture(opt=self.match_opt, cap=self.capture.depth.read(),
                                                   templates=self.templates)
                                 match_res = mc.eval_match()
-                                camera_db.inoutPartOk = len(match_res) > 0
-                                camera_db.inoutResultNok = len(match_res) == 0
-                        if camera_db.outStreamOn:
+                                camera_db.inoutPartOk[0] = len(match_res) > 0
+                                camera_db.inoutResultNok[0] = len(match_res) == 0
+                        if camera_db.outStreamOn[0]:
                             res1 = self.http_stream_on()
                             res2 = self.rtsp_stream_on()
                         else:
                             res1 = self.http_stream_off()
                             res2 = self.rtsp_stream_off()
                             self.pipeline_stop()
-                        if camera_db.outHistoryOn:
+                        if camera_db.outHistoryOn[0]:
                             pass
                         else:
                             pass
                 finally:
                     # Stop streaming
                     # self.pipeline_stop()
-                    if camera_db.inoutRequest:
-                        camera_db.inPartTypeDetect = camera_db.outPartTypeExpect
-                        camera_db.inPartPosNumDetect = camera_db.outPartPosNumExpect
+                    if camera_db.inoutRequest[0]:
+                        camera_db.inPartTypeDetect[0] = camera_db.outPartTypeExpect[0]
+                        camera_db.inPartPosNumDetect[0] = camera_db.outPartPosNumExpect[0]
                         self.vision_status.put(camera_db)
                     self.vision_tasks.get()
             if self.rtsp_video_writer is not None:
