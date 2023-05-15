@@ -30,18 +30,18 @@ class PLC(threading.Thread):
         self.camera_db_num = config['plc']['camera_db_num']
         self.reconnect_timeout = config['plc']['reconnect_timeout']
         self.camera_db = Obj({
-            "inoutRequest": (False, "Bool", 0, 0),
-            "inoutPartOk": (False, "Bool", 0, 1),
-            "inoutResultNok": (False, "Bool", 0, 2),
-            "inoutTrainOk": (False, "Bool", 0, 3),
-            "outTrainModeOn": (False, "Bool", 0, 4),
-            "outPartPresentInNest": (False, "Bool", 0, 5),
-            "outHistoryOn": (False, "Bool", 0, 6),
-            "outStreamOn": (False, "Bool", 0, 7),
-            "inPartTypeDetect": (0, "USInt", 1, 0),
-            "inPartPosNumDetect": (0, "USInt", 2, 0),
-            "outPartTypeExpect": (0, "USInt", 3, 0),
-            "outPartPosNumExpect": (0, "USInt", 4, 0)
+            "inoutRequest": [False, "Bool", 0, 0],
+            "inoutPartOk": [False, "Bool", 0, 1],
+            "inoutResultNok": [False, "Bool", 0, 2],
+            "inoutTrainOk": [False, "Bool", 0, 3],
+            "outTrainModeOn": [False, "Bool", 0, 4],
+            "outPartPresentInNest": [False, "Bool", 0, 5],
+            "outHistoryOn": [False, "Bool", 0, 6],
+            "outStreamOn": [False, "Bool", 0, 7],
+            "inPartTypeDetect": [0, "USInt", 1, 0],
+            "inPartPosNumDetect": [0, "USInt", 2, 0],
+            "outPartTypeExpect": [0, "USInt", 3, 0],
+            "outPartPosNumExpect": [0, "USInt", 4, 0]
         })
         # camera_db_num = config['plc']['camera_db_num']
         # part_type_byte = config['plc']['part_type_byte']
@@ -72,16 +72,16 @@ class PLC(threading.Thread):
         return snap7.util.get_usint(byte_array_read, 0)
 
     # def get_cam_value(self, value_type, offsetbyte, offsetbit=0):
-    def get_cam_value(self, tag_tuple):
-        value, value_type, offsetbyte, offsetbit = tag_tuple
+    def get_cam_value(self, tag_list: list) -> bool:
+        value, value_type, offsetbyte, offsetbit = tag_list
         if value_type == 'Bool':
             # return snap7.util.get_bool(self.snap7client.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
-            tag_tuple = self.get_bool(self.camera_db_num, offsetbyte, offsetbit), value_type, offsetbyte, offsetbit
+            tag_list =  [self.get_bool(self.camera_db_num, offsetbyte, offsetbit), value_type, offsetbyte, offsetbit]
             return True
         if value_type == 'USInt':
             # byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
             # return snap7.util.get_usint(byte_array_read, 0)
-            tag_tuple = self.get_usint(self.camera_db_num, offsetbyte), value_type, offsetbyte, offsetbit
+            tag_list = [self.get_usint(self.camera_db_num, offsetbyte), value_type, offsetbyte, offsetbit]
             return True
         return False
 
@@ -99,8 +99,8 @@ class PLC(threading.Thread):
         snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
         return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
-    def set_cam_value(self, tag_tuple):
-        tag_value, value_type, offsetbyte, offsetbit = tag_tuple
+    def set_cam_value(self, tag_list: list) -> bool:
+        tag_value, value_type, offsetbyte, offsetbit = tag_list
         if value_type == 'Bool':
             tag_data = bytearray(1)
             snap7.util.set_usint(tag_data, 0, tag_value)
