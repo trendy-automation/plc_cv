@@ -1,6 +1,7 @@
 sudo pvresize /dev/sda3
 sudo lvresize -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
 sudo resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+
 sudo cfdisk
 
 #in host OS
@@ -10,3 +11,6 @@ sudo apt-get clean
 sudo apt-get update
 sudo timedatectl set-local-rtc 1
 sudo timedatectl set-local-rtc 0
+
+
+gst-launch-1.0 rtspsrc location=rtsp://172.19.0.2:8554/

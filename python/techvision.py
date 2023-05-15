@@ -30,8 +30,8 @@ class TechVision(threading.Thread):
 
         self.vision_tasks = None
         self.http_server = None
-        self.rtsp_server = None
-        # self.rtsp_video_writer = None
+        #self.rtsp_server = None
+        self.rtsp_video_writer = None
         self.gst_loop = None
         self.capture = None
         self.vision_status = Queue()
@@ -156,26 +156,36 @@ class TechVision(threading.Thread):
 
     def rtsp_stream_on(self):
         try:
-            #if self.rtsp_video_writer is None and self.capture is not None:
-            if self.rtsp_server is None and self.capture is not None:
+            if self.rtsp_video_writer is None and self.capture is not None:
+            #if self.rtsp_server is None and self.capture is not None:
                 # RTSP: initializing the threads and running the stream on loop.
-                GObject.threads_init()
-                Gst.init(None)
-                self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.capture.images)
-                self.gst_loop = GObject.MainLoop()
-                self.gst_loop.run()
+                # GObject.threads_init()
+                # Gst.init(None)
+                # self.rtsp_server = GstServer(opt=self.stream_opt, cap=self.capture.images)
+                # self.gst_loop = GObject.MainLoop()
+                # self.gst_loop.run()
 
                 # # Define the gstreamer sink
+                gst_str_rtp = f"appsrc ! videoconvert ! videoscale ! video/x-raw,format=RGBA,width={self.stream_opt.image_width}," \
+                             f"height={self.stream_opt.image_height},framerate={self.stream_opt.fps}/1 ! " \
+                              " videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! " \
+                             f"rtph264pay ! udpsink host={self.stream_opt.local_ip} port={self.stream_opt.rtspport}"
+
+                # gst_str_rtp = f"appsrc ! videoconvert ! videoscale ! video/x-raw,format=I420,width={self.stream_opt.image_width}," \
+                #               f"height={self.stream_opt.image_height},framerate={self.stream_opt.fps}/1 ! " \
+                #                " videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! " \
+                #               f"rtph264pay ! udpsink host={self.stream_opt.local_ip} port={self.stream_opt.rtspport}"
+
                 # gst_str_rtp = "appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! " \
                 #               f"rtph264pay ! udpsink host={self.stream_opt.local_ip} port={self.stream_opt.rtspport}"
                 # #"appsrc ! video/x-raw, format=BGR ! queue ! videoconvert ! video/x-raw, format=BGRx ! nvvidconv ! " \
                 # #"omxh264enc ! video/x-h264, stream-format=byte-stream ! h264parse ! rtph264pay pt=96 config-interval=1 ! " \
                 # #f"udpsink host={self.stream_opt.local_ip} port={self.stream_opt.rtspport}"
                 # # Create videowriter as a SHM sink
-                # self.rtsp_video_writer = cv2.VideoWriter(gst_str_rtp, cv2.CAP_GSTREAMER, 0, self.stream_opt.fps,
-                #                                          (self.stream_opt.image_width, self.stream_opt.image_height),
-                #                                          True)
-                # print(f'RTSP server start on rtsp://{self.stream_opt.local_ip}:{self.stream_opt.rtspport}')
+                self.rtsp_video_writer = cv2.VideoWriter(gst_str_rtp, cv2.CAP_GSTREAMER, 0, self.stream_opt.fps,
+                                                         (self.stream_opt.image_width, self.stream_opt.image_height),
+                                                         True)
+                print(f'RTSP server start on rtsp://{self.stream_opt.local_ip}:{self.stream_opt.rtspport}')
                 return True
         except Exception as error:
             self.logger.error(f"Не удалось включить rtsp стрим сервер\n"
@@ -183,12 +193,12 @@ class TechVision(threading.Thread):
 
     def rtsp_stream_off(self):
         try:
-            if self.rtsp_server is not None:
-                self.rtsp_server = None
-            # if self.rtsp_video_writer is not None:
-            #     self.rtsp_video_writer = None
-            if self.gst_loop is not None:
-                self.gst_loop.stop()
+            # if self.rtsp_server is not None:
+            #     self.rtsp_server = None
+            if self.rtsp_video_writer is not None:
+                self.rtsp_video_writer = None
+            # if self.gst_loop is not None:
+            #     self.gst_loop.stop()
                 print('Rtsp server shutdown')
             return True
         except Exception as error:
@@ -255,18 +265,18 @@ class TechVision(threading.Thread):
                         camera_db.inPartPosNumDetect = camera_db.outPartPosNumExpect
                         self.vision_status.put(camera_db)
                     self.vision_tasks.get()
-            # if self.rtsp_video_writer is not None:
-            #     # Check if cap is open
-            #     if True or self.capture.images.isOpened():
-            #         # Get the frame
-            #         #ret, frame = self.capture.images.read()
-            #         frame = cv2.imread("2/part4.png")
-            #         ret = True
-            #         # Check
-            #         if ret is True:
-            #             # Flip frame
-            #             frame = cv2.flip(frame, 1)
-            #             # Write to SHM
-            #             self.rtsp_video_writer.write(frame)
-            #         else:
-            #             print("Camera error.")
+            if self.rtsp_video_writer is not None:
+                # Check if cap is open
+                if True or self.capture.images.isOpened():
+                    # Get the frame
+                    ret, frame = self.capture.images.read()
+                    # frame = cv2.imread("2/part4.png")
+                    # ret = True
+                    # Check
+                    if ret is True:
+                        # Flip frame
+                        # frame = cv2.flip(frame, 1)
+                        # Write to SHM
+                        self.rtsp_video_writer.write(frame)
+                    else:
+                        print("Camera error.")
