@@ -68,17 +68,17 @@ class PLC(threading.Thread):
         return snap7.util.get_bool(tag_data, 0, offsetbit)
 
     def get_usint(self, db_number, offsetbyte):
-        tag_data = bytearray(1)
-        byte_array_read = self.snap7client.db_read(db_number, offsetbyte, tag_data)
+        byte_array_read = self.snap7client.db_read(db_number, offsetbyte, 1)
         return snap7.util.get_usint(byte_array_read, 0)
 
     def get_cam_value(self, value_type, offsetbyte, offsetbit=0):
         if value_type == 'Bool':
-            return snap7.util.get_bool(self.snap7client.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
+            # return snap7.util.get_bool(self.snap7client.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
+            return self.get_bool(self.camera_db_num, offsetbyte, offsetbit)
         if value_type == 'USInt':
-            tag_data = bytearray(1)
-            byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, tag_data)
-            return snap7.util.get_usint(byte_array_read, 0)
+            # byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
+            # return snap7.util.get_usint(byte_array_read, 0)
+            return self.get_usint(self.camera_db_num, offsetbyte)
         return 0
 
     def get_string(self, db_number, offsetbyte, len_arr):
