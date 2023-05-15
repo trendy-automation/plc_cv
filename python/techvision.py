@@ -3,8 +3,8 @@
 from capture import ImgCapture
 from match import MatchCapture
 from httpserver import HttpServer
-import rtspserver
-from rtspserver import GObject, Gst, GstServer
+#import rtspserver
+#from rtspserver import GObject, Gst, GstServer
 from obj import Obj
 import logging
 import traceback
@@ -73,8 +73,7 @@ class TechVision(threading.Thread):
         self.stream_opt = Obj({"rtspport": config['vision']['stream']['rtspport'],
                                "httpport": config['vision']['stream']['httpport'],
                                "quality": config['vision']['stream']['quality'],
-                               #"local_ip": socket.gethostbyname(socket.gethostname()),
-                               "local_ip": "192.168.0.12",
+                               "local_ip": socket.gethostbyname(socket.gethostname()),
                                "stream_uri": "",
                                "image_width": 2 * config['vision']['pipline']['resolution_x'],
                                "image_height": config['vision']['pipline']['resolution_y'],
