@@ -77,6 +77,7 @@ class PLC(threading.Thread):
         if value_type == 'Bool':
             # return snap7.util.get_bool(self.snap7client.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
             tag_list = [self.get_bool(self.camera_db_num, offsetbyte, offsetbit), value_type, offsetbyte, offsetbit]
+            print(f"tag_list{tag_list}")
             return True
         if value_type == 'USInt':
             # byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
