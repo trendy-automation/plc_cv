@@ -154,12 +154,16 @@ class PLC(threading.Thread):
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
                 self.snap7client.disconnect()
             else:
-                if self.camera_db.inoutRequest:
-                    self.logger.info(f"Строб съёмки пришёл {self.camera_db.inoutRequest} считываем задание")
-                    res = self.get_cam_value(self.camera_db.outTrainModeOn)
-                    res = self.get_cam_value(self.camera_db.outPartPresentInNest)
-                    res = self.get_cam_value(self.camera_db.outPartTypeExpect)
-                    res = self.get_cam_value(self.camera_db.outPartPosNumExpect)
+                if self.camera_db.inoutRequest[0]:
+                    self.logger.info(f"Строб съёмки пришёл {self.camera_db.inoutRequest[0]} считываем задание")
+                    try:
+                        res = self.get_cam_value(self.camera_db.outTrainModeOn)
+                        res = self.get_cam_value(self.camera_db.outPartPresentInNest)
+                        res = self.get_cam_value(self.camera_db.outPartTypeExpect)
+                        res = self.get_cam_value(self.camera_db.outPartPosNumExpect)
+                    except Exception as error:
+                        self.logger.error(f"Не удалось считать данные из DB{self.camera_db_num}\n"
+                                          f"Ошибка {str(error)} {traceback.format_exc()}")
                     # Отправляем задание
                     self.vision_tasks.put(self.camera_db)
                     #self.logger.info(f"Очередь заданий: self.vision_tasks.empty() {self.vision_tasks.empty()}")
