@@ -64,7 +64,7 @@ class PLC(threading.Thread):
         self.unreachable_time = 0
 
     def get_bool(self, db_number, offsetbyte, offsetbit):
-        tag_data = self.db_read(db_number, offsetbyte, 1)
+        tag_data = self.snap7client.db_read(db_number, offsetbyte, 1)
         return snap7.util.get_bool(tag_data, 0, offsetbit)
 
     def get_usint(self, db_number, offsetbyte):
@@ -74,7 +74,7 @@ class PLC(threading.Thread):
 
     def get_cam_value(self, value_type, offsetbyte, offsetbit=0):
         if value_type == 'Bool':
-            return snap7.util.get_bool(self.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
+            return snap7.util.get_bool(self.snap7client.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
         if value_type == 'USInt':
             tag_data = bytearray(1)
             byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, tag_data)
@@ -82,7 +82,7 @@ class PLC(threading.Thread):
         return 0
 
     def get_string(self, db_number, offsetbyte, len_arr):
-        byte_array_read = self.db_read(db_number, offsetbyte, len_arr)
+        byte_array_read = self.snap7client.db_read(db_number, offsetbyte, len_arr)
         return snap7.util.get_string(byte_array_read, 0, len_arr)
 
     def set_usint(self, db_number, offsetbyte, tag_value):
@@ -91,7 +91,7 @@ class PLC(threading.Thread):
         return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
     def set_bool(self, db_number, offsetbyte, offsetbit, tag_value):
-        tag_data = self.db_read(db_number, offsetbyte, 1)
+        tag_data = self.snap7client.db_read(db_number, offsetbyte, 1)
         snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
         return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
@@ -101,7 +101,7 @@ class PLC(threading.Thread):
             snap7.util.set_usint(tag_data, 0, tag_value)
             return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
         if value_type == 'USInt':
-            tag_data = self.db_read(self.camera_db_num, offsetbyte, 1)
+            tag_data = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
             snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
             return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
         return False
