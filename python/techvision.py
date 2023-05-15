@@ -211,6 +211,7 @@ class TechVision(threading.Thread):
             time.sleep(0.2)
             if not self.vision_tasks.empty():
                 camera_db = self.vision_tasks.queue[0]
+                self.logger.info(f"Получено задание {str(camera_db)}")
                 try:
                     # Start streaming
                     if self.pipeline_start():
