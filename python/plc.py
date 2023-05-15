@@ -137,14 +137,8 @@ class PLC(threading.Thread):
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
 
     def process_io(self):
-        # try:
-        # except Exception as error:
-        #    self.logger.error(f"Не удалось обработать чтение/запись IO plc\n"
-        #                          f"Ошибка {str(error)} {traceback.format_exc()}")
-
         if self.vision_tasks.empty():
             try:
-                # snapshot_req = self.get_bool(db_number=camera_db_num, offsetbyte=0, offsetbit=0)
                 stream_current_state = self.camera_db.outStreamOn
                 history_current_state = self.camera_db.outHistoryOn
                 self.camera_db.inoutRequest = self.get_cam_value("Bool", 0, 0)
@@ -161,9 +155,6 @@ class PLC(threading.Thread):
                     self.camera_db.outPartPresentInNest = self.get_cam_value("Bool", 0, 5)
                     self.camera_db.outPartTypeExpect = self.get_cam_value("USInt", 3, 0)
                     self.camera_db.outPartPosNumExpect = self.get_cam_value("USInt", 4, 0)
-                    # part_type = self.get_usint(db_number=camera_db_num, offsetbyte=part_type_byte)
-                    # part_pos_num = self.get_usint(db_number=camera_db_num, offsetbyte=part_posnum_byte)
-                    # vision_mode = self.get_string(db_number=camera_db_num, offsetbyte=vision_mode_byte)
                     # Отправляем задание
                     self.vision_tasks.put(self.camera_db)
                     #self.logger.info(f"Очередь заданий: self.vision_tasks.empty() {self.vision_tasks.empty()}")
@@ -177,14 +168,17 @@ class PLC(threading.Thread):
                 f"Запись результата распознования - тип детали - {camera_db.inPartTypeDetect} "
                 f"результат распознования {camera_db.inoutPartOk}")
             try:
-                res = self.set_cam_value(camera_db.inPartTypeDetect, "USInt", 1, 0)
-                res = self.set_cam_value(camera_db.inPartPosNumDetect, "USInt", 2, 0)
-                res = self.set_cam_value(camera_db.inoutPartOk, "Bool", 0, 1)
-                res = self.set_cam_value(camera_db.inoutResultNok, "Bool", 0, 2)
-                res = self.set_cam_value(camera_db.inoutTrainOk, "Bool", 0, 3)
-                res = self.set_cam_value(camera_db.inoutPartOk, "Bool", 0, 1)
-                # self.set_usint(db_number=camera_db_num, offsetbyte=1, tag_value=part_num)
-                # self.found_part_num = 0
+                if camera_db.inPartTypeDetect > 0:
+                    res = self.set_cam_value(camera_db.inPartTypeDetect, "USInt", 1, 0)
+                    res = self.set_cam_value(camera_db.inPartPosNumDetect, "USInt", 2, 0)
+                    res = self.set_cam_value(camera_db.inoutPartOk, "Bool", 0, 1)
+                    res = self.set_cam_value(camera_db.inoutResultNok, "Bool", 0, 2)
+                    res = self.set_cam_value(camera_db.inoutTrainOk, "Bool", 0, 3)
+                    res = self.set_cam_value(camera_db.inoutPartOk, "Bool", 0, 1)
+                res = self.set_cam_value(camera_db.inoutRequest, "Bool", 0, 0)
+
+                    # self.set_usint(db_number=camera_db_num, offsetbyte=1, tag_value=part_num)
+                    # self.found_part_num = 0
                 self.vision_status.get()
             except Exception as error:
                 self.logger.error(f"Не удалось записать результат съёмки: в DB{self.camera_db_num}\n"
