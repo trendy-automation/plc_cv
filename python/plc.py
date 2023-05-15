@@ -166,7 +166,7 @@ class PLC(threading.Thread):
                     # vision_mode = self.get_string(db_number=camera_db_num, offsetbyte=vision_mode_byte)
                     # Отправляем задание
                     self.vision_tasks.put(self.camera_db)
-                    self.logger.info(f"Очередь заданий: self.vision_tasks.empty() {self.vision_tasks.empty()}")
+                    #self.logger.info(f"Очередь заданий: self.vision_tasks.empty() {self.vision_tasks.empty()}")
                 else:
                     if stream_current_state != self.camera_db.outStreamOn or \
                             history_current_state != self.camera_db.outHistoryOn:
@@ -190,4 +190,3 @@ class PLC(threading.Thread):
                 self.logger.error(f"Не удалось записать результат съёмки: в DB{self.camera_db_num}\n"
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
                 self.snap7client.disconnect()
-        self.vision_tasks.get()

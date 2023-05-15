@@ -46,20 +46,20 @@ if __name__ == '__main__':
     plc_ip, logger_level, logger_debug_file, logger_format = read_config()
     start_logging(logger_level, logger_debug_file, logger_format)
     main_plc, main_techvision = run_plc(plc_ip)
-    from obj import Obj
-    main_plc.vision_tasks.put(
-        Obj({
-            "inoutRequest": False,
-            "inoutPartOk": False,
-            "inoutResultNok": False,
-            "inoutTrainOk": False,
-            "outTrainModeOn": False,
-            "outPartPresentInNest": False,
-            "outHistoryOn": False,
-            "outStreamOn": True,
-            "inPartTypeDetect": 0,
-            "inPartPosNumDetect": 0,
-            "outPartTypeExpect": 2,
-            "outPartPosNumExpect": 0
-        })
-    )
+    # from obj import Obj
+    # main_plc.vision_tasks.put(
+    #     Obj({
+    #         "inoutRequest": False,
+    #         "inoutPartOk": False,
+    #         "inoutResultNok": False,
+    #         "inoutTrainOk": False,
+    #         "outTrainModeOn": False,
+    #         "outPartPresentInNest": False,
+    #         "outHistoryOn": False,
+    #         "outStreamOn": True,
+    #         "inPartTypeDetect": 0,
+    #         "inPartPosNumDetect": 0,
+    #         "outPartTypeExpect": 2,
+    #         "outPartPosNumExpect": 0
+    #     })
+    # )
