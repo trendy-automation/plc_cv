@@ -98,9 +98,9 @@ class TechVision(threading.Thread):
             # Get capture
             self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
             # ?
-            self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
-            self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
-            self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
+            # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
+            # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
+            # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
 
             return self.capture is not None
         except Exception as error:
@@ -253,6 +253,7 @@ class TechVision(threading.Thread):
                         else:
                             res1 = self.http_stream_off()
                             res2 = self.rtsp_stream_off()
+                            self.pipeline_stop()
                         if camera_db.outHistoryOn:
                             pass
                         else:
