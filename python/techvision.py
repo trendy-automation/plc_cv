@@ -220,13 +220,14 @@ class TechVision(threading.Thread):
                         part_pos_num = str(camera_db.outPartPosNumExpect[0])
                         # part_template_dir = os.path.join(self.match_opt.template_dir, part_type)
                         if camera_db.inoutRequest[0]:
+                            res = False
                             if camera_db.outTrainModeOn[0]:
-                                res = False
                                 if camera_db.outPartPresentInNest[0]:
                                     if self.capture is not None:
                                         nest = cv2.imread(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
                                         nest_part = self.capture.depth.read()
-                                        res, nest_mask = self.subtract_background(nest_part, nest)
+                                        if nest_part is not None:
+                                            res, nest_mask = self.subtract_background(nest_part, nest)
                                         if res:
                                             res = cv2.imwrite(os.path.join(part_type, part_pos_num + ".png"),
                                                               nest_mask)
@@ -235,19 +236,22 @@ class TechVision(threading.Thread):
                                             print('Ошибка. Невозможно обучить деталь')
                                 else:
                                     if self.capture is not None:
-                                        res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
-                                                          self.capture.depth.read())
+                                        part = self.capture.depth.read()
+                                        if part is not None:
+                                            res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
+                                                          part)
                                     else:
                                         print('Ошибка. Невозможно обучить фон')
                                 camera_db.inoutTrainOk[0] = res
-                                camera_db.inoutResultNok[0] = not res
                             else:
                                 if self.capture is not None:
-                                    mc = MatchCapture(opt=self.match_opt, cap=self.capture.depth.read(),
-                                                      templates=self.templates)
-                                    match_res = mc.eval_match()
-                                    camera_db.inoutPartOk[0] = len(match_res) > 0
-                                    camera_db.inoutResultNok[0] = len(match_res) == 0
+                                    part = self.capture.depth.read()
+                                    if part is not None:
+                                        mc = MatchCapture(opt=self.match_opt, cap=part, templates=self.templates)
+                                        match_res = mc.eval_match()
+                                        res = len(match_res) > 0
+                                camera_db.inoutPartOk[0] = res
+                            camera_db.inoutResultNok[0] = not res
                         if camera_db.outStreamOn[0]:
                             res1 = self.http_stream_on()
                             res2 = self.rtsp_stream_on()
@@ -271,11 +275,11 @@ class TechVision(threading.Thread):
                 # Check if cap is open
                 if True or self.capture.images.isOpened():
                     # Get the frame
-                    ret, frame = self.capture.images.read()
+                    frame = self.capture.images.read()
                     # frame = cv2.imread("2/part4.png")
                     # ret = True
                     # Check
-                    if ret is True:
+                    if frame is not None:
                         # Flip frame
                         # frame = cv2.flip(frame, 1)
                         # Write to SHM

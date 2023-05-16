@@ -48,6 +48,7 @@ class ImgCapture:
         except Exception as error:
             self.logger.error(f"Не удалось считать изображение\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
+            return None, None, None
 
     def isOpened(self):
         ret, _, _ = self.rs.get_frame_stream()
