@@ -103,7 +103,7 @@ class TechVision(threading.Thread):
 
             return self.capture is not None
         except Exception as error:
-            self.logger.error(f"Не удалось включить камеру rs.playback_status {rs.playback_status}\n"
+            self.logger.error(f"Не удалось включить камеру rs.playback_status {str(rs.playback_status)}\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
             return False
 
