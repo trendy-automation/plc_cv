@@ -72,7 +72,7 @@ class PLC(threading.Thread):
         return snap7.util.get_usint(byte_array_read, 0)
 
     # def get_cam_value(self, value_type, offsetbyte, offsetbit=0):
-    def get_cam_value(self, tag_list):
+    def get_cam_value(self, tag_list: list) -> bool:
         value, value_type, offsetbyte, offsetbit = tag_list
         if value_type == 'Bool':
             # return snap7.util.get_bool(self.snap7client.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
@@ -149,7 +149,7 @@ class PLC(threading.Thread):
                 stream_current_state = self.camera_db.outStreamOn[0]
                 history_current_state = self.camera_db.outHistoryOn[0]
                 res = self.get_cam_value(self.camera_db.inoutRequest)
-                self.logger.info(f"self.get_cam_value(self.camera_db.inoutRequest) {res}")
+                self.logger.info(f"self.get_cam_value(self.camera_db.inoutRequest) {self.camera_db.inoutRequest} {self.camera_db.inoutRequest[0]}")
                 res = self.get_cam_value(self.camera_db.outHistoryOn)
                 res = self.get_cam_value(self.camera_db.outStreamOn)
             except Exception as error:
