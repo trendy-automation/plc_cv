@@ -100,8 +100,8 @@ class PLC(threading.Thread):
     def set_cam_value(self, tag_list: list) -> bool:
         tag_value, value_type, offsetbyte, offsetbit = tag_list
         if value_type == 'Bool':
-            tag_data = bytearray(1)
-            snap7.util.set_usint(tag_data, 0, tag_value)
+            tag_data = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
+            snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
             return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
         if value_type == 'USInt':
             tag_data = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
