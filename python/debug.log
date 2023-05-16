@@ -39434,3 +39434,109 @@ RuntimeError: b' TCP : Unreachable peer'
     raise RuntimeError(error)
 RuntimeError: b' TCP : Unreachable peer'
 
+2023-05-16 11:22:26,627 snap7.client creating snap7 client
+2023-05-16 11:22:26,648 vision.main Techvision started
+2023-05-16 11:22:26,648 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-16 11:22:26,850 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-16 11:22:26,850 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-16 11:22:27,148 _plc_.client Соединение открыто 192.168.1.10
+2023-05-16 11:22:27,149 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:27,167 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:27,392 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:27,401 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:27,646 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:27,655 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:27,880 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:27,900 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:28,144 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:28,152 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:28,373 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:28,393 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:28,670 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:28,696 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:28,928 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:28,945 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:29,167 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:29,177 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:29,406 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:29,426 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:29,686 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:29,695 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:29,919 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:29,932 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:30,155 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:30,184 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:30,457 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:30,466 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:30,694 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:30,705 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:30,941 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:30,960 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:31,205 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:31,220 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:31,451 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:31,461 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:31,683 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:31,720 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:31,977 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:32,003 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:32,242 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:32,249 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:32,493 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:32,522 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:32,764 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:32,772 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:32,998 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:33,014 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:33,279 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:33,289 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:33,509 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:33,528 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:33,750 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:33,759 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:34,006 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:34,042 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:34,297 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:34,308 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:34,546 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:34,559 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:34,782 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:34,815 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:35,092 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:35,099 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:35,335 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:35,346 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:35,566 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:35,583 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:35,834 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:35,872 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:36,125 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:36,146 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:36,368 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:36,383 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:36,636 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:36,647 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:36,871 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:36,883 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:37,103 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:37,134 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:37,373 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:37,400 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:37,654 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:37,663 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:37,897 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:37,909 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:38,169 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:38,180 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:38,404 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:38,417 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:38,658 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:38,676 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:38,922 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:38,954 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:39,184 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:39,203 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:39,475 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:39,500 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 11:22:39,743 _plc_.client process_io() self.vision_tasks.empty()=True
+2023-05-16 11:22:39,752 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False

@@ -72,19 +72,16 @@ class PLC(threading.Thread):
         return snap7.util.get_usint(byte_array_read, 0)
 
     # def get_cam_value(self, value_type, offsetbyte, offsetbit=0):
-    def get_cam_value(self, tag_list: list) -> bool:
+    def get_cam_value(self, tag_list: list) -> list:
         value, value_type, offsetbyte, offsetbit = tag_list
         if value_type == 'Bool':
             # return snap7.util.get_bool(self.snap7client.db_read(self.camera_db_num, offsetbyte, 1), 0, offsetbit)
-            tag_list = [self.get_bool(self.camera_db_num, offsetbyte, offsetbit), value_type, offsetbyte, offsetbit]
-            print(f"tag_list{tag_list}")
-            return True
+            return [self.get_bool(self.camera_db_num, offsetbyte, offsetbit), value_type, offsetbyte, offsetbit]
         if value_type == 'USInt':
             # byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
             # return snap7.util.get_usint(byte_array_read, 0)
-            tag_list = [self.get_usint(self.camera_db_num, offsetbyte), value_type, offsetbyte, offsetbit]
-            return True
-        return False
+            return [self.get_usint(self.camera_db_num, offsetbyte), value_type, offsetbyte, offsetbit]
+        return None
 
     def get_string(self, db_number, offsetbyte, len_arr):
         byte_array_read = self.snap7client.db_read(db_number, offsetbyte, len_arr)
@@ -143,15 +140,15 @@ class PLC(threading.Thread):
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
 
     def process_io(self):
-        self.logger.info(f"process_io() self.vision_tasks.empty()={self.vision_tasks.empty()}")
+        #self.logger.info(f"process_io() self.vision_tasks.empty()={self.vision_tasks.empty()}")
         if self.vision_tasks.empty():
             try:
                 stream_current_state = self.camera_db.outStreamOn[0]
                 history_current_state = self.camera_db.outHistoryOn[0]
-                res = self.get_cam_value(self.camera_db.inoutRequest)
-                self.logger.info(f"self.get_cam_value(self.camera_db.inoutRequest) {self.camera_db.inoutRequest} {self.camera_db.inoutRequest[0]}")
-                res = self.get_cam_value(self.camera_db.outHistoryOn)
-                res = self.get_cam_value(self.camera_db.outStreamOn)
+                self.camera_db.inoutRequest = self.get_cam_value(self.camera_db.inoutRequest)
+                #self.logger.info(f"self.get_cam_value(self.camera_db.inoutRequest) {self.camera_db.inoutRequest} {self.camera_db.inoutRequest[0]}")
+                self.camera_db.outHistoryOn = self.get_cam_value(self.camera_db.outHistoryOn)
+                self.camera_db.outStreamOn = self.get_cam_value(self.camera_db.outStreamOn)
             except Exception as error:
                 self.logger.error(f"Не удалось считать данные из DB{self.camera_db_num}\n"
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
@@ -160,10 +157,10 @@ class PLC(threading.Thread):
                 if self.camera_db.inoutRequest[0]:
                     self.logger.info(f"Строб съёмки пришёл {self.camera_db.inoutRequest[0]} считываем задание")
                     try:
-                        res = self.get_cam_value(self.camera_db.outTrainModeOn)
-                        res = self.get_cam_value(self.camera_db.outPartPresentInNest)
-                        res = self.get_cam_value(self.camera_db.outPartTypeExpect)
-                        res = self.get_cam_value(self.camera_db.outPartPosNumExpect)
+                        self.camera_db.outTrainModeOn = self.get_cam_value(self.camera_db.outTrainModeOn)
+                        self.camera_db.outPartPresentInNest = self.get_cam_value(self.camera_db.outPartPresentInNest)
+                        self.camera_db.outPartTypeExpect = self.get_cam_value(self.camera_db.outPartTypeExpect)
+                        self.camera_db.outPartPosNumExpect = self.get_cam_value(self.camera_db.outPartPosNumExpect)
                     except Exception as error:
                         self.logger.error(f"Не удалось считать данные из DB{self.camera_db_num}\n"
                                           f"Ошибка {str(error)} {traceback.format_exc()}")
