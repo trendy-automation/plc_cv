@@ -63,6 +63,13 @@ class TechVision(threading.Thread):
         self.rs_config.enable_stream(rs.stream.color, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
                                      rs.format.bgr8, self.stream_opt.fps)
 
+        print(f"str rs.playback_status.value {str(rs.playback_status.value)}")
+        print(f"str rs.playback_status.name {str(rs.playback_status.name)}")
+        print(f"rs.playback_status.playing {rs.playback_status == rs.playback_status.playing}")
+        print(f"rs.playback_status.stopped {rs.playback_status == rs.playback_status.stopped}")
+        print(f"rs.playback_status.paused {rs.playback_status == rs.playback_status.paused}")
+        print(f"rs.playback_status.unknown {rs.playback_status == rs.playback_status.unknown}")
+
     def read_config(self):
         csd = os.path.dirname(os.path.abspath(__file__))
         config = yaml.safe_load(open(csd + "/config.yaml"))
