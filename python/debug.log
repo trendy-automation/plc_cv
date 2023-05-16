@@ -39418,3 +39418,19 @@ RuntimeError: No device connected
     raise RuntimeError(error)
 RuntimeError: b' TCP : Unreachable peer'
 
+2023-05-15 20:26:46,105 snap7.client creating snap7 client
+2023-05-15 20:26:46,146 vision.main Techvision started
+2023-05-15 20:26:46,147 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-15 20:26:46,355 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-15 20:26:46,356 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-15 20:26:46,648 snap7.common b' TCP : Unreachable peer'
+2023-05-15 20:26:46,666 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 128, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+

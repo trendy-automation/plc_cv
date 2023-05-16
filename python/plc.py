@@ -143,11 +143,13 @@ class PLC(threading.Thread):
                                   f"Ошибка {str(error)} {traceback.format_exc()}")
 
     def process_io(self):
+        self.logger.info(f"process_io() self.vision_tasks.empty()={self.vision_tasks.empty()}")
         if self.vision_tasks.empty():
             try:
                 stream_current_state = self.camera_db.outStreamOn[0]
                 history_current_state = self.camera_db.outHistoryOn[0]
                 res = self.get_cam_value(self.camera_db.inoutRequest)
+                self.logger.info(f"self.get_cam_value(self.camera_db.inoutRequest) {res}")
                 res = self.get_cam_value(self.camera_db.outHistoryOn)
                 res = self.get_cam_value(self.camera_db.outStreamOn)
             except Exception as error:
