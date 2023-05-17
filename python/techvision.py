@@ -47,6 +47,7 @@ class TechVision(threading.Thread):
 
         # Configure depth and color streams
         self.pipeline = rs.pipeline()
+        self.is_pipeline_started = False
         self.rs_config = rs.config()
 
         ## Get device product line for setting a supporting resolution
@@ -63,12 +64,6 @@ class TechVision(threading.Thread):
         self.rs_config.enable_stream(rs.stream.color, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
                                      rs.format.bgr8, self.stream_opt.fps)
 
-        print(f"str rs.playback_status.value {str(rs.playback_status.value)}")
-        print(f"str rs.playback_status.name {str(rs.playback_status.name)}")
-        print(f"rs.playback_status.playing {rs.playback_status == rs.playback_status.playing}")
-        print(f"rs.playback_status.stopped {rs.playback_status == rs.playback_status.stopped}")
-        print(f"rs.playback_status.paused {rs.playback_status == rs.playback_status.paused}")
-        print(f"rs.playback_status.unknown {rs.playback_status == rs.playback_status.unknown}")
 
     def read_config(self):
         csd = os.path.dirname(os.path.abspath(__file__))
@@ -99,16 +94,15 @@ class TechVision(threading.Thread):
         # if rs.playback_status == 3:
         # Start streaming
         try:
-            # self.pipeline.stop()
-            self.pipeline.start(self.rs_config)
-            # Get capture
-            self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
-            # ?
-            # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
-            # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
-            # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
-
-            return self.capture is not None
+            if not self.is_pipeline_started:
+                # Get capture
+                self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
+                # ?
+                # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
+                # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
+                # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
+                self.is_pipeline_started = True
+            return True
         except Exception as error:
             print(f"str rs.playback_status.value {str(rs.playback_status.value)}")
             #print(f"int rs.playback_status.value {int(rs.playback_status.value)}")
@@ -122,6 +116,7 @@ class TechVision(threading.Thread):
         # playing
         # if rs.playback_status == 1:
         try:
+            self.is_pipeline_started = False
             self.pipeline.stop()
         except Exception as error:
             self.logger.error(f"Не удалось выключить камеру\n"
