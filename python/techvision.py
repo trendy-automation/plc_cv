@@ -3,8 +3,8 @@
 from capture import ImgCapture
 from match import MatchCapture
 from httpserver import HttpServer
-#import rtspserver
-#from rtspserver import GObject, Gst, GstServer
+# import rtspserver
+# from rtspserver import GObject, Gst, GstServer
 from obj import Obj
 import logging
 import traceback
@@ -30,7 +30,7 @@ class TechVision(threading.Thread):
 
         self.vision_tasks = None
         self.http_server = None
-        #self.rtsp_server = None
+        # self.rtsp_server = None
         self.rtsp_video_writer = None
         self.gst_loop = None
         self.vision_status = Queue()
@@ -48,7 +48,7 @@ class TechVision(threading.Thread):
         self.pipeline = rs.pipeline()
         self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
         self.is_pipeline_started = False
-        self.rs_config = rs.config()
+        rs_config = rs.config()
 
         ## Get device product line for setting a supporting resolution
         # pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
@@ -59,11 +59,10 @@ class TechVision(threading.Thread):
         # print('device_product_line', device_product_line)
 
         res = rs.align(rs.stream.depth)
-        self.rs_config.enable_stream(rs.stream.depth, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
-                                     rs.format.z16, self.stream_opt.fps)
-        self.rs_config.enable_stream(rs.stream.color, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
-                                     rs.format.bgr8, self.stream_opt.fps)
-
+        rs_config.enable_stream(rs.stream.depth, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
+                                rs.format.z16, self.stream_opt.fps)
+        rs_config.enable_stream(rs.stream.color, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
+                                rs.format.bgr8, self.stream_opt.fps)
 
     def read_config(self):
         csd = os.path.dirname(os.path.abspath(__file__))
@@ -106,7 +105,7 @@ class TechVision(threading.Thread):
             return True
         except Exception as error:
             print(f"str rs.playback_status.value {str(rs.playback_status.value)}")
-            #print(f"int rs.playback_status.value {int(rs.playback_status.value)}")
+            # print(f"int rs.playback_status.value {int(rs.playback_status.value)}")
             print(f"rs.playback_status.playing {rs.playback_status.playing}")
             self.logger.error(f"Не удалось включить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
@@ -163,7 +162,7 @@ class TechVision(threading.Thread):
     def rtsp_stream_on(self):
         try:
             if self.rtsp_video_writer is None and self.capture is not None:
-            #if self.rtsp_server is None and self.capture is not None:
+                # if self.rtsp_server is None and self.capture is not None:
                 # RTSP: initializing the threads and running the stream on loop.
                 # GObject.threads_init()
                 # Gst.init(None)
@@ -173,9 +172,9 @@ class TechVision(threading.Thread):
 
                 # # Define the gstreamer sink
                 gst_str_rtp = f"appsrc ! videoconvert ! videoscale ! video/x-raw,format=RGBA,width={self.stream_opt.image_width}," \
-                             f"height={self.stream_opt.image_height},framerate={self.stream_opt.fps}/1 ! " \
+                              f"height={self.stream_opt.image_height},framerate={self.stream_opt.fps}/1 ! " \
                               " videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! " \
-                             f"rtph264pay ! udpsink host={self.stream_opt.local_ip} port={self.stream_opt.rtspport}"
+                              f"rtph264pay ! udpsink host={self.stream_opt.local_ip} port={self.stream_opt.rtspport}"
 
                 # gst_str_rtp = f"appsrc ! videoconvert ! videoscale ! video/x-raw,format=I420,width={self.stream_opt.image_width}," \
                 #               f"height={self.stream_opt.image_height},framerate={self.stream_opt.fps}/1 ! " \
@@ -203,8 +202,8 @@ class TechVision(threading.Thread):
             #     self.rtsp_server = None
             if self.rtsp_video_writer is not None:
                 self.rtsp_video_writer = None
-            # if self.gst_loop is not None:
-            #     self.gst_loop.stop()
+                # if self.gst_loop is not None:
+                #     self.gst_loop.stop()
                 print('Rtsp server shutdown')
             return True
         except Exception as error:
@@ -218,7 +217,7 @@ class TechVision(threading.Thread):
             time.sleep(0.2)
             if not self.vision_tasks.empty():
                 camera_db = self.vision_tasks.queue[0]
-                #(f"Получено задание {str(camera_db)}")
+                # (f"Получено задание {str(camera_db)}")
                 try:
                     # Start streaming
                     if self.pipeline_start():
@@ -246,7 +245,7 @@ class TechVision(threading.Thread):
                                         part = self.capture.depth.read()
                                         if part is not None:
                                             res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
-                                                          part)
+                                                              part)
                                     else:
                                         print('Ошибка. Невозможно обучить фон')
                                 camera_db.inoutTrainOk[0] = res
