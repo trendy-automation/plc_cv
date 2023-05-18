@@ -62,14 +62,12 @@ class ImgImages():
 
     def read(self):
         color_frame, depth_colormap, images = self.capture.read()
-        if images is not None:
-            ret = True
+        ret = images is not None
         return (ret,images)
 
     def isOpened(self):
         color_image, depth_colormap, images = self.capture.read()
-        if images is not None:
-            ret = True
+        ret = images is not None
         return (ret)
 
 class ImgDepth():
@@ -79,15 +77,13 @@ class ImgDepth():
 
     def read(self):
         color_frame, depth_colormap, images = self.capture.read()
-        if depth_colormap is not None:
-            ret = True
+        ret = depth_colormap is not None
         #return (ret,depth_colormap)
         return depth_colormap
 
     def isOpened(self):
         color_image, depth_colormap, images = self.capture.read()
-        if color_image is not None:
-            ret = True
+        ret = color_image is not None
         return(ret)
 
 class ImgColor():
@@ -97,13 +93,11 @@ class ImgColor():
 
     def read(self):
         color_image, depth_colormap, images = self.capture.read()
-        if color_image is not None:
-            ret = True
+        ret = color_image is not None
         #return(ret, color_image)
         return color_image
 
     def isOpened(self):
         color_image, depth_colormap, images = self.capture.read()
-        if color_image is not None:
-            ret = True
+        ret = color_image is not None
         return(ret)
