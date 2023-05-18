@@ -176,7 +176,7 @@ class PLC(threading.Thread):
             print(f"camera_db.inoutRequest[0] = {camera_db.inoutRequest[0]}")
             if self.camera_db.outTrainModeOn[0]:
                 self.logger.info(
-                    f"Запись результата обучения: {camera_db.inoutPartOk[0]}. "
+                    f"Запись результата обучения: {camera_db.inoutTrainOk[0]}. "
                     f"Тип детали: {camera_db.inPartTypeDetect[0]}")
             else:
                 self.logger.info(
