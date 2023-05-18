@@ -94,8 +94,9 @@ class TechVision(threading.Thread):
         # Start streaming
         try:
             if not self.is_pipeline_started:
+                self.logger.info(f"self.pipeline.start()1")
                 self.pipeline.start()
-                self.logger.info(f"self.pipeline.start()")
+                self.logger.info(f"self.pipeline.start()2")
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
                 # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
