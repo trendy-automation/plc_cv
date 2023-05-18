@@ -227,12 +227,16 @@ class TechVision(threading.Thread):
                                         if os.path.exists(part_type):
                                             nest = cv2.imread(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
                                             nest_part = self.capture.depth.read()
+                                            if camera_db.outHistoryOn:
+                                                part_res = cv2.imwrite(os.path.join(part_type, "part_" + part_pos_num + ".png"),
+                                                                      nest_part)
                                             if nest_part is not None:
                                                 res, nest_mask = self.subtract_background(nest_part, nest)
                                             if res:
                                                 res = cv2.imwrite(os.path.join(part_type, part_pos_num + ".png"),
                                                                   nest_mask)
-                                                os.remove(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
+                                                if not camera_db.outHistoryOn:
+                                                    os.remove(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
                                             else:
                                                 print('Ошибка. Невозможно обучить деталь')
                                 else:
