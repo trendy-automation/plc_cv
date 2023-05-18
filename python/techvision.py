@@ -33,7 +33,6 @@ class TechVision(threading.Thread):
         #self.rtsp_server = None
         self.rtsp_video_writer = None
         self.gst_loop = None
-        self.capture = None
         self.vision_status = Queue()
 
         os.chdir(self.match_opt.template_dir + '/')
@@ -47,6 +46,7 @@ class TechVision(threading.Thread):
 
         # Configure depth and color streams
         self.pipeline = rs.pipeline()
+        self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
         self.is_pipeline_started = False
         self.rs_config = rs.config()
 
@@ -97,7 +97,7 @@ class TechVision(threading.Thread):
             if not self.is_pipeline_started:
                 self.pipeline.start()
                 # Get capture
-                self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
+
                 # ?
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
