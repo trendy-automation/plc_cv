@@ -174,8 +174,8 @@ class PLC(threading.Thread):
         if not self.vision_status.empty():
             camera_db = self.vision_status.queue[0]
             self.logger.info(
-                f"Запись результата распознования - тип детали - {camera_db.inPartTypeDetect} "
-                f"результат распознования {camera_db.inoutPartOk}")
+                f"Запись результата распознования: {camera_db.inoutPartOk[0]}. "
+                f"Тип детали: {camera_db.inPartTypeDetect[0]}")
             try:
                 res = self.set_cam_value(camera_db.inoutPartOk)
                 res = self.set_cam_value(camera_db.inoutResultNok)
