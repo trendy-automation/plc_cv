@@ -281,6 +281,7 @@ class TechVision(threading.Thread):
                     if camera_db.inoutPartOk[0] or camera_db.inoutTrainOk[0]:
                         camera_db.inPartTypeDetect[0] = camera_db.outPartTypeExpect[0]
                         camera_db.inPartPosNumDetect[0] = camera_db.outPartPosNumExpect[0]
+
                     self.vision_status.put(camera_db)
                     self.vision_tasks.get()
             if self.rtsp_video_writer is not None:
