@@ -74,6 +74,7 @@ class MatchCapture:
                 rotated_template = rotated_template[y:y + h, x:x + w]
                 matched_points = cv2.matchTemplate(rgbimage, rotated_template, method, None, rotated_template.copy())
                 min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(matched_points)
+                self.logger.info(f"max_val {max_val}")
                 if max_val >= matched_thresh:
                     max_loc = (max_loc[0] - x, max_loc[1] - y)
                     all_points.append([max_loc, next_angle, actual_scale, max_val])
@@ -113,6 +114,7 @@ class MatchCapture:
                 # /{self.opt.template_dir}/
                 template = cv2.imread(f"{part}/{file}")
                 if template is not None:
+                    self.logger.info(f"part {part} file {file}")
                     points_list = self.invariantMatchTemplate(self.depth_colormap, template, cv2.TM_CCORR_NORMED,
                                                               self.opt.match_threshold,
                                                               [-self.opt.delta_angle, self.opt.delta_angle + 1], 1,

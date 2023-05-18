@@ -39540,3 +39540,239 @@ RuntimeError: b' TCP : Unreachable peer'
 2023-05-16 11:22:39,500 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
 2023-05-16 11:22:39,743 _plc_.client process_io() self.vision_tasks.empty()=True
 2023-05-16 11:22:39,752 _plc_.client self.get_cam_value(self.camera_db.inoutRequest) [False, 'Bool', 0, 0] False
+2023-05-16 16:30:37,029 snap7.client creating snap7 client
+2023-05-16 16:30:37,049 vision.main Techvision started
+2023-05-16 16:30:37,050 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-16 16:30:37,251 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-16 16:30:37,251 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-16 16:30:37,622 _plc_.client Соединение открыто 192.168.1.10
+2023-05-16 16:30:52,912 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 96, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-16 16:30:52,913 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 96, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 118, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-16 16:30:53,215 _plc_.client Запись результата распознования - тип детали - [0, 'USInt', 1, 0] результат распознования [False, 'Bool', 0, 1]
+2023-05-16 16:31:29,638 snap7.client creating snap7 client
+2023-05-16 16:31:29,651 vision.main Techvision started
+2023-05-16 16:31:29,651 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-16 16:31:29,853 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-16 16:31:29,853 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-16 16:31:30,230 _plc_.client Соединение открыто 192.168.1.10
+2023-05-16 16:31:45,490 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 100, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-16 16:31:45,490 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 100, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 122, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-16 16:31:45,830 _plc_.client Запись результата распознования - тип детали - [0, 'USInt', 1, 0] результат распознования [False, 'Bool', 0, 1]
+2023-05-16 16:32:22,852 snap7.client creating snap7 client
+2023-05-16 16:32:22,865 vision.main Techvision started
+2023-05-16 16:32:22,866 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-16 16:32:23,068 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-16 16:32:23,069 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-16 16:32:23,477 _plc_.client Соединение открыто 192.168.1.10
+2023-05-16 16:32:38,704 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 100, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-16 16:32:38,705 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 100, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 122, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-16 16:32:38,993 _plc_.client Запись результата распознования - тип детали - [0, 'USInt', 1, 0] результат распознования [False, 'Bool', 0, 1]
+2023-05-16 16:35:24,974 snap7.client creating snap7 client
+2023-05-16 16:35:24,987 vision.main Techvision started
+2023-05-16 16:35:24,987 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-16 16:35:25,189 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-16 16:35:25,189 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-16 16:35:25,538 _plc_.client Соединение открыто 192.168.1.10
+2023-05-16 16:35:40,833 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 103, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-16 16:35:40,834 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 103, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 125, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-16 16:35:41,099 _plc_.client Запись результата распознования - тип детали - [0, 'USInt', 1, 0] результат распознования [False, 'Bool', 0, 1]
+2023-05-16 16:35:54,975 snap7.client creating snap7 client
+2023-05-16 16:35:54,988 vision.main Techvision started
+2023-05-16 16:35:54,988 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-16 16:35:55,189 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-16 16:35:55,189 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-16 16:35:55,473 _plc_.client Соединение открыто 192.168.1.10
+2023-05-16 16:36:10,834 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 103, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-16 16:36:10,835 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 103, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 125, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-16 16:36:11,211 _plc_.client Запись результата распознования - тип детали - [0, 'USInt', 1, 0] результат распознования [False, 'Bool', 0, 1]
+2023-05-16 16:39:12,083 vision.main Не удалось включить камеру
+Ошибка No device connected Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 103, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+2023-05-16 16:39:12,083 vision.main Не удалось выключить камеру
+Ошибка stop() cannot be called before start() Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 103, in pipeline_start
+    self.pipeline.start(self.rs_config)
+RuntimeError: No device connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\techvision.py", line 125, in pipeline_stop
+    self.pipeline.stop()
+RuntimeError: stop() cannot be called before start()
+
+2023-05-16 16:39:12,403 _plc_.client Запись результата распознования - тип детали - [0, 'USInt', 1, 0] результат распознования [False, 'Bool', 0, 1]
+2023-05-16 17:05:09,384 snap7.client creating snap7 client
+2023-05-16 17:05:09,397 vision.main Techvision started
+2023-05-16 17:05:09,398 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-16 17:05:09,600 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-16 17:05:09,601 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-16 17:05:09,884 _plc_.client Соединение открыто 192.168.1.10
+2023-05-17 10:10:24,033 snap7.client creating snap7 client
+2023-05-17 10:11:14,572 snap7.client creating snap7 client
+2023-05-17 10:11:58,363 snap7.client creating snap7 client
+2023-05-17 10:12:32,212 snap7.client creating snap7 client
+2023-05-17 10:13:03,229 snap7.client creating snap7 client
+2023-05-17 10:13:58,993 snap7.client creating snap7 client
+2023-05-17 10:15:45,824 snap7.client creating snap7 client
+2023-05-17 10:15:52,139 snap7.client creating snap7 client
+2023-05-17 10:18:21,373 snap7.client creating snap7 client
+2023-05-17 10:18:23,642 vision.main Techvision started
+2023-05-17 10:18:23,642 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-17 10:18:23,844 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-17 10:18:23,844 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-17 10:18:24,091 snap7.common b' TCP : Unreachable peer'
+2023-05-17 10:18:24,112 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 125, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-17 10:18:52,436 snap7.client creating snap7 client
+2023-05-17 10:18:54,409 vision.main Techvision started
+2023-05-17 10:18:54,409 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-17 10:18:54,611 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-17 10:18:54,612 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-17 10:18:55,097 snap7.common b' TCP : Unreachable peer'
+2023-05-17 10:18:55,097 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 125, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-17 10:19:32,845 snap7.client creating snap7 client
+2023-05-17 10:19:33,331 vision.main Techvision started
+2023-05-17 10:19:33,331 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-17 10:19:33,535 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-17 10:19:33,536 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-17 10:19:33,595 snap7.common b' TCP : Unreachable peer'
+2023-05-17 10:19:33,596 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 125, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-17 10:19:48,429 snap7.client creating snap7 client
+2023-05-17 10:31:05,408 snap7.client creating snap7 client
+2023-05-17 10:31:35,748 snap7.client creating snap7 client
+2023-05-17 10:33:03,837 snap7.client creating snap7 client
+2023-05-17 10:33:03,851 vision.main Techvision started
+2023-05-17 10:33:03,851 _plc_.client Connection with PLC 192.168.1.10 started
+2023-05-17 10:33:04,054 _plc_.client Подключение к контроллеру 192.168.1.10...
+2023-05-17 10:33:04,054 snap7.client connecting to 192.168.1.10:102 rack 0 slot 1
+2023-05-17 10:33:04,422 snap7.common b' TCP : Unreachable peer'
+2023-05-17 10:33:04,423 _plc_.client Не удалось подключиться к контроллеру: 192.168.1.10
+Ошибка b' TCP : Unreachable peer' Traceback (most recent call last):
+  File "D:\Work\DMU85\PLC_CV\python\plc.py", line 125, in run
+    self.snap7client.connect(self.plc_ip, 0, 1)
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\client\__init__.py", line 24, in f
+    check_error(code, context="client")
+  File "D:\Work\DMU85\PLC_CV\venv\lib\site-packages\snap7\common.py", line 89, in check_error
+    raise RuntimeError(error)
+RuntimeError: b' TCP : Unreachable peer'
+
+2023-05-17 10:33:28,123 snap7.client creating snap7 client
+2023-05-17 10:33:43,417 snap7.client creating snap7 client
+2023-05-17 10:34:50,788 snap7.client creating snap7 client
+2023-05-17 10:35:07,732 snap7.client creating snap7 client
+2023-05-17 10:36:22,190 snap7.client creating snap7 client
