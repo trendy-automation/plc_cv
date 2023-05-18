@@ -255,8 +255,8 @@ class TechVision(threading.Thread):
                                     part = self.capture.depth.read()
                                     if part is not None:
                                         mc = MatchCapture(opt=self.match_opt, cap=part, templates=self.templates)
-                                        match_res = mc.eval_match()
-                                        res = len(match_res) > 0
+                                        result, res_list = mc.eval_match()
+                                        res = len(res_list) > 0
                                 camera_db.inoutPartOk[0] = res
                             camera_db.inoutResultNok[0] = not res
                         if camera_db.outStreamOn[0]:
