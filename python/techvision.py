@@ -103,20 +103,17 @@ class TechVision(threading.Thread):
                 self.is_pipeline_started = True
             return True
         except Exception as error:
-            print(f"str rs.playback_status.value {str(rs.playback_status.value)}")
-            # print(f"int rs.playback_status.value {int(rs.playback_status.value)}")
-            print(f"rs.playback_status.playing {rs.playback_status.playing}")
             self.logger.error(f"Не удалось включить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
-            self.pipeline_stop()
             return False
 
     def pipeline_stop(self):
         # playing
         # if rs.playback_status == 1:
         try:
-            self.is_pipeline_started = False
-            self.pipeline.stop()
+            if self.is_pipeline_started:
+                self.is_pipeline_started = False
+                self.pipeline.stop()
         except Exception as error:
             self.logger.error(f"Не удалось выключить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
