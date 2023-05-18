@@ -266,6 +266,9 @@ class TechVision(threading.Thread):
                             pass
                     else:
                         camera_db.outStreamOn[0] = False
+                except Exception as error:
+                    self.logger.error(f"Не удалось обработать запрос\n"
+                                      f"Ошибка {str(error)} {traceback.format_exc()}")
                 finally:
                     camera_db.inoutRequest[0] = False
                     if camera_db.inoutPartOk[0] or camera_db.inoutTrainOk[0]:

@@ -173,9 +173,15 @@ class PLC(threading.Thread):
                         self.vision_tasks.put(self.camera_db)
         if not self.vision_status.empty():
             camera_db = self.vision_status.queue[0]
-            self.logger.info(
-                f"Запись результата распознования: {camera_db.inoutPartOk[0]}. "
-                f"Тип детали: {camera_db.inPartTypeDetect[0]}")
+            print(f"camera_db.inoutRequest[0] = {camera_db.inoutRequest[0]}")
+            if self.camera_db.outTrainModeOn[0]:
+                self.logger.info(
+                    f"Запись результата обучения: {camera_db.inoutPartOk[0]}. "
+                    f"Тип детали: {camera_db.inPartTypeDetect[0]}")
+            else:
+                self.logger.info(
+                    f"Запись результата распознования: {camera_db.inoutPartOk[0]}. "
+                    f"Тип детали: {camera_db.inPartTypeDetect[0]}")
             try:
                 self.camera_db.outStreamOn[0] = camera_db.outStreamOn[0]
                 res = self.set_cam_value(camera_db.inoutPartOk)
