@@ -48,7 +48,7 @@ class TechVision(threading.Thread):
         self.pipeline = rs.pipeline()
         self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
         self.is_pipeline_started = False
-        rs_config = rs.config()
+        self.rs_config = rs.config()
 
         ## Get device product line for setting a supporting resolution
         # pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
@@ -59,10 +59,10 @@ class TechVision(threading.Thread):
         # print('device_product_line', device_product_line)
 
         res = rs.align(rs.stream.depth)
-        rs_config.enable_stream(rs.stream.depth, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
-                                rs.format.z16, self.stream_opt.fps)
-        rs_config.enable_stream(rs.stream.color, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
-                                rs.format.bgr8, self.stream_opt.fps)
+        self.rs_config.enable_stream(rs.stream.depth, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
+                                     rs.format.z16, self.stream_opt.fps)
+        self.rs_config.enable_stream(rs.stream.color, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
+                                     rs.format.bgr8, self.stream_opt.fps)
 
     def read_config(self):
         csd = os.path.dirname(os.path.abspath(__file__))
@@ -94,9 +94,7 @@ class TechVision(threading.Thread):
         # Start streaming
         try:
             if not self.is_pipeline_started:
-                self.logger.info(f"self.pipeline.start()1")
-                self.pipeline.start()
-                self.logger.info(f"self.pipeline.start()2")
+                self.pipeline.start(self.rs_config)
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
                 # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
