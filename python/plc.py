@@ -177,6 +177,7 @@ class PLC(threading.Thread):
                 f"Запись результата распознования: {camera_db.inoutPartOk[0]}. "
                 f"Тип детали: {camera_db.inPartTypeDetect[0]}")
             try:
+                self.camera_db.outStreamOn[0] = camera_db.outStreamOn[0]
                 res = self.set_cam_value(camera_db.inoutPartOk)
                 res = self.set_cam_value(camera_db.inoutResultNok)
                 res = self.set_cam_value(camera_db.inoutTrainOk)

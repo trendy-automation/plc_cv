@@ -266,6 +266,8 @@ class TechVision(threading.Thread):
                             pass
                         else:
                             pass
+                    else:
+                        camera_db.outStreamOn[0] = False
                 finally:
                     camera_db.inoutRequest[0] = False
                     if camera_db.inoutPartOk[0] or camera_db.inoutTrainOk[0]:
