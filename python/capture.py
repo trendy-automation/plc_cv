@@ -63,7 +63,7 @@ class ImgImages():
     def read(self):
         color_frame, depth_colormap, images = self.capture.read()
         ret = images is not None
-        return (ret,images)
+        return (ret, images)
 
     def isOpened(self):
         color_image, depth_colormap, images = self.capture.read()

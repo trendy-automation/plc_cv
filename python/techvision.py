@@ -95,6 +95,7 @@ class TechVision(threading.Thread):
         # Start streaming
         try:
             if not self.is_pipeline_started:
+                self.pipeline.start()
                 # Get capture
                 self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
                 # ?
@@ -279,13 +280,13 @@ class TechVision(threading.Thread):
                     self.vision_tasks.get()
             if self.rtsp_video_writer is not None:
                 # Check if cap is open
-                if True or self.capture.images.isOpened():
+                if self.capture.images.isOpened():
                     # Get the frame
-                    frame = self.capture.images.read()
+                    ret, frame = self.capture.images.read()
                     # frame = cv2.imread("2/part4.png")
                     # ret = True
                     # Check
-                    if frame is not None:
+                    if ret:
                         # Flip frame
                         # frame = cv2.flip(frame, 1)
                         # Write to SHM
