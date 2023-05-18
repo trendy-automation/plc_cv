@@ -174,16 +174,16 @@ class PLC(threading.Thread):
                         self.vision_tasks.put(self.camera_db)
         if not self.vision_status.empty():
             camera_db = self.vision_status.queue[0]
-            print(f"camera_db.inoutRequest[0] = {camera_db.inoutRequest[0]}")
-            if self.camera_db.outTrainModeOn[0]:
+            if camera_db.outTrainModeOn[0]:
                 self.logger.info(
-                    f"Запись результата обучения: {camera_db.inoutTrainOk[0]}. "
-                    f"Тип детали: {camera_db.inPartTypeDetect[0]}")
+                    f"Запись результата обучения {'детали' if camera_db.outPartPresentInNest[0] else 'фона'}: "
+                    f"{camera_db.inoutTrainOk[0]}. Тип детали: {camera_db.inPartTypeDetect[0]}")
             else:
                 self.logger.info(
                     f"Запись результата распознования: {camera_db.inoutPartOk[0]}. "
                     f"Тип детали: {camera_db.inPartTypeDetect[0]}")
             try:
+                #save stream off if device not connected
                 self.camera_db.outStreamOn[0] = camera_db.outStreamOn[0]
                 res = self.set_cam_value(camera_db.inoutPartOk)
                 res = self.set_cam_value(camera_db.inoutResultNok)
