@@ -141,7 +141,7 @@ class PLC(threading.Thread):
 
     def process_io(self):
         #self.logger.info(f"process_io() self.vision_tasks.empty()={self.vision_tasks.empty()}")
-        if self.vision_tasks.empty():
+        if self.vision_status.empty() and self.vision_tasks.empty():
             try:
                 stream_current_state = self.camera_db.outStreamOn[0]
                 history_current_state = self.camera_db.outHistoryOn[0]
@@ -164,6 +164,7 @@ class PLC(threading.Thread):
                     except Exception as error:
                         self.logger.error(f"Не удалось считать данные из DB{self.camera_db_num}\n"
                                           f"Ошибка {str(error)} {traceback.format_exc()}")
+                        self.snap7client.disconnect()
                     # Отправляем задание
                     self.vision_tasks.put(self.camera_db)
                     #self.logger.info(f"Очередь заданий: self.vision_tasks.empty() {self.vision_tasks.empty()}")
