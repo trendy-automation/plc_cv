@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import numpy as np
 from capture import ImgCapture
 from match import MatchCapture
 from httpserver import HttpServer
@@ -116,7 +117,7 @@ class TechVision(threading.Thread):
             self.logger.error(f"Не удалось выключить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
 
-    def subtract_background(self, nest_part, nest):
+    def subtract_background_old(self, nest_part, nest):
         nest_mask = None
         if not (nest_part is None) and not (nest is None):
             nest_diff = cv2.compare(nest_part, nest, cv2.CMP_NE)
@@ -125,6 +126,38 @@ class TechVision(threading.Thread):
             b_channel = cv2.bitwise_and(b_channel, b_channel, mask=alpha_channel)
             g_channel = cv2.bitwise_and(g_channel, g_channel, mask=alpha_channel)
             r_channel = cv2.bitwise_and(r_channel, r_channel, mask=alpha_channel)
+            nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
+        res = not (nest_mask is None)
+        return res, nest_mask
+
+
+    def subtract_background(self, nest_part, nest):
+        nest_mask = None
+
+        if not (nest_part is None) and not (nest is None):
+            grey_nest = cv2.cvtColor(nest, cv2.COLOR_BGR2GRAY)
+            grey_nest_part = cv2.cvtColor(nest_part, cv2.COLOR_BGR2GRAY)
+            diff = grey_nest_part - grey_nest
+            mask = (diff > 239) & (diff < 251)
+            nest_diff = np.where(mask, 255, 0).astype(dtype='uint8')
+            blur = cv2.GaussianBlur(nest_diff, (3, 3), 0)
+            thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+            # Filter using contour area and remove small noise
+            cnts = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+            for c in cnts:
+                area = cv2.contourArea(c)
+                if area < 5500:
+                    cv2.drawContours(thresh, [c], -1, (0, 0, 0), -1)
+            # Morph close and invert image
+            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (10, 10))
+            close = 255 - cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=2)
+            alpha_channel = close
+            b_channel, g_channel, r_channel = cv2.split(nest_part)
+            b_channel = cv2.bitwise_and(b_channel, b_channel, mask=alpha_channel)
+            g_channel = cv2.bitwise_and(g_channel, g_channel, mask=alpha_channel)
+            r_channel = cv2.bitwise_and(r_channel, r_channel, mask=alpha_channel)
+
             nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
         res = not (nest_mask is None)
         return res, nest_mask
