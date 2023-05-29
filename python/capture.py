@@ -23,11 +23,12 @@ class ImgCapture:
 
     def read(self):
         try:
-            # Wait for a coherent pair of frames: depth and color
             self.frames = self.pipeline.wait_for_frames()
             depth_frame = self.frames.get_depth_frame()
             color_frame = self.frames.get_color_frame()
-
+            if not depth_frame or not color_frame:
+                self.logger.error(f"Нет изображения с камеры")
+                return False, None, None, None
             # hole_filling = rs.hole_filling_filter()
             depth_frame = self.hole_filling.process(depth_frame)
             depth_image = np.asanyarray(depth_frame.get_data())
@@ -52,7 +53,7 @@ class ImgCapture:
             return False, None, None, None
 
     def isOpened(self):
-        ret, _, _ = self.pipeline.get_frame_stream()
+        ret, _, _, _ = self.read()
         return ret
 
 
