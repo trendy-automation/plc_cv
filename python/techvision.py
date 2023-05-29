@@ -113,8 +113,8 @@ class TechVision(threading.Thread):
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
                 # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
                 # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
-                self.is_pipeline_started = True
-            return True
+                self.is_pipeline_started = self.capture.isOpened()
+            return self.is_pipeline_started
         except Exception as error:
             self.logger.error(f"Не удалось включить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
