@@ -259,12 +259,12 @@ class TechVision(threading.Thread):
                                     if self.capture.isOpened():
                                         if os.path.exists(part_type):
                                             nest = cv2.imread(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
-                                            ret, nest_part = self.capture.depth.read()
-                                            if camera_db.outHistoryOn:
-                                                part_res = cv2.imwrite(
-                                                    os.path.join(part_type, "part_" + part_pos_num + ".png"),
-                                                    nest_part)
-                                            if nest_part is not None:
+                                            cap_readed, nest_part = self.capture.depth.read()
+                                            if cap_readed:
+                                                if camera_db.outHistoryOn:
+                                                    part_res = cv2.imwrite(
+                                                        os.path.join(part_type, "part_" + part_pos_num + ".png"),
+                                                        nest_part)
                                                 res, nest_mask = self.subtract_background(nest_part, nest)
                                             if res:
                                                 res = cv2.imwrite(os.path.join(part_type, part_pos_num + ".png"),
@@ -275,8 +275,8 @@ class TechVision(threading.Thread):
                                                 print('Ошибка. Невозможно обучить деталь')
                                 else:
                                     if self.capture.isOpened():
-                                        ret, part = self.capture.depth.read()
-                                        if part is not None:
+                                        cap_readed, part = self.capture.depth.read()
+                                        if cap_readed:
                                             if not os.path.exists(part_type):
                                                 os.makedirs(part_type)
                                             res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
@@ -286,8 +286,8 @@ class TechVision(threading.Thread):
                                 camera_db.inoutTrainOk[0] = res
                             else:
                                 if self.capture.isOpened():
-                                    ret, part = self.capture.depth.read()
-                                    if part is not None:
+                                    cap_readed, part = self.capture.depth.read()
+                                    if cap_readed:
                                         mc = MatchCapture(opt=self.match_opt, cap=part, templates=self.templates)
                                         result, res_list = mc.eval_match()
                                         res = len(res_list) > 0
@@ -322,11 +322,11 @@ class TechVision(threading.Thread):
                 # Check if cap is open
                 if self.capture.isOpened():
                     # Get the frame
-                    ret, frame = self.capture.images.read()
+                    cap_readed, frame = self.capture.images.read()
                     # frame = cv2.imread("2/part4.png")
-                    # ret = True
+                    # cap_readed = True
                     # Check
-                    if ret:
+                    if cap_readed:
                         # Flip frame
                         # frame = cv2.flip(frame, 1)
                         # Write to SHM
