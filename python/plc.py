@@ -191,6 +191,7 @@ class PLC(threading.Thread):
                 res = self.set_cam_value(camera_db.inPartTypeDetect)
                 res = self.set_cam_value(camera_db.inPartPosNumDetect)
                 res = self.set_cam_value(camera_db.inoutRequest)
+                res = self.set_cam_value(camera_db.outStreamOn)
 
                     # self.set_usint(db_number=camera_db_num, offsetbyte=1, tag_value=part_num)
                     # self.found_part_num = 0
