@@ -19,6 +19,20 @@ import yaml
 import os
 
 
+def subtract_background_old(nest_part, nest):
+    nest_mask = None
+    if not (nest_part is None) and not (nest is None):
+        nest_diff = cv2.compare(nest_part, nest, cv2.CMP_NE)
+        alpha_channel = cv2.cvtColor(nest_diff, cv2.COLOR_BGR2GRAY)
+        b_channel, g_channel, r_channel = cv2.split(nest_part)
+        b_channel = cv2.bitwise_and(b_channel, b_channel, mask=alpha_channel)
+        g_channel = cv2.bitwise_and(g_channel, g_channel, mask=alpha_channel)
+        r_channel = cv2.bitwise_and(r_channel, r_channel, mask=alpha_channel)
+        nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
+    res = not (nest_mask is None)
+    return res, nest_mask
+
+
 class TechVision(threading.Thread):
     def __init__(self):
 
@@ -116,20 +130,6 @@ class TechVision(threading.Thread):
         except Exception as error:
             self.logger.error(f"Не удалось выключить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
-
-    def subtract_background_old(self, nest_part, nest):
-        nest_mask = None
-        if not (nest_part is None) and not (nest is None):
-            nest_diff = cv2.compare(nest_part, nest, cv2.CMP_NE)
-            alpha_channel = cv2.cvtColor(nest_diff, cv2.COLOR_BGR2GRAY)
-            b_channel, g_channel, r_channel = cv2.split(nest_part)
-            b_channel = cv2.bitwise_and(b_channel, b_channel, mask=alpha_channel)
-            g_channel = cv2.bitwise_and(g_channel, g_channel, mask=alpha_channel)
-            r_channel = cv2.bitwise_and(r_channel, r_channel, mask=alpha_channel)
-            nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
-        res = not (nest_mask is None)
-        return res, nest_mask
-
 
     def subtract_background(self, nest_part, nest):
         nest_mask = None
@@ -256,13 +256,14 @@ class TechVision(threading.Thread):
                             res = False
                             if camera_db.outTrainModeOn[0]:
                                 if camera_db.outPartPresentInNest[0]:
-                                    if self.capture is not None:
+                                    if self.capture.isOpened():
                                         if os.path.exists(part_type):
                                             nest = cv2.imread(os.path.join(part_type, "nest_" + part_pos_num + ".png"))
-                                            nest_part = self.capture.depth.read()
+                                            ret, nest_part = self.capture.depth.read()
                                             if camera_db.outHistoryOn:
-                                                part_res = cv2.imwrite(os.path.join(part_type, "part_" + part_pos_num + ".png"),
-                                                                      nest_part)
+                                                part_res = cv2.imwrite(
+                                                    os.path.join(part_type, "part_" + part_pos_num + ".png"),
+                                                    nest_part)
                                             if nest_part is not None:
                                                 res, nest_mask = self.subtract_background(nest_part, nest)
                                             if res:
@@ -273,8 +274,8 @@ class TechVision(threading.Thread):
                                             else:
                                                 print('Ошибка. Невозможно обучить деталь')
                                 else:
-                                    if self.capture is not None:
-                                        part = self.capture.depth.read()
+                                    if self.capture.isOpened():
+                                        ret, part = self.capture.depth.read()
                                         if part is not None:
                                             if not os.path.exists(part_type):
                                                 os.makedirs(part_type)
@@ -284,8 +285,8 @@ class TechVision(threading.Thread):
                                         print('Ошибка. Невозможно обучить фон')
                                 camera_db.inoutTrainOk[0] = res
                             else:
-                                if self.capture is not None:
-                                    part = self.capture.depth.read()
+                                if self.capture.isOpened():
+                                    ret, part = self.capture.depth.read()
                                     if part is not None:
                                         mc = MatchCapture(opt=self.match_opt, cap=part, templates=self.templates)
                                         result, res_list = mc.eval_match()
@@ -319,7 +320,7 @@ class TechVision(threading.Thread):
                     self.vision_tasks.get()
             if self.rtsp_video_writer is not None:
                 # Check if cap is open
-                if self.capture.images.isOpened():
+                if self.capture.isOpened():
                     # Get the frame
                     ret, frame = self.capture.images.read()
                     # frame = cv2.imread("2/part4.png")
