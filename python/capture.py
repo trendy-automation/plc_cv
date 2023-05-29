@@ -52,7 +52,7 @@ class ImgCapture:
             return False, None, None, None
 
     def isOpened(self):
-        ret, _, _ = self.rs.get_frame_stream()
+        ret, _, _ = self.pipeline.get_frame_stream()
         return ret
 
 
