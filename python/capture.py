@@ -29,13 +29,13 @@ class ImgCapture:
             frame_start = time.time()
             while no_frame and ((time.time() - frame_start) < 15):
                 self.frames = self.pipeline.wait_for_frames()
-                self.playback.pause()
+                #self.playback.pause()
                 depth_frame = self.frames.get_depth_frame()
                 color_frame = self.frames.get_color_frame()
                 if not depth_frame or not color_frame:
                     continue
                 no_frame = False
-                self.playback.resume()
+                #self.playback.resume()
             # self.frames = self.pipeline.wait_for_frames()
             # depth_frame = self.frames.get_depth_frame()
             # color_frame = self.frames.get_color_frame()

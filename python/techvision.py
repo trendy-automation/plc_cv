@@ -119,7 +119,7 @@ class TechVision(threading.Thread):
 
                 # self.playback = self.pipeline_profile.get_device().as_playback()
                 self.playback = self.device.as_playback()
-                self.playback.set_real_time(False)
+                #self.playback.set_real_time(False)
                 # self._enabled_devices[device_serial] = (Device(self.pipeline, self.pipeline_profile, "D400"))
 
                 # depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
