@@ -62,10 +62,10 @@ class TechVision(threading.Thread):
         # Configure depth and color streams
         self.pipeline = rs.pipeline()
         self.pipeline_profile = None
-        self.pipeline_wrapper = None
-        self.device = None
-        self.playback = None
-        self.capture = ImgCapture(self.pipeline, self.playback, rs.hole_filling_filter())
+        # self.pipeline_wrapper = None
+        # self.device = None
+        # self.playback = None
+        self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
         self.is_pipeline_started = False
         self.rs_config = rs.config()
 
@@ -109,27 +109,27 @@ class TechVision(threading.Thread):
                 #self.rs_config).enable_device(device_serial)
                 self.pipeline_profile = self.pipeline.start(self.rs_config)
 
-                # Get device product line for setting a supporting resolution
-                self.pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
-                self.pipeline_profile = self.rs_config.resolve(self.pipeline_wrapper)
-                self.device = self.pipeline_profile.get_device()
-                # depth_sensor = self.device.first_depth_sensor()
-                device_product_line = str(self.device.get_info(rs.camera_info.product_line))
-                print('device_product_line', device_product_line)
-
-                # self.playback = self.pipeline_profile.get_device().as_playback()
-                self.playback = self.device.as_playback()
-                #self.playback.set_real_time(False)
-                # self._enabled_devices[device_serial] = (Device(self.pipeline, self.pipeline_profile, "D400"))
-
-                # depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
-                # if depth_sensor.supports(rs.option.emitter_enabled):
-                #     depth_sensor.set_option(rs.option.emitter_enabled, 1)  # 1 == enable_ir_emitter
-                # color_sensor = self.pipeline_profile.get_device().first_color_sensor()
-
-                # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
-                # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
-                # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
+                # # Get device product line for setting a supporting resolution
+                # self.pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
+                # self.pipeline_profile = self.rs_config.resolve(self.pipeline_wrapper)
+                # self.device = self.pipeline_profile.get_device()
+                # # depth_sensor = self.device.first_depth_sensor()
+                # device_product_line = str(self.device.get_info(rs.camera_info.product_line))
+                # print('device_product_line', device_product_line)
+                #
+                # # self.playback = self.pipeline_profile.get_device().as_playback()
+                # self.playback = self.device.as_playback()
+                # #self.playback.set_real_time(False)
+                # # self._enabled_devices[device_serial] = (Device(self.pipeline, self.pipeline_profile, "D400"))
+                #
+                # # depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
+                # # if depth_sensor.supports(rs.option.emitter_enabled):
+                # #     depth_sensor.set_option(rs.option.emitter_enabled, 1)  # 1 == enable_ir_emitter
+                # # color_sensor = self.pipeline_profile.get_device().first_color_sensor()
+                #
+                # # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
+                # # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
+                # # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
                 self.is_pipeline_started = self.capture.isOpened()
                 if not self.is_pipeline_started:
                     self.pipeline.stop()
