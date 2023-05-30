@@ -62,18 +62,13 @@ class TechVision(threading.Thread):
         # Configure depth and color streams
         self.pipeline = rs.pipeline()
         self.pipeline_profile = None
+        self.pipeline_wrapper = None
+        self.device = None
         self.playback = None
         self.capture = ImgCapture(self.pipeline, self.playback, rs.hole_filling_filter())
         self.is_pipeline_started = False
         self.rs_config = rs.config()
 
-        ## Get device product line for setting a supporting resolution
-        # pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
-        # pipeline_profile = rs_config.resolve(pipeline_wrapper)
-        # device = pipeline_profile.get_device()
-        ## depth_sensor = device.first_depth_sensor()
-        # device_product_line = str(device.get_info(rs.camera_info.product_line))
-        # print('device_product_line', device_product_line)
 
         res = rs.align(rs.stream.depth)
         self.rs_config.enable_stream(rs.stream.depth, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
@@ -113,7 +108,17 @@ class TechVision(threading.Thread):
             if not self.is_pipeline_started:
                 #self.rs_config).enable_device(device_serial)
                 self.pipeline_profile = self.pipeline.start(self.rs_config)
-                self.playback = self.pipeline_profile.get_device().as_playback()
+
+                # Get device product line for setting a supporting resolution
+                self.pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
+                self.pipeline_profile = self.rs_config.resolve(self.pipeline_wrapper)
+                self.device = self.pipeline_profile.get_device()
+                # depth_sensor = self.device.first_depth_sensor()
+                device_product_line = str(self.device.get_info(rs.camera_info.product_line))
+                print('device_product_line', device_product_line)
+
+                # self.playback = self.pipeline_profile.get_device().as_playback()
+                self.playback = self.device.as_playback()
                 self.playback.set_real_time(False)
                 # self._enabled_devices[device_serial] = (Device(self.pipeline, self.pipeline_profile, "D400"))
 
