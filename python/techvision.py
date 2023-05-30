@@ -63,7 +63,7 @@ class TechVision(threading.Thread):
         self.pipeline = rs.pipeline()
         self.pipeline_profile = None
         self.playback = None
-        self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
+        self.capture = ImgCapture(self.pipeline, self.playback, rs.hole_filling_filter())
         self.is_pipeline_started = False
         self.rs_config = rs.config()
 

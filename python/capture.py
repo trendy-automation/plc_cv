@@ -6,13 +6,15 @@ import logging
 import yaml
 import os
 import traceback
+import time
 
 
 class ImgCapture:
-    def __init__(self, pipeline, hole_filling):
+    def __init__(self, pipeline, playback, hole_filling):
         self.logger = logging.getLogger("vision.capture")
         self.frames = None
         self.pipeline = pipeline
+        self.playback = playback
         self.hole_filling = hole_filling
         csd = os.path.dirname(os.path.abspath(__file__))
         config = yaml.safe_load(open(csd + "/config.yaml"))
@@ -23,16 +25,22 @@ class ImgCapture:
 
     def read(self):
         try:
-            while True:
+            no_frame = True
+            frame_start = time.time()
+            while no_frame and ((time.time() - frame_start) < 15):
                 self.frames = self.pipeline.wait_for_frames()
-                self.pipeline.playback.pause()
+                self.playback.pause()
                 depth_frame = self.frames.get_depth_frame()
-                if not depth_frame:
+                color_frame = self.frames.get_color_frame()
+                if not depth_frame or not color_frame:
                     continue
+                no_frame = False
+                self.playback.resume()
+            # self.frames = self.pipeline.wait_for_frames()
             # depth_frame = self.frames.get_depth_frame()
-            color_frame = self.frames.get_color_frame()
+            # color_frame = self.frames.get_color_frame()
             if not depth_frame or not color_frame:
-                self.logger.error(f"Нет изображения с камеры")
+                self.logger.error(f"Нет изображения с камеры 15 сек")
                 return False, None, None, None
             # hole_filling = rs.hole_filling_filter()
             depth_frame = self.hole_filling.process(depth_frame)
