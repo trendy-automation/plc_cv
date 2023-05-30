@@ -6,6 +6,7 @@ x-services-volume:
   source: ./appdata
   target: /var/appdata
 
+# docker run -p 8080:80  pfav/minipaint:latest
 
 services:
   portainer:

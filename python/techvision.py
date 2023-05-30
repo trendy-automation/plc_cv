@@ -130,6 +130,7 @@ class TechVision(threading.Thread):
                 # # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
                 # # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
                 # # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
+                #self.is_pipeline_started = self.capture.isOpened()
                 self.is_pipeline_started = self.capture.isOpened()
                 if not self.is_pipeline_started:
                     self.pipeline.stop()
@@ -178,7 +179,7 @@ class TechVision(threading.Thread):
             r_channel = cv2.bitwise_and(r_channel, r_channel, mask=alpha_channel)
 
             nest_mask = cv2.merge((b_channel, g_channel, r_channel, alpha_channel))
-        res = not (nest_mask is None)
+        res = nest_mask is not None
         return res, nest_mask
 
     def http_stream_on(self):

@@ -31,3 +31,14 @@ sudo docker-compose up --build -d
 # https://stackoverflow.com/questions/33985648/access-camera-inside-docker-container
 # jenkins install by ansible
 # https://habr.com/ru/articles/680170/
+
+
+sudo ip link set wlan0 up
+sudo iw dev wlan0 link
+sudo iwctl station wlan0 scan
+sudo ifconfig wlan0 up
+nmcli d wifi list
+iwconfig
+iwlist scan | more
+
+#https://unix.stackexchange.com/questions/450501/unable-to-connect-to-wlan0-via-wpa-supplicant

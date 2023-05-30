@@ -54,7 +54,8 @@ class ImgCapture:
             return False, None, None, None
 
     def isOpened(self):
-        cap_readed, _, _, _ = self.read()
+        #cap_readed, _, _, _ = self.read()
+        cap_readed = True
         return cap_readed
 
 
