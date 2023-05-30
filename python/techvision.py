@@ -17,6 +17,7 @@ import pyrealsense2 as rs
 from queue import Queue
 import yaml
 import os
+import sys
 
 
 def subtract_background_old(nest_part, nest):
@@ -138,6 +139,10 @@ class TechVision(threading.Thread):
         except Exception as error:
             self.logger.error(f"Не удалось включить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
+            if str(error).startswith("map_device_descriptor"):
+                exit_code = 10
+                self.logger.error("Exit application with code {exit_code}. Can not start camera")
+                sys.exit(exit_code)
             return False
 
     def pipeline_stop(self):
