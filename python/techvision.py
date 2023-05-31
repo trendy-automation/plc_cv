@@ -107,19 +107,21 @@ class TechVision(threading.Thread):
         # Start streaming
         try:
             if not self.is_pipeline_started:
-                self.logger.info("reset start")
-                ctx = rs.context()
-                devices = ctx.query_devices()
-                for dev in devices:
-                    dev.hardware_reset()
-                self.logger.info("reset done")
+                # self.logger.info("reset start")
+                # ctx = rs.context()
+                # devices = ctx.query_devices()
+                # for dev in devices:
+                #     dev.hardware_reset()
+                # #device = profile.get_device()
+                # #depth_sensor = device.first_depth_sensor()
+                # #device.hardware_reset()
+                # self.logger.info("reset done")
 
-                #self.rs_config).enable_device(device_serial)
                 self.pipeline_profile = self.pipeline.start(self.rs_config)
-
-                depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
-                depth_scale = depth_sensor.get_depth_scale()
-                self.logger.info("Depth Scale is: ", depth_scale)
+                time.sleep(1)
+                # depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
+                # depth_scale = depth_sensor.get_depth_scale()
+                # self.logger.info("fDepth Scale is: {depth_scale}")
 
                 # # Get device product line for setting a supporting resolution
                 # self.pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
@@ -142,7 +144,6 @@ class TechVision(threading.Thread):
                 # # self.capture.images.set(cv2.CAP_PROP_FRAME_WIDTH, self.stream_opt.image_width)
                 # # self.capture.images.set(cv2.CAP_PROP_FRAME_HEIGHT, self.stream_opt.image_height)
                 # # self.capture.images.set(cv2.CAP_PROP_FPS, self.stream_opt.fps)
-                #self.is_pipeline_started = self.capture.isOpened()
                 self.is_pipeline_started = self.capture.isOpened()
                 if not self.is_pipeline_started:
                     self.pipeline.stop()
