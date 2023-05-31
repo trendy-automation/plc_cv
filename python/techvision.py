@@ -107,18 +107,18 @@ class TechVision(threading.Thread):
         # Start streaming
         try:
             if not self.is_pipeline_started:
-                # self.logger.info("reset start")
-                # ctx = rs.context()
-                # devices = ctx.query_devices()
-                # for dev in devices:
-                #     dev.hardware_reset()
-                # #device = profile.get_device()
-                # #depth_sensor = device.first_depth_sensor()
-                # #device.hardware_reset()
-                # self.logger.info("reset done")
+                self.logger.info("reset start")
+                ctx = rs.context()
+                devices = ctx.query_devices()
+                for dev in devices:
+                    dev.hardware_reset()
+                ##device = profile.get_device()
+                ##depth_sensor = device.first_depth_sensor()
+                ##device.hardware_reset()
+                self.logger.info("reset done")
 
                 self.pipeline_profile = self.pipeline.start(self.rs_config)
-                time.sleep(1)
+                time.sleep(5)
                 # depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
                 # depth_scale = depth_sensor.get_depth_scale()
                 # self.logger.info("fDepth Scale is: {depth_scale}")
@@ -154,7 +154,9 @@ class TechVision(threading.Thread):
             if str(error).startswith("map_device_descriptor"):
                 exit_code = 10
                 self.logger.error("Exit application with code {exit_code}. Can not start camera")
-                sys.exit(exit_code)
+                #sys.exit(exit_code)
+                quit(exit_code)
+                self.logger.error("No quit")
             return False
 
     def pipeline_stop(self):
@@ -303,6 +305,8 @@ class TechVision(threading.Thread):
                                                         os.path.join(part_type, "part_" + part_pos_num + ".png"),
                                                         nest_part)
                                                 res, nest_mask = self.subtract_background(nest_part, nest)
+                                            else:
+                                                self.pipeline_stop()
                                             if res:
                                                 res = cv2.imwrite(os.path.join(part_type, part_pos_num + ".png"),
                                                                   nest_mask)
@@ -318,8 +322,11 @@ class TechVision(threading.Thread):
                                                 os.makedirs(part_type)
                                             res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
                                                               part)
+                                        else:
+                                            self.pipeline_stop()
                                     else:
-                                        print('Ошибка. Невозможно обучить фон')
+                                        self.pipeline_stop()
+                                        self.logger.error('Невозможно обучить фон')
                                 camera_db.inoutTrainOk[0] = res
                             else:
                                 if self.capture.isOpened():
@@ -328,6 +335,10 @@ class TechVision(threading.Thread):
                                         mc = MatchCapture(opt=self.match_opt, cap=part, templates=self.templates)
                                         result, res_list = mc.eval_match()
                                         res = len(res_list) > 0
+                                    else:
+                                        self.pipeline_stop()
+                                else:
+                                    self.pipeline_stop()
                                 camera_db.inoutPartOk[0] = res
                             camera_db.inoutResultNok[0] = not res
                         if camera_db.outStreamOn[0]:
@@ -369,4 +380,5 @@ class TechVision(threading.Thread):
                         # Write to SHM
                         self.rtsp_video_writer.write(frame)
                     else:
-                        print("Camera error.")
+                        self.pipeline_stop()
+                        self.logger.error("Camera error during rtsp_video_writer")
