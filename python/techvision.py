@@ -366,19 +366,24 @@ class TechVision(threading.Thread):
 
                     self.vision_status.put(camera_db)
                     self.vision_tasks.get()
-            if self.rtsp_video_writer is not None:
-                # Check if cap is open
-                if self.capture.isOpened():
-                    # Get the frame
-                    cap_readed, frame = self.capture.images.read()
-                    # frame = cv2.imread("2/part4.png")
-                    # cap_readed = True
-                    # Check
-                    if cap_readed:
-                        # Flip frame
-                        # frame = cv2.flip(frame, 1)
-                        # Write to SHM
-                        self.rtsp_video_writer.write(frame)
-                    else:
-                        #self.pipeline_stop()
-                        self.logger.error("Camera error during rtsp_video_writer")
+            if camera_db.outStreamOn[0]:
+                if self.rtsp_video_writer is not None:
+                    # Check if cap is open
+                    if self.capture.isOpened():
+                        # Get the frame
+                        cap_readed, frame = self.capture.images.read()
+                        # frame = cv2.imread("2/part4.png")
+                        # cap_readed = True
+                        # Check
+                        if cap_readed:
+                            # Flip frame
+                            # frame = cv2.flip(frame, 1)
+                            # Write to SHM
+                            self.rtsp_video_writer.write(frame)
+                        else:
+                            #self.pipeline_stop()
+                            self.logger.error("Camera error during rtsp_video_writer")
+            else:
+                res1 = self.http_stream_off()
+                res2 = self.rtsp_stream_off()
+                #self.pipeline_stop()
