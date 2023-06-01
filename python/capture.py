@@ -10,10 +10,11 @@ import time
 
 
 class ImgCapture:
-    def __init__(self, pipeline, hole_filling):
+    def __init__(self, pipeline, pipeline_stop, hole_filling):
         self.logger = logging.getLogger("vision.capture")
         self.frames = None
         self.pipeline = pipeline
+        self.pipeline_stop = pipeline_stop
         self.hole_filling = hole_filling
         csd = os.path.dirname(os.path.abspath(__file__))
         config = yaml.safe_load(open(csd + "/config.yaml"))
@@ -68,6 +69,7 @@ class ImgCapture:
         except Exception as error:
             self.logger.error(f"Не удалось считать изображение\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
+            self.pipeline_stop()
             return False, None, None, None
 
     def isOpened(self):

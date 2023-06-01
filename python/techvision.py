@@ -66,7 +66,7 @@ class TechVision(threading.Thread):
         # self.pipeline_wrapper = None
         # self.device = None
         # self.playback = None
-        self.capture = ImgCapture(self.pipeline, rs.hole_filling_filter())
+        self.capture = ImgCapture(self.pipeline, self.pipeline_stop, rs.hole_filling_filter())
         self.is_pipeline_started = False
         self.rs_config = rs.config()
 
@@ -305,8 +305,8 @@ class TechVision(threading.Thread):
                                                         os.path.join(part_type, "part_" + part_pos_num + ".png"),
                                                         nest_part)
                                                 res, nest_mask = self.subtract_background(nest_part, nest)
-                                            else:
-                                                self.pipeline_stop()
+                                            #else:
+                                            #    self.pipeline_stop()
                                             if res:
                                                 res = cv2.imwrite(os.path.join(part_type, part_pos_num + ".png"),
                                                                   nest_mask)
@@ -322,10 +322,10 @@ class TechVision(threading.Thread):
                                                 os.makedirs(part_type)
                                             res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
                                                               part)
-                                        else:
-                                            self.pipeline_stop()
+                                        #else:
+                                        #    self.pipeline_stop()
                                     else:
-                                        self.pipeline_stop()
+                                        #self.pipeline_stop()
                                         self.logger.error('Невозможно обучить фон')
                                 camera_db.inoutTrainOk[0] = res
                             else:
@@ -335,10 +335,10 @@ class TechVision(threading.Thread):
                                         mc = MatchCapture(opt=self.match_opt, cap=part, templates=self.templates)
                                         result, res_list = mc.eval_match()
                                         res = len(res_list) > 0
-                                    else:
-                                        self.pipeline_stop()
-                                else:
-                                    self.pipeline_stop()
+                                    #else:
+                                    #    self.pipeline_stop()
+                                #else:
+                                #    self.pipeline_stop()
                                 camera_db.inoutPartOk[0] = res
                             camera_db.inoutResultNok[0] = not res
                         if camera_db.outStreamOn[0]:
@@ -380,5 +380,5 @@ class TechVision(threading.Thread):
                         # Write to SHM
                         self.rtsp_video_writer.write(frame)
                     else:
-                        self.pipeline_stop()
+                        #self.pipeline_stop()
                         self.logger.error("Camera error during rtsp_video_writer")
