@@ -118,7 +118,7 @@ class TechVision(threading.Thread):
                 self.logger.info("reset done")
 
                 self.pipeline_profile = self.pipeline.start(self.rs_config)
-                time.sleep(5)
+                #time.sleep(5)
                 # depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
                 # depth_scale = depth_sensor.get_depth_scale()
                 # self.logger.info("fDepth Scale is: {depth_scale}")
@@ -166,6 +166,7 @@ class TechVision(threading.Thread):
             if self.is_pipeline_started:
                 self.is_pipeline_started = False
                 self.pipeline.stop()
+                self.logger.info("pipeline stopped")
         except Exception as error:
             self.logger.error(f"Не удалось выключить камеру\n"
                               f"Ошибка {str(error)} {traceback.format_exc()}")
