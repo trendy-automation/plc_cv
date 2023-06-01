@@ -369,7 +369,7 @@ class TechVision(threading.Thread):
             if camera_db.outStreamOn[0]:
                 if self.rtsp_video_writer is not None:
                     # Check if cap is open
-                    if self.capture.isOpened():
+                    if self.capture.isOpened() and self.is_pipeline_started:
                         # Get the frame
                         cap_readed, frame = self.capture.images.read()
                         # frame = cv2.imread("2/part4.png")
