@@ -32,6 +32,15 @@ class ImgCapture:
             #aligned_depth_frame = aligned_frames.get_depth_frame()
             #color_frame = aligned_frames.get_color_frame()
 
+            #while True:
+            #    self.frames = self.pipeline.wait_for_frames()
+            #    depth_frame = self.frames.get_depth_frame()
+            #    color_frame = self.frames.get_color_frame()
+            #    if not depth_frame or not color_frame:
+            #        continue
+            #    else:
+            #        break
+
             self.frames = self.pipeline.wait_for_frames()
             depth_frame = self.frames.get_depth_frame()
             color_frame = self.frames.get_color_frame()
@@ -62,8 +71,8 @@ class ImgCapture:
             return False, None, None, None
 
     def isOpened(self):
-        cap_readed, _, _, _ = self.read()
-        #cap_readed = True
+        #cap_readed, _, _, _ = self.read()
+        cap_readed = True
         return cap_readed
 
 
