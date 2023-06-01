@@ -33,8 +33,8 @@ class ImgCapture:
             #aligned_depth_frame = aligned_frames.get_depth_frame()
             #color_frame = aligned_frames.get_color_frame()
 
-            #while True:
-            #    self.frames = self.pipeline.wait_for_frames()
+            # while True:
+            #    self.frames = self.pipeline.wait_for_frames(15000)
             #    depth_frame = self.frames.get_depth_frame()
             #    color_frame = self.frames.get_color_frame()
             #    if not depth_frame or not color_frame:
@@ -42,11 +42,11 @@ class ImgCapture:
             #    else:
             #        break
 
-            self.frames = self.pipeline.wait_for_frames()
+            self.frames = self.pipeline.wait_for_frames(15000)
             depth_frame = self.frames.get_depth_frame()
             color_frame = self.frames.get_color_frame()
             if not depth_frame or not color_frame:
-                self.logger.error(f"Нет изображения с камеры")
+                self.logger.error(f"Нет изображения с камеры 15 сек")
                 return False, None, None, None
             # hole_filling = rs.hole_filling_filter()
             depth_frame = self.hole_filling.process(depth_frame)
