@@ -118,7 +118,7 @@ class PLC(threading.Thread):
             #tag_data = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
             #snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
             #return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
-            return self.set_bool(self.camera_db_num, offsetbyte, tag_value)
+            return self.set_bool(self.camera_db_num, offsetbyte, offsetbit, tag_value)
         if value_type == 'USInt':
             #tag_data = bytearray(1)
             #snap7.util.set_usint(tag_data, 0, tag_value)
