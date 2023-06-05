@@ -65,15 +65,15 @@ class PLC(threading.Thread):
         # Время, в течении которого контроллер был недоступен
         self.unreachable_time = 0
 
-    def get_bool(self, db_number, offsetbyte, offsetbit):
+    def get_bool(self, db_number, offsetbyte, offsetbit) -> int:
         tag_data = self.snap7client.db_read(db_number, offsetbyte, 1)
         return snap7.util.get_bool(tag_data, 0, offsetbit)
 
-    def get_usint(self, db_number, offsetbyte):
+    def get_usint(self, db_number, offsetbyte) -> int:
         byte_array_read = self.snap7client.db_read(db_number, offsetbyte, 1)
         return snap7.util.get_usint(byte_array_read, 0)
 
-    def get_string(self, db_number, offsetbyte, len_arr):
+    def get_string(self, db_number, offsetbyte, len_arr) -> int:
         byte_array_read = self.snap7client.db_read(db_number, offsetbyte, len_arr)
         return snap7.util.get_string(byte_array_read, 0, len_arr)
 
@@ -93,17 +93,17 @@ class PLC(threading.Thread):
             return [self.get_string(self.camera_db_num, offsetbyte, value_type[7:-1]), value_type, offsetbyte, offsetbit]
         return None
 
-    def set_bool(self, db_number, offsetbyte, offsetbit, tag_value):
+    def set_bool(self, db_number, offsetbyte, offsetbit, tag_value) -> int:
         tag_data = self.snap7client.db_read(db_number, offsetbyte, 1)
         snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
         return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
-    def set_usint(self, db_number, offsetbyte, tag_value):
+    def set_usint(self, db_number, offsetbyte, tag_value) -> int:
         tag_data = bytearray(1)
         snap7.util.set_usint(tag_data, 0, tag_value)
         return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
-    def set_string(self, db_number, offsetbyte, tag_value, value_type):
+    def set_string(self, db_number, offsetbyte, tag_value, value_type) -> int:
         len_arr = int(value_type[7:-1])
         tag_value = f"%.{len_arr}s" % tag_value
         tag_data = bytearray(len_arr + 2)
@@ -112,7 +112,7 @@ class PLC(threading.Thread):
         tag_data[1] = np.uint8(len(tag_value))
         return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
-    def set_cam_value(self, tag_list: list) -> bool:
+    def set_cam_value(self, tag_list: list)  -> int:
         tag_value, value_type, offsetbyte, offsetbit = tag_list
         if value_type == 'Bool':
             #tag_data = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
@@ -204,6 +204,7 @@ class PLC(threading.Thread):
             try:
                 #save stream off if device not connected
                 self.camera_db.outStreamOn[0] = camera_db.outStreamOn[0]
+                res = 0
                 res = self.set_cam_value(camera_db.inoutPartOk)
                 res = self.set_cam_value(camera_db.inoutResultNok)
                 res = self.set_cam_value(camera_db.inoutTrainOk)
@@ -217,5 +218,5 @@ class PLC(threading.Thread):
                 self.vision_status.get()
             except Exception as error:
                 self.logger.error(f"Не удалось записать результат съёмки: в DB{self.camera_db_num}\n"
-                                  f"Ошибка {str(error)} {traceback.format_exc()}")
+                                  f"Ошибка {str(error)} {traceback.format_exc()} {res = }")
                 self.snap7client.disconnect()
