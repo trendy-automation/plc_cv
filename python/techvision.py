@@ -359,32 +359,32 @@ class TechVision(threading.Thread):
                 except Exception as error:
                     self.logger.error(f"Не удалось обработать запрос\n"
                                       f"Ошибка {str(error)} {traceback.format_exc()}")
+                    camera_db.inCameraState[0] = f"Error:{str(error)}"[camera_db.inCameraState[1][7:-1]]
                 finally:
                     camera_db.inoutRequest[0] = False
                     if camera_db.inoutPartOk[0] or camera_db.inoutTrainOk[0]:
                         camera_db.inPartTypeDetect[0] = camera_db.outPartTypeExpect[0]
                         camera_db.inPartPosNumDetect[0] = camera_db.outPartPosNumExpect[0]
-
+                        camera_db.inCameraState[0] = "Ok"
                     self.vision_status.put(camera_db)
                     self.vision_tasks.get()
-            if camera_db.outStreamOn[0]:
-                if self.rtsp_video_writer is not None:
-                    # Check if cap is open
-                    if self.capture.isOpened() and self.is_pipeline_started:
-                        # Get the frame
-                        cap_readed, frame = self.capture.images.read()
-                        # frame = cv2.imread("2/part4.png")
-                        # cap_readed = True
-                        # Check
-                        if cap_readed:
-                            # Flip frame
-                            # frame = cv2.flip(frame, 1)
-                            # Write to SHM
-                            self.rtsp_video_writer.write(frame)
-                        else:
-                            #self.pipeline_stop()
-                            self.logger.error("Camera error during rtsp_video_writer")
-            else:
-                res1 = self.http_stream_off()
-                res2 = self.rtsp_stream_off()
-                #self.pipeline_stop()
+            if self.rtsp_video_writer is not None:
+                # Check if cap is open
+                if self.capture.isOpened() and self.is_pipeline_started:
+                    # Get the frame
+                    cap_readed, frame = self.capture.images.read()
+                    # frame = cv2.imread("2/part4.png")
+                    # cap_readed = True
+                    # Check
+                    if cap_readed:
+                        # Flip frame
+                        # frame = cv2.flip(frame, 1)
+                        # Write to SHM
+                        self.rtsp_video_writer.write(frame)
+                    else:
+                        # self.pipeline_stop()
+                        self.logger.error("Camera error during rtsp_video_writer")
+                else:
+                    res1 = self.http_stream_off()
+                    res2 = self.rtsp_stream_off()
+                    #self.pipeline_stop()

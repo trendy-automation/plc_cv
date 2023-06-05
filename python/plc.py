@@ -12,6 +12,7 @@ from obj import Obj
 # from snap7.util import *
 import logging
 import time
+import numpy as np
 import snap7
 import traceback
 import threading
@@ -41,7 +42,8 @@ class PLC(threading.Thread):
             "inPartTypeDetect": [0, "USInt", 1, 0],
             "inPartPosNumDetect": [0, "USInt", 2, 0],
             "outPartTypeExpect": [0, "USInt", 3, 0],
-            "outPartPosNumExpect": [0, "USInt", 4, 0]
+            "outPartPosNumExpect": [0, "USInt", 4, 0],
+            "inCameraState": [0, "String[25]", 6, 0]
         })
         # camera_db_num = config['plc']['camera_db_num']
         # part_type_byte = config['plc']['part_type_byte']
@@ -71,6 +73,10 @@ class PLC(threading.Thread):
         byte_array_read = self.snap7client.db_read(db_number, offsetbyte, 1)
         return snap7.util.get_usint(byte_array_read, 0)
 
+    def get_string(self, db_number, offsetbyte, len_arr):
+        byte_array_read = self.snap7client.db_read(db_number, offsetbyte, len_arr)
+        return snap7.util.get_string(byte_array_read, 0, len_arr)
+
     # def get_cam_value(self, value_type, offsetbyte, offsetbit=0):
     def get_cam_value(self, tag_list: list) -> list:
         value, value_type, offsetbyte, offsetbit = tag_list
@@ -81,32 +87,45 @@ class PLC(threading.Thread):
             # byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
             # return snap7.util.get_usint(byte_array_read, 0)
             return [self.get_usint(self.camera_db_num, offsetbyte), value_type, offsetbyte, offsetbit]
+        if value_type.startswith('String'):
+            #byte_array_read = self.snap7client.db_read(self.camera_db_num, offsetbyte, value_type[7:-1])
+            #return snap7.util.get_string(byte_array_read, 0, value_type[7:-1])
+            return [self.get_string(self.camera_db_num, offsetbyte, value_type[7:-1]), value_type, offsetbyte, offsetbit]
         return None
-
-    def get_string(self, db_number, offsetbyte, len_arr):
-        byte_array_read = self.snap7client.db_read(db_number, offsetbyte, len_arr)
-        return snap7.util.get_string(byte_array_read, 0, len_arr)
-
-    def set_usint(self, db_number, offsetbyte, tag_value):
-        tag_data = bytearray(1)
-        snap7.util.set_usint(tag_data, 0, tag_value)
-        return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
     def set_bool(self, db_number, offsetbyte, offsetbit, tag_value):
         tag_data = self.snap7client.db_read(db_number, offsetbyte, 1)
         snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
         return self.snap7client.db_write(db_number, offsetbyte, tag_data)
 
+    def set_usint(self, db_number, offsetbyte, tag_value):
+        tag_data = bytearray(1)
+        snap7.util.set_usint(tag_data, 0, tag_value)
+        return self.snap7client.db_write(db_number, offsetbyte, tag_data)
+
+    def set_string(self, db_number, offsetbyte, tag_value, value_type):
+        len_arr = int(value_type[7:-1])
+        tag_value = f"%.{len_arr}s" % tag_value
+        tag_data = bytearray(len_arr + 2)
+        snap7.util.set_string(tag_data, 0, tag_value, len_arr)
+        tag_data[0] = np.uint8(len(tag_data))
+        tag_data[1] = np.uint8(len(tag_value))
+        return self.snap7client.db_write(db_number, offsetbyte, tag_data)
+
     def set_cam_value(self, tag_list: list) -> bool:
         tag_value, value_type, offsetbyte, offsetbit = tag_list
         if value_type == 'Bool':
-            tag_data = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
-            snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
-            return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
+            #tag_data = self.snap7client.db_read(self.camera_db_num, offsetbyte, 1)
+            #snap7.util.set_bool(tag_data, 0, offsetbit, bool(tag_value))
+            #return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
+            return self.set_bool(self.camera_db_num, offsetbyte, tag_value)
         if value_type == 'USInt':
-            tag_data = bytearray(1)
-            snap7.util.set_usint(tag_data, 0, tag_value)
-            return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
+            #tag_data = bytearray(1)
+            #snap7.util.set_usint(tag_data, 0, tag_value)
+            #return self.snap7client.db_write(self.camera_db_num, offsetbyte, tag_data)
+            return self.set_usint(self.camera_db_num, offsetbyte, tag_value)
+        if value_type.startswith('String'):
+            return self.set_string(self.camera_db_num, offsetbyte, tag_value, value_type)
         return False
 
     def run(self):

@@ -33,14 +33,21 @@ class ImgCapture:
             #aligned_depth_frame = aligned_frames.get_depth_frame()
             #color_frame = aligned_frames.get_color_frame()
 
-            # while True:
-            #    self.frames = self.pipeline.wait_for_frames(15000)
-            #    depth_frame = self.frames.get_depth_frame()
-            #    color_frame = self.frames.get_color_frame()
-            #    if not depth_frame or not color_frame:
+            # depth_frame = None
+            # color_frame = None
+            # cam_statr_at = time.time()
+            # while (time.time()-cam_statr_at)<25:
+            #    try:
+            #        self.frames = self.pipeline.wait_for_frames()
+            #    except Exception as error:
+            #        self.logger.error(f"Ошибка {str(error)}")
             #        continue
-            #    else:
-            #        break
+            #        depth_frame = self.frames.get_depth_frame()
+            #        color_frame = self.frames.get_color_frame()
+            #        if not depth_frame or not color_frame:
+            #            continue
+            #        else:
+            #            break
 
             self.frames = self.pipeline.wait_for_frames(15000)
             depth_frame = self.frames.get_depth_frame()
