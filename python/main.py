@@ -7,6 +7,7 @@ import os
 import logging
 from logging import handlers
 import sys
+import socket
 
 
 def read_config():
@@ -46,20 +47,26 @@ if __name__ == '__main__':
     plc_ip, logger_level, logger_debug_file, logger_format = read_config()
     start_logging(logger_level, logger_debug_file, logger_format)
     main_plc, main_techvision = run_plc(plc_ip)
-    # from obj import Obj
-    # main_plc.vision_tasks.put(
-    #     Obj({
-    #         "inoutRequest": False,
-    #         "inoutPartOk": False,
-    #         "inoutResultNok": False,
-    #         "inoutTrainOk": False,
-    #         "outTrainModeOn": False,
-    #         "outPartPresentInNest": False,
-    #         "outHistoryOn": False,
-    #         "outStreamOn": True,
-    #         "inPartTypeDetect": 0,
-    #         "inPartPosNumDetect": 0,
-    #         "outPartTypeExpect": 2,
-    #         "outPartPosNumExpect": 0
-    #     })
-    # )
+    if socket.gethostbyname(socket.gethostname()) != '192.168.1.12':
+        #test
+        print("test main.py")
+        main_plc.do_run = False
+        from obj import Obj
+        main_plc.vision_tasks.put(
+
+            Obj({
+            "inoutRequest": [False, "Bool", 0, 0],
+            "inoutPartOk": [False, "Bool", 0, 1],
+            "inoutResultNok": [False, "Bool", 0, 2],
+            "inoutTrainOk": [False, "Bool", 0, 3],
+            "outTrainModeOn": [False, "Bool", 0, 4],
+            "outPartPresentInNest": [False, "Bool", 0, 5],
+            "outHistoryOn": [False, "Bool", 0, 6],
+            "outStreamOn": [True, "Bool", 0, 7],
+            "inPartTypeDetect": [0, "USInt", 1, 0],
+            "inPartPosNumDetect": [0, "USInt", 2, 0],
+            "outPartTypeExpect": [0, "USInt", 3, 0],
+            "outPartPosNumExpect": [0, "USInt", 4, 0],
+            "inCameraState": [0, "String[25]", 6, 0]
+            })
+        )

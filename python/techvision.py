@@ -64,12 +64,12 @@ class TechVision(threading.Thread):
         self.pipeline = rs.pipeline()
         self.pipeline_profile = None
         # self.pipeline_wrapper = None
-        # self.device = None
+        self.pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
+        self.device = None
         # self.playback = None
         self.capture = ImgCapture(self.pipeline, self.pipeline_stop, rs.hole_filling_filter())
         self.is_pipeline_started = False
         self.rs_config = rs.config()
-
 
         res = rs.align(rs.stream.depth)
         self.rs_config.enable_stream(rs.stream.depth, self.stream_opt.resolution_x, self.stream_opt.resolution_y,
@@ -107,18 +107,25 @@ class TechVision(threading.Thread):
         # Start streaming
         try:
             if not self.is_pipeline_started:
-                self.logger.info("reset start")
-                ctx = rs.context()
-                devices = ctx.query_devices()
-                for dev in devices:
-                    dev.hardware_reset()
+                # self.logger.info("reset start")
+                # ctx = rs.context()
+                # devices = ctx.query_devices()
+                # for dev in devices:
+                #    dev.hardware_reset()
                 ##device = profile.get_device()
                 ##depth_sensor = device.first_depth_sensor()
                 ##device.hardware_reset()
-                self.logger.info("reset done")
+                # self.logger.info("reset done")
 
-                self.pipeline_profile = self.pipeline.start(self.rs_config)
-                #time.sleep(5)
+                ##self.pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
+                # self.pipeline_profile = self.rs_config.resolve(self.pipeline_wrapper)
+                ##self.device = self.pipeline_profile.get_device()
+                ##device_product_line = str(self.device.get_info(rs.camera_info.product_line))
+                ##self.logger.info('device_product_line',device_product_line)
+
+                # self.pipeline_profile = self.pipeline.start(self.rs_config)
+                self.pipeline.start(self.rs_config)
+                # time.sleep(5)
                 # depth_sensor = self.pipeline_profile.get_device().first_depth_sensor()
                 # depth_scale = depth_sensor.get_depth_scale()
                 # self.logger.info("fDepth Scale is: {depth_scale}")
@@ -147,6 +154,7 @@ class TechVision(threading.Thread):
                 self.is_pipeline_started = self.capture.isOpened()
                 if not self.is_pipeline_started:
                     self.pipeline.stop()
+                    self.logger.info("pipeline.stop()")
             return self.is_pipeline_started
         except Exception as error:
             self.logger.error(f"Не удалось включить камеру\n"
@@ -154,7 +162,7 @@ class TechVision(threading.Thread):
             if str(error).startswith("map_device_descriptor"):
                 exit_code = 10
                 self.logger.error("Exit application with code {exit_code}. Can not start camera")
-                #sys.exit(exit_code)
+                # sys.exit(exit_code)
                 quit(exit_code)
                 self.logger.error("No quit")
             return False
@@ -306,7 +314,7 @@ class TechVision(threading.Thread):
                                                         os.path.join(part_type, "part_" + part_pos_num + ".png"),
                                                         nest_part)
                                                 res, nest_mask = self.subtract_background(nest_part, nest)
-                                            #else:
+                                            # else:
                                             #    self.pipeline_stop()
                                             if res:
                                                 res = cv2.imwrite(os.path.join(part_type, part_pos_num + ".png"),
@@ -323,10 +331,10 @@ class TechVision(threading.Thread):
                                                 os.makedirs(part_type)
                                             res = cv2.imwrite(os.path.join(part_type, "nest_" + part_pos_num + ".png"),
                                                               part)
-                                        #else:
+                                        # else:
                                         #    self.pipeline_stop()
                                     else:
-                                        #self.pipeline_stop()
+                                        # self.pipeline_stop()
                                         self.logger.error('Невозможно обучить фон')
                                 camera_db.inoutTrainOk[0] = res
                             else:
@@ -336,9 +344,9 @@ class TechVision(threading.Thread):
                                         mc = MatchCapture(opt=self.match_opt, cap=part, templates=self.templates)
                                         result, res_list = mc.eval_match()
                                         res = len(res_list) > 0
-                                    #else:
+                                    # else:
                                     #    self.pipeline_stop()
-                                #else:
+                                # else:
                                 #    self.pipeline_stop()
                                 camera_db.inoutPartOk[0] = res
                             camera_db.inoutResultNok[0] = not res
@@ -387,4 +395,4 @@ class TechVision(threading.Thread):
                 else:
                     res1 = self.http_stream_off()
                     res2 = self.rtsp_stream_off()
-                    #self.pipeline_stop()
+                    # self.pipeline_stop()

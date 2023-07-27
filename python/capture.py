@@ -26,12 +26,12 @@ class ImgCapture:
     def read(self):
         try:
 
-            #align_to = rs.stream.depth
-            #align = rs.align(align_to)
-            #self.frames = self.pipeline.wait_for_frames()
-            #aligned_frames = align.process(self.frames)
-            #aligned_depth_frame = aligned_frames.get_depth_frame()
-            #color_frame = aligned_frames.get_color_frame()
+            # align_to = rs.stream.depth
+            # align = rs.align(align_to)
+            # self.frames = self.pipeline.wait_for_frames()
+            # aligned_frames = align.process(self.frames)
+            # aligned_depth_frame = aligned_frames.get_depth_frame()
+            # color_frame = aligned_frames.get_color_frame()
 
             # depth_frame = None
             # color_frame = None
@@ -80,8 +80,8 @@ class ImgCapture:
             return False, None, None, None
 
     def isOpened(self):
-        #cap_readed, _, _, _ = self.read()
-        cap_readed = True
+        cap_readed, _, _, _ = self.read()
+        # cap_readed = True
         return cap_readed
 
 
@@ -113,7 +113,6 @@ class ImgDepth():
         # ret, color_image, depth_colormap, images = self.capture.read()
         # return ret
         return self.capture.isOpened()
-
 
 
 class ImgColor():
